@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SymbolicDifferentiation", "SymbolicDifferentiation\SymbolicDifferentiation.csproj", "{A24939F5-5333-45B7-BAEC-BC4A518597A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SymbolicDifferentiation.Tests", "SymbolicDifferentiationTests\SymbolicDifferentiation.Tests.csproj", "{56437941-A7C2-4613-B947-59B9FE7682CA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{3AA86DD4-E168-41A8-AB8C-45B2D911BB9E}"
+	ProjectSection(SolutionItems) = preProject
+		License.htm = License.htm
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 3
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs01.codeplex.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = SymbolicDifferentiation\\SymbolicDifferentiation.csproj
+		SccProjectName1 = SymbolicDifferentiation
+		SccLocalPath1 = SymbolicDifferentiation
+		SccProjectUniqueName2 = SymbolicDifferentiationTests\\SymbolicDifferentiation.Tests.csproj
+		SccProjectName2 = SymbolicDifferentiationTests
+		SccLocalPath2 = SymbolicDifferentiationTests
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A24939F5-5333-45B7-BAEC-BC4A518597A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A24939F5-5333-45B7-BAEC-BC4A518597A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A24939F5-5333-45B7-BAEC-BC4A518597A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A24939F5-5333-45B7-BAEC-BC4A518597A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56437941-A7C2-4613-B947-59B9FE7682CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56437941-A7C2-4613-B947-59B9FE7682CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56437941-A7C2-4613-B947-59B9FE7682CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56437941-A7C2-4613-B947-59B9FE7682CA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
