@@ -18,11 +18,16 @@ using SymbolicDifferentiation.Tokens;
 
 namespace SymbolicDifferentiation.Extensions
 {
-    public static class TokenizerExtension
+    public static class TokensExtensions
     {
         public static IEnumerable<Token> Tokenize(this string input)
         {
             return Tokenizer.Tokenize(input);
+        }
+
+        public static IEnumerable<Token> DeSugar(this IEnumerable<Token> tokens)
+        {
+            return DeSugariser.This(tokens);
         }
     }
 }
