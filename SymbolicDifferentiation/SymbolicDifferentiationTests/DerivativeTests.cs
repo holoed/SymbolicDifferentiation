@@ -30,7 +30,7 @@ namespace SymbolicDifferentiation.Tests
         [Test]
         public void FirstOrderPolynomial()
         {
-            Assert.AreEqual("2", Derivative.Of("2*x + 1"));
+            Assert.AreEqual("2", Derivative.Of("2x + 1"));
         }
 
         [Test]
@@ -42,13 +42,13 @@ namespace SymbolicDifferentiation.Tests
         [Test]
         public void MultiplicationWithConstant()
         {
-            Assert.AreEqual("2", Derivative.Of("2*x"));
+            Assert.AreEqual("2", Derivative.Of("2x"));
         }
 
         [Test]
         public void SecondOrderPolynomial()
         {
-            Assert.AreEqual("6 * x + 2", Derivative.Of("3*x^2 + 2*x + 1"));
+            Assert.AreEqual("6 * x + 2", Derivative.Of("3x^2 + 2x + 1"));
         }
 
         [Test]
@@ -60,13 +60,13 @@ namespace SymbolicDifferentiation.Tests
         [Test]
         public void SquareAndMultiplication()
         {
-            Assert.AreEqual("6 * x", Derivative.Of("3*x^2"));
+            Assert.AreEqual("6 * x", Derivative.Of("3x^2"));
         }
 
         [Test]
         public void ThirdOrderPolynomial()
         {
-            Assert.AreEqual("15 * x ^ 2 + 6 * x + 2", Derivative.Of("5*x^3 + 3*x^2 + 2*x + 1"));
+            Assert.AreEqual("15 * x ^ 2 + 6 * x + 2", Derivative.Of("5x^3 + 3x^2 + 2x + 1"));
         }
     }
 }

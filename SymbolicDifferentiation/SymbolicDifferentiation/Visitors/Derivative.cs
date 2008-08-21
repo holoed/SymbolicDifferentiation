@@ -25,6 +25,11 @@ namespace SymbolicDifferentiation.Visitors
     {
         private readonly Stack<Expression> _stack = new Stack<Expression>();
 
+        public static string Of(string input)
+        {
+            return Deriv(input.Tokenize().DeSugar().Parse()).Simplify().ToString(false);
+        }
+
         void IExpressionVisitor.Visit(BinaryExpression expression)
         {
             HandleAddition(expression);
@@ -43,11 +48,6 @@ namespace SymbolicDifferentiation.Visitors
                 return;
 
             _stack.Push(new Expression {Value = token});
-        }
-
-        public static string Of(string input)
-        {
-            return Deriv(input.Tokenize().Parse()).Simplify().ToString(false);
         }
 
         private static Expression Deriv(Expression input)

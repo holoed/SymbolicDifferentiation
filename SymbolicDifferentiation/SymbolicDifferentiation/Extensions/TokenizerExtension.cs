@@ -27,7 +27,7 @@ namespace SymbolicDifferentiation.Extensions
 
         public static IEnumerable<Token> DeSugar(this IEnumerable<Token> tokens)
         {
-            return DeSugariser.This(tokens);
+            return Desugar.Expand(tokens);
         }
     }
 }
