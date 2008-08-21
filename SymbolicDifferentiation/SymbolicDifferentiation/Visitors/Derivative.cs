@@ -27,7 +27,7 @@ namespace SymbolicDifferentiation.Visitors
 
         public static string Of(string input)
         {
-            return Deriv(input.Tokenize().DeSugar().Parse()).Simplify().ToString(false);
+            return Deriv(input.Tokenize().Expand().Parse()).Simplify().ToString(false);
         }
 
         void IExpressionVisitor.Visit(BinaryExpression expression)

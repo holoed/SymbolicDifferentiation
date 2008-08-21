@@ -21,10 +21,10 @@ using SymbolicDifferentiation.Tokens;
 namespace SymbolicDifferentiation.Tests
 {
     [TestFixture]
-    public class DesugarTests
+    public class SugarTests
     {
         [Test]
-        public void Test()
+        public void DesugarMultiplications()
         {
             var input = new[]
                             {
@@ -38,7 +38,25 @@ namespace SymbolicDifferentiation.Tests
                                    TokenBuilder.Symbol("*"), 
                                    TokenBuilder.Variable("x")
                                };
-            CollectionAssert.AreEqual(expected, input.DeSugar().ToArray());
+            CollectionAssert.AreEqual(expected, input.Expand().ToArray());
+        }
+
+        [Test]
+        public void SugarMultiplications()
+        {
+            var input = new[]
+                            {
+                                TokenBuilder.Number(3), 
+                                TokenBuilder.Symbol("*"), 
+                                TokenBuilder.Variable("x")
+                            };
+
+            var expected = new[]
+                               {
+                                   TokenBuilder.Number(3), 
+                                   TokenBuilder.Variable("x")
+                               };
+            CollectionAssert.AreEqual(expected, input.Shrink().ToArray());
         }
     }
 }

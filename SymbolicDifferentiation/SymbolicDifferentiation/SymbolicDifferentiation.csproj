@@ -51,7 +51,7 @@
   <ItemGroup>
     <Compile Include="AST\BinaryExpression.cs" />
     <Compile Include="AST\IExpressionVisitor.cs" />
-    <Compile Include="Desugar.cs" />
+    <Compile Include="Sugar.cs" />
     <Compile Include="Visitors\ExpressionEqualityComparer.cs" />
     <Compile Include="Extensions\SimplifierExtension.cs" />
     <Compile Include="Visitors\Derivative.cs" />

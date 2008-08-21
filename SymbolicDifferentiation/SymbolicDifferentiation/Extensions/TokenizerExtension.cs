@@ -25,9 +25,14 @@ namespace SymbolicDifferentiation.Extensions
             return Tokenizer.Tokenize(input);
         }
 
-        public static IEnumerable<Token> DeSugar(this IEnumerable<Token> tokens)
+        public static IEnumerable<Token> Expand(this IEnumerable<Token> tokens)
         {
-            return Desugar.Expand(tokens);
+            return Sugar.Expand(tokens);
+        }
+
+        public static IEnumerable<Token> Shrink(this IEnumerable<Token> tokens)
+        {
+            return Sugar.Shrink(tokens);
         }
     }
 }

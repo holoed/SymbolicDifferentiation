@@ -51,7 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DerivativeTests.cs" />
-    <Compile Include="DesugarTests.cs" />
+    <Compile Include="SugarTests.cs" />
     <Compile Include="ExpressionAssert.cs" />
     <Compile Include="ParseTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
