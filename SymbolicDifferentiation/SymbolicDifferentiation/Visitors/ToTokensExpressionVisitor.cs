@@ -14,25 +14,26 @@
 #endregion
 
 using System;
-using System.IO;
+using System.Collections.Generic;
 using SymbolicDifferentiation.AST;
+using SymbolicDifferentiation.Tokens;
 
 namespace SymbolicDifferentiation.Visitors
 {
-    public class ToStringExpressionVisitor : IExpressionVisitor
+    public class ToTokensExpressionVisitor : IExpressionVisitor
     {
         private readonly bool _grouping;
-        private readonly StringWriter _writer;
+        private readonly List<Token> _tokens;
 
-        public ToStringExpressionVisitor(bool grouping)
+        public ToTokensExpressionVisitor(bool grouping)
         {
             _grouping = grouping;
-            _writer = new StringWriter();
+            _tokens = new List<Token>();
         }
 
-        public string Result
+        public IEnumerable<Token> Result
         {
-            get { return _writer.ToString().Trim(); }
+            get { return _tokens; }
         }
 
         public void Visit(BinaryExpression expression)
@@ -40,15 +41,15 @@ namespace SymbolicDifferentiation.Visitors
             var action = new Action(() =>
                                         {
                                             expression.Left.Accept(this);
-                                            _writer.Write(expression.Operator.Value);
+                                            _tokens.Add(expression.Operator);
                                             expression.Right.Accept(this);
                                         });
 
             if (_grouping)
             {
-                _writer.Write("(");
+                _tokens.Add(TokenBuilder.Symbol("("));
                 action();
-                _writer.Write(")");
+                _tokens.Add(TokenBuilder.Symbol(")"));
             }
             else
                 action();
@@ -56,7 +57,7 @@ namespace SymbolicDifferentiation.Visitors
 
         public void Visit(Expression expression)
         {
-            _writer.Write(" {0} ", expression.Value);
+            _tokens.Add(expression.Value);
         }
     }
 }

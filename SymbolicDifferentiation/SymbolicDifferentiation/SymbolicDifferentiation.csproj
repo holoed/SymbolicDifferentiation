@@ -62,9 +62,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tokens\TokenBuilder.cs" />
     <Compile Include="Tokens\Tokenizer.cs" />
-    <Compile Include="Extensions\TokenizerExtension.cs" />
+    <Compile Include="Extensions\TokensExtensions.cs" />
     <Compile Include="Visitors\Simplifier.cs" />
-    <Compile Include="Visitors\ToStringExpressionVisitor.cs" />
+    <Compile Include="Visitors\ToTokensExpressionVisitor.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -14,15 +14,17 @@
 #endregion
 
 using SymbolicDifferentiation.AST;
+using SymbolicDifferentiation.Tokens;
 using SymbolicDifferentiation.Visitors;
+using System.Collections.Generic;
 
 namespace SymbolicDifferentiation.Extensions
 {
     public static class ExpressionExtension
     {
-        public static string ToString(this Expression expression, bool grouping)
+        public static IEnumerable<Token> ToTokens(this Expression expression, bool grouping)
         {
-            var visitor = new ToStringExpressionVisitor(grouping);
+            var visitor = new ToTokensExpressionVisitor(grouping);
             expression.Accept(visitor);
             return visitor.Result;
         }

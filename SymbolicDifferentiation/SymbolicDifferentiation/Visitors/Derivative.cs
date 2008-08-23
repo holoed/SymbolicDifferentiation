@@ -27,7 +27,14 @@ namespace SymbolicDifferentiation.Visitors
 
         public static string Of(string input)
         {
-            return Deriv(input.Tokenize().Expand().Parse()).Simplify().ToString(false);
+            return Deriv(input.
+                Tokenize().
+                Expand().
+                Parse()).
+                Simplify().
+                ToTokens(false).
+                Shrink().
+                ToStringExpression();
         }
 
         void IExpressionVisitor.Visit(BinaryExpression expression)
@@ -77,7 +84,7 @@ namespace SymbolicDifferentiation.Visitors
                                                   {
                                                       Value =
                                                           (TokenBuilder.Number(
-                                                          Double.Parse(expression.Right.ToString(true)) - 1))
+                                                          Double.Parse(expression.Right.ToTokens(true).ToStringExpression()) - 1))
                                                   }));
         }
     }

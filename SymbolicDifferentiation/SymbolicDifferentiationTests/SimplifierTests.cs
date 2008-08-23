@@ -24,53 +24,58 @@ namespace SymbolicDifferentiation.Tests
         [Test]
         public void Addition()
         {
-            Assert.AreEqual("5", "2 + 3".Tokenize().Parse().Simplify().ToString(true));
+            Assert.AreEqual("5", Simplify("2 + 3"));
         }
 
         [Test]
         public void AdditionAndMultiplication()
         {
-            Assert.AreEqual("2", "2 * 1 + 0 * 5".Tokenize().Parse().Simplify().ToString(true));
+            Assert.AreEqual("2", Simplify("2 * 1 + 0 * 5"));
         }
 
         [Test]
         public void AdditionToZero()
         {
-            Assert.AreEqual("2", "2 + 0".Tokenize().Parse().Simplify().ToString(true));
-            Assert.AreEqual("5", "0 + 5".Tokenize().Parse().Simplify().ToString(true));
+            Assert.AreEqual("2", Simplify("2 + 0"));
+            Assert.AreEqual("5", Simplify("0 + 5"));
         }
 
         [Test]
         public void Multiplication()
         {
-            Assert.AreEqual("6", "2 * 3".Tokenize().Parse().Simplify().ToString(true));
+            Assert.AreEqual("6", Simplify("2 * 3"));
         }
 
         [Test]
         public void MultiplicationByOne()
         {
-            Assert.AreEqual("2", "2 * 1".Tokenize().Parse().Simplify().ToString(true));
-            Assert.AreEqual("5", "1 * 5".Tokenize().Parse().Simplify().ToString(true));
+            Assert.AreEqual("2", Simplify("2 * 1"));
+            Assert.AreEqual("5", Simplify("1 * 5"));
         }
 
         [Test]
         public void MultiplicationByZero()
         {
-            Assert.AreEqual("0", "2 * 0".Tokenize().Parse().Simplify().ToString(true));
-            Assert.AreEqual("0", "0 * 5".Tokenize().Parse().Simplify().ToString(true));
+            Assert.AreEqual("0", Simplify("2 * 0"));
+            Assert.AreEqual("0", Simplify("0 * 5"));
         }
 
         [Test]
         public void MultiplicationMultiplicationByVariable()
         {
-            Assert.AreEqual("( 6 * x )", (Number(2)*(Number(3)*Variable("x"))).Simplify().ToString(true));
+            Assert.AreEqual("(6*x)", (Number(2) * (Number(3) * Variable("x"))).Simplify().ToTokens(true).ToStringExpression());
         }
 
         [Test]
         public void PowerByOne()
         {
-            Assert.AreEqual("2", "2 ^ 1".Tokenize().Parse().Simplify().ToString(true));
-            Assert.AreEqual("5", "5 ^ 1".Tokenize().Parse().Simplify().ToString(true));
+            Assert.AreEqual("2", Simplify("2 ^ 1"));
+            Assert.AreEqual("5", Simplify("5 ^ 1"));
+        }
+
+        private static string Simplify(string input)
+        {
+            return input.Tokenize().Parse().Simplify().ToTokens(true).ToStringExpression();
         }
     }
 }

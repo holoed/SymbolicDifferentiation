@@ -14,6 +14,7 @@
 #endregion
 
 using System.Collections.Generic;
+using System.Linq;
 using SymbolicDifferentiation.Tokens;
 
 namespace SymbolicDifferentiation.Extensions
@@ -33,6 +34,11 @@ namespace SymbolicDifferentiation.Extensions
         public static IEnumerable<Token> Shrink(this IEnumerable<Token> tokens)
         {
             return Sugar.Shrink(tokens);
+        }
+
+        public static string ToStringExpression(this IEnumerable<Token> tokens)
+        {
+            return string.Join("", tokens.Select(token => token.ToString()).ToArray());
         }
     }
 }
