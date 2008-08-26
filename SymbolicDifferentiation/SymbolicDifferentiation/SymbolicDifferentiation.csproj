@@ -57,6 +57,7 @@
     <Compile Include="Visitors\Derivative.cs" />
     <Compile Include="AST\Expression.cs" />
     <Compile Include="Extensions\ExpressionExtension.cs" />
+    <Compile Include="Visitors\LinqExpressionVisitor.cs" />
     <Compile Include="Visitors\Parser.cs" />
     <Compile Include="Extensions\ParserExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
