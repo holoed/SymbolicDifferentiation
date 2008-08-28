@@ -30,7 +30,7 @@ namespace SymbolicDifferentiation.Visitors
             return Deriv(input.
                 Tokenize().
                 Expand().
-                Parse()).
+                CombiParse()).
                 Simplify().
                 ToTokens(false).
                 Shrink().

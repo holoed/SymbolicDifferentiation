@@ -20,7 +20,7 @@ using SymbolicDifferentiation.Tokens;
 
 namespace SymbolicDifferentiation.Visitors
 {
-    public class Parser : IExpressionVisitor
+    public class BasicParser : IExpressionVisitor
     {
         private readonly Token _addition = TokenBuilder.Symbol("+");
         private readonly Token _exponentiation = TokenBuilder.Symbol("^");
@@ -47,7 +47,7 @@ namespace SymbolicDifferentiation.Visitors
         public static Expression Parse(IEnumerable<Token> tokens)
         {
             IEnumerable<Expression> expressions = tokens.Select(token => new Expression {Value = token});
-            var parser = new Parser();
+            var parser = new BasicParser();
             return parser.Parse(expressions);
         }
 

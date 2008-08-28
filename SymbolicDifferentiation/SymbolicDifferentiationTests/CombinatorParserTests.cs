@@ -13,14 +13,18 @@
 
 #endregion
 
-namespace SymbolicDifferentiation.ParserCombinators.Monad
-{
-    public class Result<TInput, TValue>
-    {
-        public readonly TValue Value;
-        public readonly TInput Rest;
-        public Result(TValue value, TInput rest) { Value = value; Rest = rest; }
-    }
+using System.Collections.Generic;
+using SymbolicDifferentiation.AST;
+using SymbolicDifferentiation.Extensions;
+using SymbolicDifferentiation.Tokens;
 
-    public delegate Result<TInput, TValue> Parser<TInput, TValue>(TInput input);
+namespace SymbolicDifferentiation.Tests
+{
+    public class CombinatorParserTests : ParserTests
+    {
+        protected override Expression Parse(IEnumerable<Token> tokens)
+        {
+            return tokens.CombiParse();
+        }
+    }
 }

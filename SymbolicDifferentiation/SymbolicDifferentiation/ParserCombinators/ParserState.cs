@@ -14,23 +14,19 @@
 #endregion
 
 using System.Collections.Generic;
-using SymbolicDifferentiation.AST;
-using SymbolicDifferentiation.ParserCombinators;
 using SymbolicDifferentiation.Tokens;
-using SymbolicDifferentiation.Visitors;
 
-namespace SymbolicDifferentiation.Extensions
+namespace SymbolicDifferentiation.ParserCombinators
 {
-    public static class ParserExtension
+    public class ParserState
     {
-        public static Expression BasicParse(this IEnumerable<Token> tokens)
-        {
-            return BasicParser.Parse(tokens);
-        }
+        public readonly IEnumerable<Token> Input;
+        public readonly int Position;
 
-        public static Expression CombiParse(this IEnumerable<Token> tokens)
+        public ParserState(int position, IEnumerable<Token> input)
         {
-            return CombinatorParser.Parse(tokens);
+            Position = position;
+            Input = input;
         }
     }
 }

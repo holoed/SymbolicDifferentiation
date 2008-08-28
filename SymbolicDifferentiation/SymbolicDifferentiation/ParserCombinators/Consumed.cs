@@ -13,17 +13,29 @@
 
 #endregion
 
-namespace SymbolicDifferentiation.ParserCombinators.Monad
+namespace SymbolicDifferentiation.ParserCombinators
 {
-    public static class ParserCombinatorExtensions
+    public class Consumed<T>
     {
-        public static Parser<TInput, TValue> OR<TInput, TValue>(this Parser<TInput, TValue> parser1, Parser<TInput, TValue> parser2)
+        public readonly bool HasConsumedInput;
+        public readonly ParseResult<T> ParseResult;
+
+        public Consumed(bool hasConsumedInput, ParseResult<T> result)
         {
-            return input => parser1(input) ?? parser2(input);
+            HasConsumedInput = hasConsumedInput;
+            ParseResult = result;
         }
-        public static Parser<TInput, TValue2> AND<TInput, TValue1, TValue2>(this Parser<TInput, TValue1> parser1, Parser<TInput, TValue2> parser2)
+
+        public Consumed<T> Tag(string label)
         {
-            return input => parser2(parser1(input).Rest);
+            return HasConsumedInput ? 
+                this : 
+                new Consumed<T>(HasConsumedInput, ParseResult.SetExpectation(label));
+        }
+
+        public override string ToString()
+        {
+            return ParseResult.ToString();
         }
     }
 }

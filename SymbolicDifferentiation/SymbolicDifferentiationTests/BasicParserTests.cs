@@ -13,24 +13,18 @@
 
 #endregion
 
-using System;
-using SymbolicDifferentiation.ParserCombinators.Monad;
+using System.Collections.Generic;
+using SymbolicDifferentiation.AST;
+using SymbolicDifferentiation.Extensions;
 using SymbolicDifferentiation.Tokens;
 
-namespace SymbolicDifferentiation.ParserCombinators
+namespace SymbolicDifferentiation.Tests
 {
-    public abstract class TokenParser<TInput> : Parsers<TInput>
+    public class BasicParserTests : ParserTests
     {
-        protected abstract Parser<TInput, Token> AnyToken { get; }
-
-        protected Parser<TInput, Token> ParseToken(Token token)
+        protected override Expression Parse(IEnumerable<Token> tokens)
         {
-            return from c in AnyToken where c.Equals(token) select c;
-        }
-
-        protected Parser<TInput, Token> ParseToken(Predicate<Token> pred)
-        {
-            return from token in AnyToken where pred(token) select token;
+            return tokens.BasicParse();
         }
     }
 }

@@ -41,9 +41,19 @@ namespace SymbolicDifferentiation.AST
             return BuildBinary("*", left, right);
         }
 
+        public static Expression operator /(Expression left, Expression right)
+        {
+            return BuildBinary("/", left, right);
+        }
+
         public static Expression operator +(Expression left, Expression right)
         {
             return BuildBinary("+", left, right);
+        }
+
+        public static Expression operator -(Expression left, Expression right)
+        {
+            return BuildBinary("-", left, right);
         }
 
         public static Expression operator ^(Expression left, Expression right)

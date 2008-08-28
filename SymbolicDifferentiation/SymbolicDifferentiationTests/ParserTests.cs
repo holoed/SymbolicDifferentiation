@@ -13,50 +13,53 @@
 
 #endregion
 
+using System.Collections.Generic;
 using NUnit.Framework;
-using SymbolicDifferentiation.Extensions;
+using SymbolicDifferentiation.AST;
 using SymbolicDifferentiation.Tokens;
 
 namespace SymbolicDifferentiation.Tests
 {
     [TestFixture]
-    public class ParseTests : TestsBase
+    public abstract class ParserTests : TestsBase
     {
+        protected abstract Expression Parse(IEnumerable<Token> tokens);
+
         [Test]
         public void AdditionAdditionBinaryExpression()
         {
-            ExpressionAssert.AreEqual((Number(2) + Number(3)) + Number(4), Tokenizer.Tokenize("2 + 3 + 4").Parse());
+            ExpressionAssert.AreEqual((Number(2) + Number(3)) + Number(4), Parse(Tokenizer.Tokenize("2 + 3 + 4")));
         }
 
         [Test]
         public void AdditionBinaryExpression()
         {
-            ExpressionAssert.AreEqual(Number(2) + Number(3), Tokenizer.Tokenize("2 + 3").Parse());
+            ExpressionAssert.AreEqual(Number(2) + Number(3), Parse(Tokenizer.Tokenize("2 + 3")));
         }
 
         [Test]
         public void AdditionMultiplication()
         {
-            ExpressionAssert.AreEqual(Number(2) + (Number(3)*Number(4)), Tokenizer.Tokenize("2 + 3 * 4").Parse());
+            ExpressionAssert.AreEqual(Number(2) + (Number(3)*Number(4)), Parse(Tokenizer.Tokenize("2 + 3 * 4")));
         }
 
         [Test]
         public void AditionAdditionAdditionBinaryExpression()
         {
             ExpressionAssert.AreEqual(((Number(2) + Number(3)) + Number(4)) + Number(5),
-                                      Tokenizer.Tokenize("2 + 3 + 4 + 5").Parse());
+                                      Parse(Tokenizer.Tokenize("2 + 3 + 4 + 5")));
         }
 
         [Test]
         public void Expression()
         {
-            ExpressionAssert.AreEqual(Number(3), Tokenizer.Tokenize("3").Parse());
+            ExpressionAssert.AreEqual(Number(3), Parse(Tokenizer.Tokenize("3")));
         }
 
         [Test]
         public void FirstOrderPolynomial()
         {
-            ExpressionAssert.AreEqual(Number(2)*Variable("x") + Number(1), Tokenizer.Tokenize("2*x + 1").Parse());
+            ExpressionAssert.AreEqual(Number(2)*Variable("x") + Number(1), Parse(Tokenizer.Tokenize("2*x + 1")));
         }
 
         [Test]
@@ -65,57 +68,57 @@ namespace SymbolicDifferentiation.Tests
             ExpressionAssert.AreEqual(
                 ((Number(2)*(Variable("x") ^ Number(4))) + (Number(5)*(Variable("x") ^ Number(3)))) +
                 Number(3)*(Variable("x") ^ Number(2)) + (Number(2)*Variable("x")) + Number(1),
-                Tokenizer.Tokenize("2*x^4 + 5*x^3 + 3*x^2 + 2*x + 1").Parse());
+                Parse(Tokenizer.Tokenize("2*x^4 + 5*x^3 + 3*x^2 + 2*x + 1")));
         }
 
         [Test]
         public void MultiplicationAddition()
         {
-            ExpressionAssert.AreEqual((Number(2)*Number(3)) + Number(4), Tokenizer.Tokenize("2 * 3 + 4").Parse());
+            ExpressionAssert.AreEqual((Number(2)*Number(3)) + Number(4), Parse(Tokenizer.Tokenize("2 * 3 + 4")));
         }
 
         [Test]
         public void MultiplicationAndPowerBinaryExpression()
         {
-            ExpressionAssert.AreEqual(Number(3)*(Variable("x") ^ Number(2)), Tokenizer.Tokenize("3*x^2").Parse());
+            ExpressionAssert.AreEqual(Number(3)*(Variable("x") ^ Number(2)), Parse(Tokenizer.Tokenize("3*x^2")));
         }
 
         [Test]
         public void MultiplicationBinaryExpression()
         {
-            ExpressionAssert.AreEqual(Number(2)*Number(3), Tokenizer.Tokenize("2 * 3").Parse());
+            ExpressionAssert.AreEqual(Number(2)*Number(3), Parse(Tokenizer.Tokenize("2 * 3")));
         }
 
         [Test]
         public void MultiplicationMultiplicationBinaryExpression()
         {
-            ExpressionAssert.AreEqual((Number(2)*Number(3))*Number(4), Tokenizer.Tokenize("2 * 3 * 4").Parse());
+            ExpressionAssert.AreEqual((Number(2)*Number(3))*Number(4), Parse(Tokenizer.Tokenize("2 * 3 * 4")));
         }
 
         [Test]
         public void MultiplicationMultiplicationMultiplicationBinaryExpression()
         {
             ExpressionAssert.AreEqual(((Number(2)*Number(3))*Number(4))*Number(5),
-                                      Tokenizer.Tokenize("2 * 3 * 4 * 5").Parse());
+                                      Parse(Tokenizer.Tokenize("2 * 3 * 4 * 5")));
         }
 
         [Test]
         public void MultiplicationToVariableBinaryExpression()
         {
-            ExpressionAssert.AreEqual(Number(2)*Variable("x"), Tokenizer.Tokenize("2*x").Parse());
+            ExpressionAssert.AreEqual(Number(2)*Variable("x"), Parse(Tokenizer.Tokenize("2*x")));
         }
 
         [Test]
         public void PowerBinaryExpression()
         {
-            ExpressionAssert.AreEqual(Variable("x") ^ Number(2), Tokenizer.Tokenize("x^2").Parse());
+            ExpressionAssert.AreEqual(Variable("x") ^ Number(2), Parse(Tokenizer.Tokenize("x^2")));
         }
 
         [Test]
         public void SecondOrderPolynomial()
         {
             ExpressionAssert.AreEqual(Number(3)*(Variable("x") ^ Number(2)) + (Number(2)*Variable("x")) + Number(1),
-                                      Tokenizer.Tokenize("3*x^2 + 2*x + 1").Parse());
+                                      Parse(Tokenizer.Tokenize("3*x^2 + 2*x + 1")));
         }
 
         [Test]
@@ -124,7 +127,7 @@ namespace SymbolicDifferentiation.Tests
             ExpressionAssert.AreEqual(
                 (Number(5)*(Variable("x") ^ Number(3))) + Number(3)*(Variable("x") ^ Number(2)) +
                 (Number(2)*Variable("x")) + Number(1),
-                Tokenizer.Tokenize("5*x^3 + 3*x^2 + 2*x + 1").Parse());
+                Parse(Tokenizer.Tokenize("5*x^3 + 3*x^2 + 2*x + 1")));
         }
     }
 }

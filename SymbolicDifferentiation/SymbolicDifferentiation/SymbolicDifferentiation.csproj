@@ -51,12 +51,11 @@
   <ItemGroup>
     <Compile Include="AST\BinaryExpression.cs" />
     <Compile Include="AST\IExpressionVisitor.cs" />
-    <Compile Include="ParserCombinators\ExpressionParser.cs" />
-    <Compile Include="ParserCombinators\Monad\ParserCombinatorExtensions.cs" />
-    <Compile Include="ParserCombinators\Monad\ParserCombinatorsMonad.cs" />
-    <Compile Include="ParserCombinators\Monad\Parsers.cs" />
-    <Compile Include="ParserCombinators\Monad\Result.cs" />
-    <Compile Include="ParserCombinators\TokenParser.cs" />
+    <Compile Include="ParserCombinators\Consumed.cs" />
+    <Compile Include="ParserCombinators\ErrorInfo.cs" />
+    <Compile Include="ParserCombinators\CombinatorParser.cs" />
+    <Compile Include="ParserCombinators\ParseResult.cs" />
+    <Compile Include="ParserCombinators\ParserState.cs" />
     <Compile Include="Sugar.cs" />
     <Compile Include="Tokens\Token.cs" />
     <Compile Include="Visitors\ExpressionEqualityComparer.cs" />
@@ -65,7 +64,7 @@
     <Compile Include="AST\Expression.cs" />
     <Compile Include="Extensions\ExpressionExtension.cs" />
     <Compile Include="Visitors\LinqExpressionVisitor.cs" />
-    <Compile Include="Visitors\Parser.cs" />
+    <Compile Include="Visitors\BasicParser.cs" />
     <Compile Include="Extensions\ParserExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tokens\TokenBuilder.cs" />

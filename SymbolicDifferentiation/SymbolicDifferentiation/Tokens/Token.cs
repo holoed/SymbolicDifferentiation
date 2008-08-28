@@ -29,7 +29,6 @@ namespace SymbolicDifferentiation.Tokens
 
     public class Token
     {
-        public static Token EOF = new Token(MatchType.EOF, "\0");
         public static Token Whitespace = new Token(MatchType.Whitespace, " ");
 
         public Token(MatchType type, object value)
@@ -78,14 +77,6 @@ namespace SymbolicDifferentiation.Tokens
             if (left.Type == MatchType.Number && right.Type == MatchType.Number)
                 return new Token(MatchType.Number, ((double)left.Value) + ((double)right.Value));
             throw new ArgumentOutOfRangeException("Cannot add if both operands are not numbers");
-        }
-
-        public static bool IsLetter(Token token)
-        {
-            return 
-                token.Type == MatchType.Variable || 
-                token.Type == MatchType.Number ||
-                token.Type == MatchType.Keyword;
         }
 
         public static bool IsLetterOrDigit(Token token)
