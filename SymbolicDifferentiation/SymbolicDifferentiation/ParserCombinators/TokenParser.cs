@@ -21,14 +21,14 @@ namespace SymbolicDifferentiation.ParserCombinators
 {
     public abstract class TokenParser<TInput> : Parsers<TInput>
     {
-        public abstract Parser<TInput, Token> AnyToken { get; }
+        protected abstract Parser<TInput, Token> AnyToken { get; }
 
-        public Parser<TInput, Token> ParseToken(Token token)
+        protected Parser<TInput, Token> ParseToken(Token token)
         {
             return from c in AnyToken where c.Equals(token) select c;
         }
 
-        public Parser<TInput, Token> ParseToken(Predicate<Token> pred)
+        protected Parser<TInput, Token> ParseToken(Predicate<Token> pred)
         {
             return from token in AnyToken where pred(token) select token;
         }

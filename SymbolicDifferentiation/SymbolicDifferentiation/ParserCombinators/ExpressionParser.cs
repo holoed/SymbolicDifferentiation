@@ -24,15 +24,15 @@ namespace SymbolicDifferentiation.ParserCombinators
 {
     public class ExpressionParser : TokenParser<Token[]>
     {
-        public Parser<Token[], Expression> All;
-        public Parser<Token[], Token[]> Id;
-        public Parser<Token[], Token[]> LetId;
-        public Parser<Token[], Expression> Term;
-        public Parser<Token[], Expression> Term1;
-        public Parser<Token[], Token[]> Whitespace;
-        public Func<Token, Parser<Token[], Token>> WsChr;
+        private readonly Parser<Token[], Expression> All;
+        private readonly Parser<Token[], Token[]> Id;
+        private readonly Parser<Token[], Token[]> LetId;
+        private readonly Parser<Token[], Expression> Term;
+        private readonly Parser<Token[], Expression> Term1;
+        private readonly Parser<Token[], Token[]> Whitespace;
+        private readonly Func<Token, Parser<Token[], Token>> WsChr;
 
-        public ExpressionParser()
+        private ExpressionParser()
         {
             Whitespace = Rep(ParseToken(Token.Whitespace));
             WsChr = chr => Whitespace.AND(ParseToken(chr));
@@ -62,7 +62,7 @@ namespace SymbolicDifferentiation.ParserCombinators
             All = from t in Term from u in WsChr(Token.EOF) select t;
         }
 
-        public override Parser<Token[], Token> AnyToken
+        protected override Parser<Token[], Token> AnyToken
         {
             get { { return input => input.Length > 0 ? new Result<Token[], Token>(input[0], input.Skip(1).ToArray()) : null; } }
         }
