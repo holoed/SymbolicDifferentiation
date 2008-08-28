@@ -19,95 +19,16 @@ using System.Text.RegularExpressions;
 
 namespace SymbolicDifferentiation.Tokens
 {
-    public enum MatchType
-    {
-        Number,
-        Variable,
-        Symbol,
-        Whitespace
-    }
-
-    public class Token
-    {
-        public Token(MatchType type, object value) : this(type, value, 0, 0)
-        {
-        }
-
-        public Token(MatchType type, object value, int index, int length)
-        {
-            Type = type;
-            Value = value;
-            Index = index;
-            Length = length;
-        }
-
-        public MatchType Type { private set; get; }
-        public object Value { private set; get; }
-        public int Index { private set; get; }
-        public int Length { private set; get; }
-
-        public override bool Equals(object obj)
-        {
-            var token = obj as Token;
-            if (token == null) return false;
-            return Equals(token.Type, Type) && Equals(token.Value, Value);
-        }
-
-        public override int GetHashCode()
-        {
-            return Type.GetHashCode() ^ Value.GetHashCode();
-        }
-
-        public override string ToString()
-        {
-            return Value.ToString();
-        }
-
-        public static Token operator *(Token left, Token right)
-        {
-            if (left.Type == MatchType.Number && right.Type == MatchType.Number)
-                return new Token(MatchType.Number, ((double) left.Value)*((double) right.Value));
-            throw new ArgumentOutOfRangeException("Cannot multiply if both operands are not numbers");
-        }
-
-        public static Token operator +(Token left, Token right)
-        {
-            if (left.Type == MatchType.Number && right.Type == MatchType.Number)
-                return new Token(MatchType.Number, ((double) left.Value) + ((double) right.Value));
-            throw new ArgumentOutOfRangeException("Cannot add if both operands are not numbers");
-        }
-    }
-
     public class Tokenizer
     {
-        private static readonly Dictionary<MatchType, Func<string, Match>> _patterns = new Dictionary
-            <MatchType, Func<string, Match>>
-                                                                                           {
-                                                                                               {
-                                                                                                   MatchType.Number,
-                                                                                                   input =>
-                                                                                                   Regex.Match(input,
-                                                                                                               "^[0-9]+")
-                                                                                                   },
-                                                                                               {
-                                                                                                   MatchType.Variable,
-                                                                                                   input =>
-                                                                                                   Regex.Match(input,
-                                                                                                               "^[a-zA-Z]+")
-                                                                                                   },
-                                                                                               {
-                                                                                                   MatchType.Symbol,
-                                                                                                   input =>
-                                                                                                   Regex.Match(input,
-                                                                                                               "^[\\^\\+\\*]")
-                                                                                                   },
-                                                                                               {
-                                                                                                   MatchType.Whitespace,
-                                                                                                   input =>
-                                                                                                   Regex.Match(input,
-                                                                                                               "^[ ]")
-                                                                                                   }
-                                                                                           };
+        private static readonly Dictionary<MatchType, Func<string, Match>> _patterns = 
+            new Dictionary<MatchType, Func<string, Match>>
+           {
+               { MatchType.Number, input => Regex.Match(input, "^[0-9]+") },
+               { MatchType.Variable, input => Regex.Match(input, "^[a-zA-Z]+") },
+               { MatchType.Symbol, input => Regex.Match(input, "^[\\^\\+\\*]") },
+               { MatchType.Whitespace, input => Regex.Match(input, "^[ ]") }
+           };
 
         public static IEnumerable<Token> Tokenize(string input)
         {

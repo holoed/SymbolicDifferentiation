@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="DerivativeTests.cs" />
     <Compile Include="LinqExpressionVisitorTests.cs" />
+    <Compile Include="ParserCombinators\ExpressionParserTests.cs" />
     <Compile Include="SugarTests.cs" />
     <Compile Include="ExpressionAssert.cs" />
     <Compile Include="ParseTests.cs" />
