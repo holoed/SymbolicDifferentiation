@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="AST\BinaryExpression.cs" />
     <Compile Include="AST\IExpressionVisitor.cs" />
+    <Compile Include="ParserCombinators\CombinatorParserExtensions.cs" />
     <Compile Include="ParserCombinators\Consumed.cs" />
     <Compile Include="ParserCombinators\ErrorInfo.cs" />
     <Compile Include="ParserCombinators\CombinatorParser.cs" />

@@ -26,17 +26,13 @@ namespace SymbolicDifferentiation.ParserCombinators
 
     public static class CombinatorParser
     {
-        private static readonly P<Expression> DigitVal = Sat(Token.IsLetterOrDigit).Then(c => Return((new Expression { Value = c })));
+        private static readonly P<Expression> DigitVal = Sat(Token.IsLetterOrDigit).Then(c => (new Expression { Value = c }).Return());
+      
         public static IEnumerable<T> Cons<T>(T x, IEnumerable<T> rest)
         {
             yield return x;
             foreach (T t in rest)
                 yield return t;
-        }
-
-        private static ParseResult<T> Parse<T>(this P<T> p, IEnumerable<Token> toParse)
-        {
-            return p(new ParserState(0, toParse)).ParseResult;
         }
 
         private static P<T> Return<T>(T x)
@@ -47,58 +43,6 @@ namespace SymbolicDifferentiation.ParserCombinators
         private static P<Func<T, T, T>> Return<T>(Func<T, T, T> f)
         {
             return Return<Func<T, T, T>>(f);
-        }
-
-        private static P<U> Then_<T, U>(this P<T> p1, P<U> p2)
-        {
-            return p1.Then(dummy => p2);
-        }
-
-        private static P<U> Then<T, U>(this P<T> p1, Func<T, P<U>> f)
-        {
-            return input =>
-            {
-                Consumed<T> consumed1 = p1(input);
-                if (consumed1.ParseResult.Succeeded)
-                {
-                    Consumed<U> consumed2 =
-                        f(consumed1.ParseResult.Result)(consumed1.ParseResult.RemainingInput);
-                    return new Consumed<U>(consumed1.HasConsumedInput || consumed2.HasConsumedInput,
-                                           consumed2.HasConsumedInput
-                                               ? consumed2.ParseResult
-                                               : consumed2.ParseResult.MergeError(
-                                                     consumed1.ParseResult.ErrorInfo));
-                }
-                else
-                {
-                    return new Consumed<U>(consumed1.HasConsumedInput,
-                                           new ParseResult<U>(consumed1.ParseResult.ErrorInfo));
-                }
-            };
-        }
-
-        private static P<T> Or<T>(this P<T> p1, P<T> p2)
-        {
-            return input =>
-            {
-                var consumed1 = p1(input);
-                if (consumed1.ParseResult.Succeeded || consumed1.HasConsumedInput)
-                    return consumed1;
-                else
-                {
-                    var consumed2 = p2(input);
-                    return consumed2.HasConsumedInput
-                               ? consumed2
-                               : new Consumed<T>(
-                                   consumed2.HasConsumedInput,
-                                   consumed2.ParseResult.MergeError(consumed1.ParseResult.ErrorInfo));
-                }
-            };
-        }
-
-        private static P<T> Tag<T>(this P<T> p, string label)
-        {
-            return input => p(input).Tag(label);
         }
 
         // Sat(pred) succeeds parsing a character only if the character matches the predicate
@@ -129,20 +73,7 @@ namespace SymbolicDifferentiation.ParserCombinators
             return Sat(x => x.Equals(c)).Tag("character '" + c + "'");
         }
 
-        private static P<T> Chainl1<T>(this P<T> p, P<Func<T, T, T>> op)
-        {
-            return p.Then(x =>Chainl1Helper(x, p, op));
-        }
-
-        public static P<T> Chainr1<T>(this P<T> p, P<Func<T, T, T>> op)
-        {
-            return p.Then(x => ( op.Then(f => Chainr1(p, op).Then(y => Return(f(x, y))))).Or(Return(x)));
-        }
-
-        private static P<T> Chainl1Helper<T>(T x, P<T> p, P<Func<T, T, T>> op)
-        {
-            return op.Then(f => p.Then(y => Chainl1Helper(f(x, y), p, op))).Or(Return(x));
-        }
+       
 
         public static Expression Parse(IEnumerable<Token> input)
         {

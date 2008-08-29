@@ -45,7 +45,7 @@ namespace SymbolicDifferentiation.ParserCombinators
         public ErrorInfo SetExpectation(string label)
         {
             return string.IsNullOrEmpty(label) ? 
-                new ErrorInfo(Position, Enumerable.Empty<string>(), Message) : 
+                new ErrorInfo(Position, Enumerable.Empty<string>(), Message) :
                 new ErrorInfo(Position, CombinatorParser.Cons(label, Enumerable.Empty<string>()), Message);
         }
 
