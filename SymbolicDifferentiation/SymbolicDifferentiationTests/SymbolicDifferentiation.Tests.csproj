@@ -57,6 +57,7 @@
     <Compile Include="CombinatorParserTests.cs" />
     <Compile Include="DerivativeTests.cs" />
     <Compile Include="LinqExpressionVisitorTests.cs" />
+    <Compile Include="ParserCombinators\CombinatorParserExtensionsTests.cs" />
     <Compile Include="SugarTests.cs" />
     <Compile Include="ExpressionAssert.cs" />
     <Compile Include="ParserTests.cs" />
