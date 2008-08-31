@@ -26,8 +26,8 @@ namespace SymbolicDifferentiation.ParserCombinators
 
     public static class CombinatorParser
     {
-        private static readonly P<Expression> DigitVal = Sat(Token.IsLetterOrDigit).Then(c => (new Expression { Value = c }).Return());
-      
+        private static readonly P<Expression> DigitVal = from c in Sat(Token.IsLetterOrDigit) select new Expression { Value = c };
+
         public static IEnumerable<T> Cons<T>(T x, IEnumerable<T> rest)
         {
             yield return x;
@@ -72,9 +72,7 @@ namespace SymbolicDifferentiation.ParserCombinators
         {
             return Sat(x => x.Equals(c)).Tag("character '" + c + "'");
         }
-
        
-
         public static Expression Parse(IEnumerable<Token> input)
         {
             var addOp =

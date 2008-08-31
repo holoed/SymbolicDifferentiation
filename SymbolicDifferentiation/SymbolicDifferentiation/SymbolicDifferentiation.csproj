@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{A24939F5-5333-45B7-BAEC-BC4A518597A1}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -55,6 +55,7 @@
     <Compile Include="ParserCombinators\Consumed.cs" />
     <Compile Include="ParserCombinators\ErrorInfo.cs" />
     <Compile Include="ParserCombinators\CombinatorParser.cs" />
+    <Compile Include="ParserCombinators\Linq.cs" />
     <Compile Include="ParserCombinators\ParseResult.cs" />
     <Compile Include="ParserCombinators\ParserState.cs" />
     <Compile Include="Sugar.cs" />
