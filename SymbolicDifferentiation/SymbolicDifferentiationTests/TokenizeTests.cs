@@ -84,6 +84,8 @@ namespace SymbolicDifferentiation.Tests
             AssertToken("^", MatchType.Symbol, "^".Tokenize().First());
             AssertToken("*", MatchType.Symbol, "*".Tokenize().First());
             AssertToken("+", MatchType.Symbol, "+".Tokenize().First());
+            AssertToken("(", MatchType.Symbol, "(".Tokenize().First());
+            AssertToken(")", MatchType.Symbol, ")".Tokenize().First());
         }
 
         [Test]

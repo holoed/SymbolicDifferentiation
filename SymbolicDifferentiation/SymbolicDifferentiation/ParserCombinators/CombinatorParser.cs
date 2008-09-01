@@ -27,8 +27,18 @@ namespace SymbolicDifferentiation.ParserCombinators
             var mulOp = (new Symbol("*") > ((x, y) => x * y)).Or(new Symbol("/") > ((x, y) => x / y)).Tag("multiply/divide op");
             var expOp = (new Symbol("^") > ((x, y) => x ^ y)).Tag("exponentiation op");
 
-            var expr = CombinatorParserExtensions.DigitVal.Chainr1(expOp).Chainl1(mulOp).Chainl1(addOp);
+            P<Expression> paren, part, factor, term, expr = null;
 
+            paren = from o in new Symbol("(").Literal()
+                    from e in expr
+                    from c in new Symbol(")").Literal()
+                    select e;
+
+            part = CombinatorParserExtensions.DigitVal.Or(paren);
+            factor = part.Chainr1(expOp);
+            term = factor.Chainl1(mulOp);
+            expr = term.Chainl1(addOp);
+           
             return expr.Parse(input).Result;
         }
     }   

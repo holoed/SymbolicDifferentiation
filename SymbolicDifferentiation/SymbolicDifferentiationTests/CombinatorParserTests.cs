@@ -14,6 +14,7 @@
 #endregion
 
 using System.Collections.Generic;
+using NUnit.Framework;
 using SymbolicDifferentiation.AST;
 using SymbolicDifferentiation.Extensions;
 using SymbolicDifferentiation.Tokens;
@@ -25,6 +26,18 @@ namespace SymbolicDifferentiation.Tests
         protected override Expression Parse(IEnumerable<Token> tokens)
         {
             return tokens.CombiParse();
+        }
+
+        [Test]
+        public void AdditionMultiplicationGrouped()
+        {
+            ExpressionAssert.AreEqual((Number(2) + Number(3)) * Number(4), Parse(Tokenizer.Tokenize("(2 + 3) * 4")));
+        }
+
+        [Test]
+        public void AdditionExponentationGrouped()
+        {
+            ExpressionAssert.AreEqual((Number(2) + Number(3)) ^ Number(2), Parse(Tokenizer.Tokenize("(2 + 3)^2")));
         }
     }
 }
