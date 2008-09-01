@@ -13,23 +13,27 @@
 
 #endregion
 
-using System.Collections.Generic;
+
+using System;
 using SymbolicDifferentiation.AST;
 using SymbolicDifferentiation.Tokens;
 
 namespace SymbolicDifferentiation.ParserCombinators
 {
-    public static class CombinatorParser
+    public class Symbol : Token
     {
-        public static Expression Parse(IEnumerable<Token> input)
+        public Symbol(string value)
+            : base(MatchType.Symbol, value)
+        { }
+
+        public static P<Func<Expression, Expression, Expression>> operator >(Symbol token, Func<Expression, Expression, Expression> func)
         {
-            var addOp = (new Symbol("+") > ((x, y) => x + y)).Or(new Symbol("-") > ((x, y) => x - y)).Tag("add/subtract op");
-            var mulOp = (new Symbol("*") > ((x, y) => x * y)).Or(new Symbol("/") > ((x, y) => x / y)).Tag("multiply/divide op");
-            var expOp = (new Symbol("^") > ((x, y) => x ^ y)).Tag("exponentiation op");
-
-            var expr = CombinatorParserExtensions.DigitVal.Chainr1(expOp).Chainl1(mulOp).Chainl1(addOp);
-
-            return expr.Parse(input).Result;
+            return from t in token.Literal() select func;
         }
-    }   
+
+        public static P<Func<Expression, Expression, Expression>> operator <(Symbol token, Func<Expression, Expression, Expression> func)
+        {
+            throw new NotImplementedException();
+        }
+    } 
 }

@@ -58,6 +58,7 @@
     <Compile Include="ParserCombinators\Linq.cs" />
     <Compile Include="ParserCombinators\ParseResult.cs" />
     <Compile Include="ParserCombinators\ParserState.cs" />
+    <Compile Include="ParserCombinators\Symbol.cs" />
     <Compile Include="Sugar.cs" />
     <Compile Include="Tokens\Token.cs" />
     <Compile Include="Visitors\ExpressionEqualityComparer.cs" />

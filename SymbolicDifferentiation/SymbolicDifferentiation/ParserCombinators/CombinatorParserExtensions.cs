@@ -33,11 +33,6 @@ namespace SymbolicDifferentiation.ParserCombinators
             return p(new ParserState(0, toParse)).ParseResult;
         }
 
-        public static P<U> Then_<T, U>(P<T> p1, P<U> p2)
-        {
-            return p1.Then(dummy => p2);
-        }
-
         public static P<U> Then<T, U>(this P<T> p1, Func<T, P<U>> f)
         {
             return input =>
@@ -85,11 +80,6 @@ namespace SymbolicDifferentiation.ParserCombinators
             return input => new Consumed<T>(false, new ParseResult<T>(x, input, new ErrorInfo(input.Position)));
         }
 
-        public static P<Func<T, T, T>> Return<T>(this Func<T, T, T> f)
-        {
-            return Return<Func<T, T, T>>(f);
-        }
-
         public static P<T> Tag<T>(this P<T> p, string label)
         {
             return input => p(input).Tag(label);
@@ -110,7 +100,6 @@ namespace SymbolicDifferentiation.ParserCombinators
             return op.Then(f => p.Then(y => Chainl1Helper(f(x, y), p, op))).Or(x.Return());
         }
 
-        // Sat(pred) succeeds parsing a character only if the character matches the predicate
         private static P<Token> Sat(Predicate<Token> pred)
         {
             return input =>
@@ -133,21 +122,16 @@ namespace SymbolicDifferentiation.ParserCombinators
         }
 
 
-        public static P<Token> Literal(this string c)
+        public static P<Token> Literal(this Token c)
         {
-            return Sat(x => x.Equals(TokenBuilder.Symbol(c))).Tag("character '" + c + "'");
+            return Sat(x => x.Equals(c)).Tag("character '" + c + "'");
         }
 
         public static IEnumerable<T> Cons<T>(T x, IEnumerable<T> rest)
         {
             yield return x;
-            foreach (T t in rest)
+            foreach (var t in rest)
                 yield return t;
-        }
-
-        public static P<Func<Expression, Expression, Expression>> Op(this string op, Func<Expression, Expression, Expression> func)
-        {
-            return from t in op.Literal() select func;
         }
     }
 }
