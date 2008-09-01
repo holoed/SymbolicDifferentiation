@@ -72,30 +72,27 @@ namespace SymbolicDifferentiation.ParserCombinators
         {
             return Sat(x => x.Equals(c)).Tag("character '" + c + "'");
         }
+
+        private static P<Func<Expression, Expression, Expression>> BinOp(string symbol, Func<Expression, Expression, Expression> func)
+        {
+            return Literal(TokenBuilder.Symbol(symbol)).Then_(Return(func));
+        }
        
         public static Expression Parse(IEnumerable<Token> input)
         {
-            var addOp =
-                    Literal(TokenBuilder.Symbol("+")).Then_(Return((Expression x, Expression y) => x + y))
-                    .Or(
-                    Literal(TokenBuilder.Symbol("-")).Then_(Return((Expression x, Expression y) => x - y)))
-                    .Tag("add/subtract op");
+            var addOp = BinOp("+", (x, y) => x + y).Or(BinOp("-", (x, y) => x - y)).Tag("add/subtract op");
 
-            var mulOp =
-                Literal(TokenBuilder.Symbol("*")).Then_(Return((Expression x, Expression y) => x * y))
-                .Or(
-                Literal(TokenBuilder.Symbol("/")).Then_(Return((Expression x, Expression y) => x / y)))
-                .Tag("multiply/divide op");
+            var mulOp = BinOp("*", (x, y) => x * y).Or(BinOp("/", (x, y) => x / y)).Tag("multiply/divide op");
 
-            var expOp = Literal(TokenBuilder.Symbol("^")).Then_(Return((Expression x, Expression y) => x ^ y)).
-                Tag("exponentiation op");
+            var expOp = BinOp("^", (x, y) => x ^ y).Tag("exponentiation op");
 
             var factor = DigitVal.Chainr1(expOp);
             var term = factor.Chainl1(mulOp);
             var expr = term.Chainl1(addOp);
 
-
             return expr.Parse(input).Result;
         }
+
+       
     }
 }
