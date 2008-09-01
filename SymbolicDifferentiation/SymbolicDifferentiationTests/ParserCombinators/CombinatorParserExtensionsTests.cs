@@ -14,8 +14,8 @@ namespace SymbolicDifferentiation.Tests.ParserCombinators
         [Test]
         public void Cons()
         {
-            CollectionAssert.AreEqual(new[] { 0 }, CombinatorParser.Cons(0, new int[0]).ToArray());
-            CollectionAssert.AreEqual(new[] {0, 1, 2, 3}, CombinatorParser.Cons(0, new[] {1, 2, 3}).ToArray());
+            CollectionAssert.AreEqual(new[] { 0 }, CombinatorParserExtensions.Cons(0, new int[0]).ToArray());
+            CollectionAssert.AreEqual(new[] {0, 1, 2, 3}, CombinatorParserExtensions.Cons(0, new[] {1, 2, 3}).ToArray());
         }
 
         [Test]

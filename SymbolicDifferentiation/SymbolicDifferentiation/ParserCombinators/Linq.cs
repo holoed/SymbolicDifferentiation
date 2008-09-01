@@ -1,4 +1,5 @@
 ﻿using System;
+using SymbolicDifferentiation.Tokens;
 
 namespace SymbolicDifferentiation.ParserCombinators
 {
@@ -12,6 +13,11 @@ namespace SymbolicDifferentiation.ParserCombinators
         public static P<V> SelectMany<T, U, V>(this P<T> p, Func<T, P<U>> selector, Func<T, U, V> projector)
         {
             return p.Then(r1 => selector(r1).Then(r2 => projector(r1, r2).Return()));
+        }
+
+        public static P<T> Where<T>(this P<T> p, Func<T, bool> predicate)
+        {
+            throw new NotImplementedException(); 
         }
     }
 }

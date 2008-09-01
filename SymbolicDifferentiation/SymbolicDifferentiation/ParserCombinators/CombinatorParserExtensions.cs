@@ -15,18 +15,25 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using SymbolicDifferentiation.AST;
 using SymbolicDifferentiation.Tokens;
 
 namespace SymbolicDifferentiation.ParserCombinators
 {
+    // representation type for parsers
+    public delegate Consumed<T> P<T>(ParserState input);
+
     public static class CombinatorParserExtensions
     {
+        public static readonly P<Expression> DigitVal = from c in Sat(Token.IsLetterOrDigit) select new Expression { Value = c };
+
         public static ParseResult<T> Parse<T>(this P<T> p, IEnumerable<Token> toParse)
         {
             return p(new ParserState(0, toParse)).ParseResult;
         }
 
-        public static P<U> Then_<T, U>(this P<T> p1, P<U> p2)
+        public static P<U> Then_<T, U>(P<T> p1, P<U> p2)
         {
             return p1.Then(dummy => p2);
         }
@@ -35,10 +42,10 @@ namespace SymbolicDifferentiation.ParserCombinators
         {
             return input =>
             {
-                Consumed<T> consumed1 = p1(input);
+                var consumed1 = p1(input);
                 if (consumed1.ParseResult.Succeeded)
                 {
-                    Consumed<U> consumed2 =
+                    var consumed2 =
                         f(consumed1.ParseResult.Result)(consumed1.ParseResult.RemainingInput);
                     return new Consumed<U>(consumed1.HasConsumedInput || consumed2.HasConsumedInput,
                                            consumed2.HasConsumedInput
@@ -101,6 +108,46 @@ namespace SymbolicDifferentiation.ParserCombinators
         private static P<T> Chainl1Helper<T>(T x, P<T> p, P<Func<T, T, T>> op)
         {
             return op.Then(f => p.Then(y => Chainl1Helper(f(x, y), p, op))).Or(x.Return());
+        }
+
+        // Sat(pred) succeeds parsing a character only if the character matches the predicate
+        private static P<Token> Sat(Predicate<Token> pred)
+        {
+            return input =>
+                input.Position >= input.Input.Count() ?
+                new Consumed<Token>(false,
+                    new ParseResult<Token>(
+                        new ErrorInfo(input.Position,
+                            Enumerable.Empty<string>(),
+                            "unexpected end of input"))) :
+                (!pred(input.Input.ElementAt(input.Position)) ?
+                new Consumed<Token>(false,
+                    new ParseResult<Token>(
+                        new ErrorInfo(input.Position,
+                            Enumerable.Empty<string>(),
+                            "unexpected character '" + input.Input.ElementAt(input.Position) + "'"))) :
+                            new Consumed<Token>(true,
+                                new ParseResult<Token>(
+                                    input.Input.ElementAt(input.Position),
+                                    new ParserState(input.Position + 1, input.Input), new ErrorInfo(input.Position + 1))));
+        }
+
+
+        public static P<Token> Literal(this string c)
+        {
+            return Sat(x => x.Equals(TokenBuilder.Symbol(c))).Tag("character '" + c + "'");
+        }
+
+        public static IEnumerable<T> Cons<T>(T x, IEnumerable<T> rest)
+        {
+            yield return x;
+            foreach (T t in rest)
+                yield return t;
+        }
+
+        public static P<Func<Expression, Expression, Expression>> Op(this string op, Func<Expression, Expression, Expression> func)
+        {
+            return from t in op.Literal() select func;
         }
     }
 }
