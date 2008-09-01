@@ -68,5 +68,11 @@ namespace SymbolicDifferentiation.Tests
         {
             Assert.AreEqual("15x^2+6x+2", Derivative.Of("5x^3 + 3x^2 + 2x + 1"));
         }
+
+        [Test]
+        public void BinomialSquare()
+        {
+            Assert.AreEqual("2x+2", Derivative.Of("(x + 2)^2"));
+        }
     }
 }
