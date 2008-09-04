@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{A24939F5-5333-45B7-BAEC-BC4A518597A1}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -60,7 +60,6 @@
     <Compile Include="ParserCombinators\ParserState.cs" />
     <Compile Include="ParserCombinators\Symbol.cs" />
     <Compile Include="Sugar.cs" />
-    <Compile Include="Tokens\Token.cs" />
     <Compile Include="Visitors\ExpressionEqualityComparer.cs" />
     <Compile Include="Extensions\SimplifierExtension.cs" />
     <Compile Include="Visitors\Derivative.cs" />
@@ -70,11 +69,20 @@
     <Compile Include="Visitors\BasicParser.cs" />
     <Compile Include="Extensions\ParserExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tokens\TokenBuilder.cs" />
-    <Compile Include="Tokens\Tokenizer.cs" />
+    <Compile Include="Tokenizer.cs" />
     <Compile Include="Extensions\TokensExtensions.cs" />
     <Compile Include="Visitors\Simplifier.cs" />
     <Compile Include="Visitors\ToTokensExpressionVisitor.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SimbolicDifferentiation.Core\SimbolicDifferentiation.Core.csproj">
+      <Project>{34911264-DB7F-49A6-B88F-72C13168EA00}</Project>
+      <Name>SimbolicDifferentiation.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SymbolicDifferentiationLib\SymbolicDifferentiationLib.fsproj">
+      <Project>{50027D53-BFEE-4AA9-BE67-B4598353DD9F}</Project>
+      <Name>SymbolicDifferentiationLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

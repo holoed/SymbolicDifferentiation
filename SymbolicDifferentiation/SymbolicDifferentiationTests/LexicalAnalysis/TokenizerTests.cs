@@ -16,14 +16,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using SymbolicDifferentiation.Extensions;
-using SymbolicDifferentiation.Tokens;
+using SimbolicDifferentiation.Core.Tokens;
 
-namespace SymbolicDifferentiation.Tests
+namespace SymbolicDifferentiation.Tests.LexicalAnalysis
 {
     [TestFixture]
-    public class TokenizeTests
+    public abstract class TokenizerTests
     {
+        protected abstract IEnumerable<Token> Tokenize(string input);
+
         private static void AssertToken(object value, MatchType type, Token token)
         {
             Assert.AreEqual(type, token.Type);
@@ -33,7 +34,7 @@ namespace SymbolicDifferentiation.Tests
         [Test]
         public void MultiplicationAndSquare()
         {
-            IEnumerable<Token> tokens = "3x^2".Tokenize();
+            IEnumerable<Token> tokens = Tokenize("3x^2");
             AssertToken(3, MatchType.Number, tokens.ElementAt(0));
             AssertToken("x", MatchType.Variable, tokens.ElementAt(1));
             AssertToken("^", MatchType.Symbol, tokens.ElementAt(2));
@@ -43,14 +44,14 @@ namespace SymbolicDifferentiation.Tests
         [Test]
         public void Number()
         {
-            IEnumerable<Token> tokens = "42".Tokenize();
+            IEnumerable<Token> tokens = Tokenize("42");
             AssertToken(42, MatchType.Number, tokens.First());
         }
 
         [Test]
         public void NumberAndVariable()
         {
-            IEnumerable<Token> tokens = "2x".Tokenize();
+            IEnumerable<Token> tokens = Tokenize("2x");
             AssertToken(2, MatchType.Number, tokens.First());
             AssertToken("x", MatchType.Variable, tokens.ElementAt(1));
         }
@@ -58,7 +59,7 @@ namespace SymbolicDifferentiation.Tests
         [Test]
         public void Polynomial()
         {
-            IEnumerable<Token> tokens = "x^2 + 3x + 1".Tokenize();
+            IEnumerable<Token> tokens = Tokenize("x^2 + 3x + 1");
             AssertToken("x", MatchType.Variable, tokens.ElementAt(0));
             AssertToken("^", MatchType.Symbol, tokens.ElementAt(1));
             AssertToken(2, MatchType.Number, tokens.ElementAt(2));
@@ -72,7 +73,7 @@ namespace SymbolicDifferentiation.Tests
         [Test]
         public void Square()
         {
-            IEnumerable<Token> tokens = "x^2".Tokenize();
+            IEnumerable<Token> tokens = Tokenize("x^2");
             AssertToken("x", MatchType.Variable, tokens.ElementAt(0));
             AssertToken("^", MatchType.Symbol, tokens.ElementAt(1));
             AssertToken(2, MatchType.Number, tokens.ElementAt(2));
@@ -81,17 +82,17 @@ namespace SymbolicDifferentiation.Tests
         [Test]
         public void Symbol()
         {
-            AssertToken("^", MatchType.Symbol, "^".Tokenize().First());
-            AssertToken("*", MatchType.Symbol, "*".Tokenize().First());
-            AssertToken("+", MatchType.Symbol, "+".Tokenize().First());
-            AssertToken("(", MatchType.Symbol, "(".Tokenize().First());
-            AssertToken(")", MatchType.Symbol, ")".Tokenize().First());
+            AssertToken("^", MatchType.Symbol, Tokenize("^").First());
+            AssertToken("*", MatchType.Symbol, Tokenize("*").First());
+            AssertToken("+", MatchType.Symbol, Tokenize("+").First());
+            AssertToken("(", MatchType.Symbol, Tokenize("(").First());
+            AssertToken(")", MatchType.Symbol, Tokenize(")").First());
         }
 
         [Test]
         public void Variable()
         {
-            IEnumerable<Token> tokens = "x".Tokenize();
+            IEnumerable<Token> tokens = Tokenize("x");
             AssertToken("x", MatchType.Variable, tokens.First());
         }
     }

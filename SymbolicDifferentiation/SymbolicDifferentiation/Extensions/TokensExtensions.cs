@@ -15,15 +15,20 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using SymbolicDifferentiation.Tokens;
+using SimbolicDifferentiation.Core.Tokens;
 
 namespace SymbolicDifferentiation.Extensions
 {
     public static class TokensExtensions
     {
-        public static IEnumerable<Token> Tokenize(this string input)
+        public static IEnumerable<Token> CSTokenize(this string input)
         {
             return Tokenizer.Tokenize(input);
+        }
+
+        public static IEnumerable<Token> FSTokenize(this string input)
+        {
+            return FSharpLib.Tokenize(input);
         }
 
         public static IEnumerable<Token> Expand(this IEnumerable<Token> tokens)

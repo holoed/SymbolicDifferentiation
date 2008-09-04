@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{56437941-A7C2-4613-B947-59B9FE7682CA}</ProjectGuid>
+    <ProjectGuid>{34911264-DB7F-49A6-B88F-72C13168EA00}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SymbolicDifferentiation.Tests</RootNamespace>
-    <AssemblyName>SymbolicDifferentiation.Tests</AssemblyName>
+    <RootNamespace>SimbolicDifferentiation.Core</RootNamespace>
+    <AssemblyName>SimbolicDifferentiation.Core</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -35,11 +35,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FSharp.Core, Version=1.9.6.0, Culture=neutral, PublicKeyToken=a19089b1c74d0809, processorArchitecture=MSIL" />
-    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Program Files\NUnit 2.4.8\bin\nunit.framework.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -54,34 +49,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BasicParserTests.cs" />
-    <Compile Include="CombinatorParserTests.cs" />
-    <Compile Include="LexicalAnalysis\CSTokenizerTests.cs" />
-    <Compile Include="DerivativeTests.cs" />
-    <Compile Include="LexicalAnalysis\FSTokenizerTests.cs" />
-    <Compile Include="LinqExpressionVisitorTests.cs" />
-    <Compile Include="ParserCombinators\CombinatorParserExtensionsTests.cs" />
-    <Compile Include="SugarTests.cs" />
-    <Compile Include="ExpressionAssert.cs" />
-    <Compile Include="ParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SimplifierTests.cs" />
-    <Compile Include="TestsBase.cs" />
-    <Compile Include="LexicalAnalysis\TokenizerTests.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SimbolicDifferentiation.Core\SimbolicDifferentiation.Core.csproj">
-      <Project>{34911264-DB7F-49A6-B88F-72C13168EA00}</Project>
-      <Name>SimbolicDifferentiation.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SymbolicDifferentiationLib\SymbolicDifferentiationLib.fsproj">
-      <Project>{50027D53-BFEE-4AA9-BE67-B4598353DD9F}</Project>
-      <Name>SymbolicDifferentiationLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SymbolicDifferentiation\SymbolicDifferentiation.csproj">
-      <Project>{A24939F5-5333-45B7-BAEC-BC4A518597A1}</Project>
-      <Name>SymbolicDifferentiation</Name>
-    </ProjectReference>
+    <Compile Include="Tokens\Token.cs" />
+    <Compile Include="Tokens\TokenBuilder.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

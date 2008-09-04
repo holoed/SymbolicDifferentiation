@@ -13,27 +13,23 @@
 
 #endregion
 
-
-using System;
-using SimbolicDifferentiation.Core.Tokens;
-using SymbolicDifferentiation.AST;
-
-namespace SymbolicDifferentiation.ParserCombinators
+namespace SimbolicDifferentiation.Core.Tokens
 {
-    public class Symbol : Token
+    public static class TokenBuilder
     {
-        public Symbol(string value)
-            : base(MatchType.Symbol, value)
-        { }
-
-        public static P<Func<Expression, Expression, Expression>> operator >(Symbol token, Func<Expression, Expression, Expression> func)
+        public static Token Number(double value)
         {
-            return from t in token.Literal() select func;
+            return new Token(MatchType.Number, value);
         }
 
-        public static P<Func<Expression, Expression, Expression>> operator <(Symbol token, Func<Expression, Expression, Expression> func)
+        public static Token Variable(string value)
         {
-            throw new NotImplementedException();
+            return new Token(MatchType.Variable, value);
         }
-    } 
+
+        public static Token Symbol(string value)
+        {
+            return new Token(MatchType.Symbol, value);
+        }
+    }
 }

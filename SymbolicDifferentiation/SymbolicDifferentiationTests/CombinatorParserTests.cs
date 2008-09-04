@@ -15,9 +15,9 @@
 
 using System.Collections.Generic;
 using NUnit.Framework;
+using SimbolicDifferentiation.Core.Tokens;
 using SymbolicDifferentiation.AST;
 using SymbolicDifferentiation.Extensions;
-using SymbolicDifferentiation.Tokens;
 
 namespace SymbolicDifferentiation.Tests
 {

@@ -14,7 +14,7 @@
 #endregion
 
 using System.Collections.Generic;
-using SymbolicDifferentiation.Tokens;
+using SimbolicDifferentiation.Core.Tokens;
 
 namespace SymbolicDifferentiation.ParserCombinators
 {

@@ -14,9 +14,9 @@
 #endregion
 
 using System.Collections.Generic;
+using SimbolicDifferentiation.Core.Tokens;
 using SymbolicDifferentiation.AST;
 using SymbolicDifferentiation.ParserCombinators;
-using SymbolicDifferentiation.Tokens;
 using SymbolicDifferentiation.Visitors;
 
 namespace SymbolicDifferentiation.Extensions

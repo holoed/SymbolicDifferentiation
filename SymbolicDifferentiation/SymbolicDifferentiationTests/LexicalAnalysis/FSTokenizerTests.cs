@@ -13,27 +13,17 @@
 
 #endregion
 
-
-using System;
+using System.Collections.Generic;
 using SimbolicDifferentiation.Core.Tokens;
-using SymbolicDifferentiation.AST;
+using SymbolicDifferentiation.Extensions;
 
-namespace SymbolicDifferentiation.ParserCombinators
+namespace SymbolicDifferentiation.Tests.LexicalAnalysis
 {
-    public class Symbol : Token
+    public class FSTokenizerTests : TokenizerTests
     {
-        public Symbol(string value)
-            : base(MatchType.Symbol, value)
-        { }
-
-        public static P<Func<Expression, Expression, Expression>> operator >(Symbol token, Func<Expression, Expression, Expression> func)
+        protected override IEnumerable<Token> Tokenize(string input)
         {
-            return from t in token.Literal() select func;
+            return input.FSTokenize();
         }
-
-        public static P<Func<Expression, Expression, Expression>> operator <(Symbol token, Func<Expression, Expression, Expression> func)
-        {
-            throw new NotImplementedException();
-        }
-    } 
+    }
 }

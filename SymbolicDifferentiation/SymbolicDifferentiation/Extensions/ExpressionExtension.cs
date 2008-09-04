@@ -13,8 +13,8 @@
 
 #endregion
 
+using SimbolicDifferentiation.Core.Tokens;
 using SymbolicDifferentiation.AST;
-using SymbolicDifferentiation.Tokens;
 using SymbolicDifferentiation.Visitors;
 using System.Collections.Generic;
 

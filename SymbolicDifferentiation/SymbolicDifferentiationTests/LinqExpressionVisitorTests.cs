@@ -16,8 +16,8 @@
 using System;
 using System.Linq.Expressions;
 using NUnit.Framework;
+using SimbolicDifferentiation.Core.Tokens;
 using SymbolicDifferentiation.Extensions;
-using SymbolicDifferentiation.Tokens;
 using SymbolicDifferentiation.Visitors;
 using Expression=SymbolicDifferentiation.AST.Expression;
 

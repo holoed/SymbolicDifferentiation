@@ -10,9 +10,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{
 		License.htm = License.htm
 	EndProjectSection
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SymbolicDifferentiationLib", "SymbolicDifferentiationLib\SymbolicDifferentiationLib.fsproj", "{50027D53-BFEE-4AA9-BE67-B4598353DD9F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimbolicDifferentiation.Core", "SimbolicDifferentiation.Core\SimbolicDifferentiation.Core.csproj", "{34911264-DB7F-49A6-B88F-72C13168EA00}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 3
+		SccNumberOfProjects = 5
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs01.codeplex.com/
 		SccLocalPath0 = .
@@ -22,6 +26,12 @@ Global
 		SccProjectUniqueName2 = SymbolicDifferentiationTests\\SymbolicDifferentiation.Tests.csproj
 		SccProjectName2 = SymbolicDifferentiationTests
 		SccLocalPath2 = SymbolicDifferentiationTests
+		SccProjectUniqueName3 = SymbolicDifferentiationLib\\SymbolicDifferentiationLib.fsproj
+		SccProjectName3 = SymbolicDifferentiationLib
+		SccLocalPath3 = SymbolicDifferentiationLib
+		SccProjectUniqueName4 = SimbolicDifferentiation.Core\\SimbolicDifferentiation.Core.csproj
+		SccProjectName4 = SimbolicDifferentiation.Core
+		SccLocalPath4 = SimbolicDifferentiation.Core
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +46,14 @@ Global
 		{56437941-A7C2-4613-B947-59B9FE7682CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56437941-A7C2-4613-B947-59B9FE7682CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56437941-A7C2-4613-B947-59B9FE7682CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50027D53-BFEE-4AA9-BE67-B4598353DD9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50027D53-BFEE-4AA9-BE67-B4598353DD9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50027D53-BFEE-4AA9-BE67-B4598353DD9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50027D53-BFEE-4AA9-BE67-B4598353DD9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34911264-DB7F-49A6-B88F-72C13168EA00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34911264-DB7F-49A6-B88F-72C13168EA00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34911264-DB7F-49A6-B88F-72C13168EA00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34911264-DB7F-49A6-B88F-72C13168EA00}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -15,8 +15,8 @@
 
 using System;
 using System.Collections.Generic;
+using SimbolicDifferentiation.Core.Tokens;
 using SymbolicDifferentiation.AST;
-using SymbolicDifferentiation.Tokens;
 
 namespace SymbolicDifferentiation.Visitors
 {

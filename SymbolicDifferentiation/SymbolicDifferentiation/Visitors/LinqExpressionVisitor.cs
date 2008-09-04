@@ -19,8 +19,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using SimbolicDifferentiation.Core.Tokens;
 using SymbolicDifferentiation.AST;
-using SymbolicDifferentiation.Tokens;
 using BinaryExpression=SymbolicDifferentiation.AST.BinaryExpression;
 using Expression=System.Linq.Expressions.Expression;
 

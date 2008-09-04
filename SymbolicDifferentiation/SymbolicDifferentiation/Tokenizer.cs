@@ -16,19 +16,20 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using SimbolicDifferentiation.Core.Tokens;
 
-namespace SymbolicDifferentiation.Tokens
+namespace SymbolicDifferentiation
 {
     public class Tokenizer
     {
         private static readonly Dictionary<MatchType, Func<string, Match>> _patterns = 
             new Dictionary<MatchType, Func<string, Match>>
-           {
-               { MatchType.Number, input => Regex.Match(input, "^[0-9]+") },
-               { MatchType.Variable, input => Regex.Match(input, "^[a-zA-Z]+") },
-               { MatchType.Symbol, input => Regex.Match(input, "^[\\^\\+\\*\\(\\)]") },
-               { MatchType.Whitespace, input => Regex.Match(input, "^[ ]") }
-           };
+                {
+                    { MatchType.Number, input => Regex.Match(input, "^[0-9]+") },
+                    { MatchType.Variable, input => Regex.Match(input, "^[a-zA-Z]+") },
+                    { MatchType.Symbol, input => Regex.Match(input, "^[\\^\\+\\*\\(\\)]") },
+                    { MatchType.Whitespace, input => Regex.Match(input, "^[ ]") }
+                };
 
         public static IEnumerable<Token> Tokenize(string input)
         {
