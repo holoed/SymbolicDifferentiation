@@ -19,9 +19,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using SimbolicDifferentiation.Core.Tokens;
-using SymbolicDifferentiation.AST;
-using BinaryExpression=SymbolicDifferentiation.AST.BinaryExpression;
+using SymbolicDifferentiation.Core.AST;
+using SymbolicDifferentiation.Core.Tokens;
+using BinaryExpression=SymbolicDifferentiation.Core.AST.BinaryExpression;
 using Expression=System.Linq.Expressions.Expression;
 
 namespace SymbolicDifferentiation.Visitors
@@ -61,7 +61,7 @@ namespace SymbolicDifferentiation.Visitors
             _stack.Push(_token_handlers[expression.Operator](l_left, l_right));
         }
 
-        public void Visit(AST.Expression expression)
+        public void Visit(Core.AST.Expression expression)
         {
             if (expression.IsNumber)
                 _stack.Push(Expression.Constant(expression.Value.Value, typeof (double)));
@@ -69,10 +69,7 @@ namespace SymbolicDifferentiation.Visitors
                 _stack.Push(_args[(string) expression.Value.Value]);
         }
 
-        public static Expression GetExpression(
-            Type delegateType,
-            AST.Expression exr,
-            params string[] args)
+        public static Expression GetExpression(Type delegateType, Core.AST.Expression exr, params string[] args)
         {
             ParameterExpression[] linqArgs = args.Select(x => Expression.Parameter(typeof (double), x)).ToArray();
 
@@ -82,9 +79,7 @@ namespace SymbolicDifferentiation.Visitors
             return Expression.Lambda(delegateType, linqVisitor._stack.Pop(), linqArgs);
         }
 
-        public static Expression<Func<double, double>> GetExpression(
-            AST.Expression expression,
-            string arg0)
+        public static Expression<Func<double, double>> GetExpression(Core.AST.Expression expression, string arg0)
         {
             return (Expression<Func<double, double>>) GetExpression(
                                                           typeof (Func<double, double>),

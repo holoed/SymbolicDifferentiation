@@ -5,13 +5,13 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{50027d53-bfee-4aa9-be67-b4598353dd9f}</ProjectGuid>
+    <ProjectGuid>{491f8d6d-0033-4d1b-9381-318fd8c2ad85}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>SymbolicDifferentiationLib</RootNamespace>
-    <AssemblyName>SymbolicDifferentiationLib</AssemblyName>
+    <RootNamespace>SymbolicDifferentiationLib.Core</RootNamespace>
+    <AssemblyName>SymbolicDifferentiationLib.Core</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <Name>SymbolicDifferentiationLib</Name>
+    <Name>SymbolicDifferentiationLib.Core</Name>
     <SccProjectName>SAK</SccProjectName>
     <SccProvider>SAK</SccProvider>
     <SccAuxPath>SAK</SccAuxPath>
@@ -41,20 +41,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FS_Tokenizer.fs" />
-    <Compile Include="FS_Derivative.fs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SimbolicDifferentiation.Core\SimbolicDifferentiation.Core.csproj">
-      <Name>SimbolicDifferentiation.Core</Name>
-      <Project>{34911264-db7f-49a6-b88f-72c13168ea00}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\SymbolicDifferentiationLib.Core\SymbolicDifferentiationLib.Core.fsproj">
-      <Name>SymbolicDifferentiationLib.Core</Name>
-      <Project>{491f8d6d-0033-4d1b-9381-318fd8c2ad85}</Project>
-      <Private>True</Private>
-    </ProjectReference>
+    <Compile Include="FS_AbstractSyntaxTree.fs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\FSharp\1.0\Microsoft.FSharp.Targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

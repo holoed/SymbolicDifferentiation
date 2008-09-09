@@ -15,7 +15,7 @@
 
 using System.Linq;
 using NUnit.Framework;
-using SimbolicDifferentiation.Core.Tokens;
+using SymbolicDifferentiation.Core.Tokens;
 using SymbolicDifferentiation.Extensions;
 
 namespace SymbolicDifferentiation.Tests

@@ -17,7 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using SimbolicDifferentiation.Core.Tokens;
+using SymbolicDifferentiation.Core.Tokens;
 using SymbolicDifferentiation.ParserCombinators;
 
 namespace SymbolicDifferentiation.Tests.ParserCombinators

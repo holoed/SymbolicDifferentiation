@@ -14,9 +14,11 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SymbolicDifferentiationLib"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimbolicDifferentiation.Core", "SimbolicDifferentiation.Core\SimbolicDifferentiation.Core.csproj", "{34911264-DB7F-49A6-B88F-72C13168EA00}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SymbolicDifferentiationLib.Core", "SymbolicDifferentiationLib.Core\SymbolicDifferentiationLib.Core.fsproj", "{491F8D6D-0033-4D1B-9381-318FD8C2AD85}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 5
+		SccNumberOfProjects = 6
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs01.codeplex.com/
 		SccLocalPath0 = .
@@ -32,6 +34,9 @@ Global
 		SccProjectUniqueName4 = SimbolicDifferentiation.Core\\SimbolicDifferentiation.Core.csproj
 		SccProjectName4 = SimbolicDifferentiation.Core
 		SccLocalPath4 = SimbolicDifferentiation.Core
+		SccProjectUniqueName5 = SymbolicDifferentiationLib.Core\\SymbolicDifferentiationLib.Core.fsproj
+		SccProjectName5 = SymbolicDifferentiationLib.Core
+		SccLocalPath5 = SymbolicDifferentiationLib.Core
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +59,10 @@ Global
 		{34911264-DB7F-49A6-B88F-72C13168EA00}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34911264-DB7F-49A6-B88F-72C13168EA00}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34911264-DB7F-49A6-B88F-72C13168EA00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{491F8D6D-0033-4D1B-9381-318FD8C2AD85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{491F8D6D-0033-4D1B-9381-318FD8C2AD85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{491F8D6D-0033-4D1B-9381-318FD8C2AD85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{491F8D6D-0033-4D1B-9381-318FD8C2AD85}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

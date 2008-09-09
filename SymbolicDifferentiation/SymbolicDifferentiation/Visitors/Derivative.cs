@@ -15,8 +15,8 @@
 
 using System;
 using System.Collections.Generic;
-using SimbolicDifferentiation.Core.Tokens;
-using SymbolicDifferentiation.AST;
+using SymbolicDifferentiation.Core.AST;
+using SymbolicDifferentiation.Core.Tokens;
 using SymbolicDifferentiation.Extensions;
 
 namespace SymbolicDifferentiation.Visitors
@@ -24,18 +24,6 @@ namespace SymbolicDifferentiation.Visitors
     public class Derivative : IExpressionVisitor
     {
         private readonly Stack<Expression> _stack = new Stack<Expression>();
-
-        public static string Of(string input)
-        {
-            return Deriv(input.
-                FSTokenize().
-                Expand().
-                CombiParse()).
-                Simplify().
-                ToTokens(false).
-                Shrink().
-                ToStringExpression();
-        }
 
         void IExpressionVisitor.Visit(BinaryExpression expression)
         {
@@ -57,7 +45,7 @@ namespace SymbolicDifferentiation.Visitors
             _stack.Push(new Expression {Value = token});
         }
 
-        private static Expression Deriv(Expression input)
+        public static Expression Deriv(Expression input)
         {
             var deriv = new Derivative();
             input.Accept(deriv);

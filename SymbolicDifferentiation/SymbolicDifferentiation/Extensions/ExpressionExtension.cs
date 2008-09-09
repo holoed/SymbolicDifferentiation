@@ -13,8 +13,8 @@
 
 #endregion
 
-using SimbolicDifferentiation.Core.Tokens;
-using SymbolicDifferentiation.AST;
+using SymbolicDifferentiation.Core.AST;
+using SymbolicDifferentiation.Core.Tokens;
 using SymbolicDifferentiation.Visitors;
 using System.Collections.Generic;
 
@@ -27,6 +27,24 @@ namespace SymbolicDifferentiation.Extensions
             var visitor = new ToTokensExpressionVisitor(grouping);
             expression.Accept(visitor);
             return visitor.Result;
+        }
+
+        public static string CSDerive(this Expression expression)
+        {
+            return Derivative.Deriv(expression).
+                Simplify().
+                ToTokens(false).
+                Shrink().
+                ToStringExpression();
+        }
+
+        public static string FSDerive(this Expression expression)
+        {
+            return FS_Derivative.Derivate(expression).
+                Simplify().
+                ToTokens(false).
+                Shrink().
+                ToStringExpression();
         }
     }
 }

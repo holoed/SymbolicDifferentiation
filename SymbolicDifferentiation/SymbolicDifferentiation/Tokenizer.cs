@@ -16,7 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using SimbolicDifferentiation.Core.Tokens;
+using SymbolicDifferentiation.Core.Tokens;
 
 namespace SymbolicDifferentiation
 {

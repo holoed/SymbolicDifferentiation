@@ -56,8 +56,10 @@
   <ItemGroup>
     <Compile Include="BasicParserTests.cs" />
     <Compile Include="CombinatorParserTests.cs" />
+    <Compile Include="Derivatives\CSDerivativeTests.cs" />
+    <Compile Include="Derivatives\FSDerivativeTests.cs" />
     <Compile Include="LexicalAnalysis\CSTokenizerTests.cs" />
-    <Compile Include="DerivativeTests.cs" />
+    <Compile Include="Derivatives\DerivativeTests.cs" />
     <Compile Include="LexicalAnalysis\FSTokenizerTests.cs" />
     <Compile Include="LinqExpressionVisitorTests.cs" />
     <Compile Include="ParserCombinators\CombinatorParserExtensionsTests.cs" />
@@ -73,6 +75,10 @@
     <ProjectReference Include="..\SimbolicDifferentiation.Core\SimbolicDifferentiation.Core.csproj">
       <Project>{34911264-DB7F-49A6-B88F-72C13168EA00}</Project>
       <Name>SimbolicDifferentiation.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SymbolicDifferentiationLib.Core\SymbolicDifferentiationLib.Core.fsproj">
+      <Project>{491F8D6D-0033-4D1B-9381-318FD8C2AD85}</Project>
+      <Name>SymbolicDifferentiationLib.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\SymbolicDifferentiationLib\SymbolicDifferentiationLib.fsproj">
       <Project>{50027D53-BFEE-4AA9-BE67-B4598353DD9F}</Project>

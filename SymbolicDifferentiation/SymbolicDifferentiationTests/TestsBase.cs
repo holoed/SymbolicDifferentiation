@@ -13,8 +13,8 @@
 
 #endregion
 
-using SimbolicDifferentiation.Core.Tokens;
-using SymbolicDifferentiation.AST;
+using SymbolicDifferentiation.Core.AST;
+using SymbolicDifferentiation.Core.Tokens;
 
 namespace SymbolicDifferentiation.Tests
 {

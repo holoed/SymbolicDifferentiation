@@ -15,7 +15,7 @@
 
 using System;
 using NUnit.Framework;
-using SymbolicDifferentiation.AST;
+using SymbolicDifferentiation.Core.AST;
 using SymbolicDifferentiation.Visitors;
 
 namespace SymbolicDifferentiation.Tests

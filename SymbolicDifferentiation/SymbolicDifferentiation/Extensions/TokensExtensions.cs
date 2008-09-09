@@ -15,7 +15,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using SimbolicDifferentiation.Core.Tokens;
+using SymbolicDifferentiation.Core.Tokens;
 
 namespace SymbolicDifferentiation.Extensions
 {
@@ -28,7 +28,7 @@ namespace SymbolicDifferentiation.Extensions
 
         public static IEnumerable<Token> FSTokenize(this string input)
         {
-            return FSharpLib.Tokenize(input);
+            return FS_Tokenizer.Tokenize(input);
         }
 
         public static IEnumerable<Token> Expand(this IEnumerable<Token> tokens)

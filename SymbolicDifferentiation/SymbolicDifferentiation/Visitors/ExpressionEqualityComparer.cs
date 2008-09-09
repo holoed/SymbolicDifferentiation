@@ -14,7 +14,7 @@
 #endregion
 
 using System.Collections.Generic;
-using SymbolicDifferentiation.AST;
+using SymbolicDifferentiation.Core.AST;
 
 namespace SymbolicDifferentiation.Visitors
 {

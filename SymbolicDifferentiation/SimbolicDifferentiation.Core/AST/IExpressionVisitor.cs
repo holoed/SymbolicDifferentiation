@@ -13,17 +13,13 @@
 
 #endregion
 
-using System.Collections.Generic;
-using SymbolicDifferentiation.Core.Tokens;
-using SymbolicDifferentiation.Extensions;
+using SymbolicDifferentiation.Core.AST;
 
-namespace SymbolicDifferentiation.Tests.LexicalAnalysis
+namespace SymbolicDifferentiation.Core.AST
 {
-    public class CSTokenizerTests : TokenizerTests
+    public interface IExpressionVisitor
     {
-        protected override IEnumerable<Token> Tokenize(string input)
-        {
-            return input.CSTokenize();
-        }
+        void Visit(BinaryExpression expression);
+        void Visit(Expression expression);
     }
 }

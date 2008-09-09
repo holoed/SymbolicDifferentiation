@@ -16,10 +16,10 @@
 using System;
 using System.Linq.Expressions;
 using NUnit.Framework;
-using SimbolicDifferentiation.Core.Tokens;
+using SymbolicDifferentiation.Core.Tokens;
 using SymbolicDifferentiation.Extensions;
 using SymbolicDifferentiation.Visitors;
-using Expression=SymbolicDifferentiation.AST.Expression;
+using Expression=SymbolicDifferentiation.Core.AST.Expression;
 
 namespace SymbolicDifferentiation.Tests
 {

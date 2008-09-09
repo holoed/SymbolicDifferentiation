@@ -49,8 +49,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AST\BinaryExpression.cs" />
-    <Compile Include="AST\IExpressionVisitor.cs" />
     <Compile Include="ParserCombinators\CombinatorParserExtensions.cs" />
     <Compile Include="ParserCombinators\Consumed.cs" />
     <Compile Include="ParserCombinators\ErrorInfo.cs" />
@@ -63,7 +61,6 @@
     <Compile Include="Visitors\ExpressionEqualityComparer.cs" />
     <Compile Include="Extensions\SimplifierExtension.cs" />
     <Compile Include="Visitors\Derivative.cs" />
-    <Compile Include="AST\Expression.cs" />
     <Compile Include="Extensions\ExpressionExtension.cs" />
     <Compile Include="Visitors\LinqExpressionVisitor.cs" />
     <Compile Include="Visitors\BasicParser.cs" />

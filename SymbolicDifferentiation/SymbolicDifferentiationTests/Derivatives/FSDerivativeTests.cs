@@ -13,17 +13,19 @@
 
 #endregion
 
-using System.Collections.Generic;
-using SymbolicDifferentiation.Core.Tokens;
+using NUnit.Framework;
 using SymbolicDifferentiation.Extensions;
 
-namespace SymbolicDifferentiation.Tests.LexicalAnalysis
+namespace SymbolicDifferentiation.Tests.Derivatives
 {
-    public class CSTokenizerTests : TokenizerTests
+    [TestFixture]
+    public class FSDerivativeTests : DerivativeTests
     {
-        protected override IEnumerable<Token> Tokenize(string input)
+        protected override string Derivate(string input)
         {
-            return input.CSTokenize();
+            return input.FSTokenize().Expand().CombiParse().FSDerive();
         }
     }
+
+   
 }

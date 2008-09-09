@@ -13,17 +13,29 @@
 
 #endregion
 
-using System.Collections.Generic;
 using SymbolicDifferentiation.Core.Tokens;
-using SymbolicDifferentiation.Extensions;
 
-namespace SymbolicDifferentiation.Tests.LexicalAnalysis
+namespace SymbolicDifferentiation.Core.AST
 {
-    public class CSTokenizerTests : TokenizerTests
+    public class BinaryExpression : Expression
     {
-        protected override IEnumerable<Token> Tokenize(string input)
+        public Expression Left { set; get; }
+        public Expression Right { set; get; }
+
+        public Token Operator
         {
-            return input.CSTokenize();
+            set { Value = value; }
+            get { return Value; }
+        }
+
+        public override bool IsSymbol
+        {
+            get { return false; }
+        }
+
+        public override void Accept(IExpressionVisitor visitor)
+        {
+            visitor.Visit(this);
         }
     }
 }

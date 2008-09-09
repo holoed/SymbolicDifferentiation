@@ -16,7 +16,7 @@
 using System;
 using System.Text.RegularExpressions;
 
-namespace SimbolicDifferentiation.Core.Tokens
+namespace SymbolicDifferentiation.Core.Tokens
 {
     public enum MatchType
     {
