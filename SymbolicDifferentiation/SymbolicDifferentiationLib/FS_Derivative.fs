@@ -12,14 +12,37 @@
 #light
 
 open FS_AbstractSyntaxTree;
-open SymbolicDifferentiation.Core.Visitors;
 open SymbolicDifferentiation.Core.AST;
 open SymbolicDifferentiation.Core.Tokens;
 
-let private ToFs (x : SymbolicDifferentiation.Core.AST.Expression) =  
-        let visitor = new ToDiscriminatedUnion()
-        x.Accept(visitor)
-        visitor.Result  
+let private (|IsOp|_|) expected actual = 
+    if (TokenBuilder.Symbol(expected) = actual) then
+        Some actual 
+    else
+        None
+
+let private toDouble (x:Token) = System.Convert.ToDouble(x.Value)
+
+let private toString (x:Token) = System.Convert.ToString(x.Value)
+
+let rec private toFsVisitor = 
+ { new IExpressionVisitor<FS_AbstractSyntaxTree.Expression> with 
+   member v.Visit(x : BinaryExpression ) =  
+      let left = x.Left.Accept toFsVisitor
+      let right = x.Right.Accept toFsVisitor
+      match x.Operator with
+      | IsOp("+") result -> left + right
+      | IsOp("*") result -> left * right
+      | IsOp("^") result -> Pow (left, toDouble x.Right.Value)
+      | _ -> failwith "unknown operator"
+   member v.Visit(x : Expression) = 
+      if (x.IsNumber) then
+        Number (toDouble x.Value)
+      else
+        Variable (toString x.Value)  }
+        
+let rec private ToFs (x : Expression) =
+    x.Accept toFsVisitor    
         
 let rec private ToCs (x : FS_AbstractSyntaxTree.Expression) =  
         match x with

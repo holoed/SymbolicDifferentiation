@@ -15,24 +15,26 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.FSharp.Core;
 using SymbolicDifferentiation.Core.AST;
 using SymbolicDifferentiation.Core.Tokens;
 
 namespace SymbolicDifferentiation.Visitors
 {
-    public class BasicParser : IExpressionVisitor
+    public class BasicParser : IExpressionVisitor<Unit>
     {
         private readonly Token _addition = TokenBuilder.Symbol("+");
         private readonly Token _exponentiation = TokenBuilder.Symbol("^");
         private readonly Token _multiplication = TokenBuilder.Symbol("*");
         private readonly Stack<Expression> _stack = new Stack<Expression>();
 
-        public void Visit(BinaryExpression expression)
+        public Unit Visit(BinaryExpression expression)
         {
             _stack.Push(expression);
+            return default(Unit);
         }
 
-        public void Visit(Expression expression)
+        public Unit Visit(Expression expression)
         {
             if (_stack.Count > 0 && _stack.Peek().IsSymbol)
             {
@@ -42,6 +44,7 @@ namespace SymbolicDifferentiation.Visitors
             }
             else
                 _stack.Push(expression);
+            return default(Unit);
         }
 
         public static Expression Parse(IEnumerable<Token> tokens)

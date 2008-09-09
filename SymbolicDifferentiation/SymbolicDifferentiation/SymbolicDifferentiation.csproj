@@ -35,6 +35,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FSharp.Core, Version=1.9.6.0, Culture=neutral, PublicKeyToken=a19089b1c74d0809, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files\FSharp-1.9.6.0\bin\FSharp.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -72,9 +76,9 @@
     <Compile Include="Visitors\ToTokensExpressionVisitor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SimbolicDifferentiation.Core\SimbolicDifferentiation.Core.csproj">
+    <ProjectReference Include="..\SimbolicDifferentiation.Core\SymbolicDifferentiation.Core.csproj">
       <Project>{34911264-DB7F-49A6-B88F-72C13168EA00}</Project>
-      <Name>SimbolicDifferentiation.Core</Name>
+      <Name>SymbolicDifferentiation.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\SymbolicDifferentiationLib\SymbolicDifferentiationLib.fsproj">
       <Project>{50027D53-BFEE-4AA9-BE67-B4598353DD9F}</Project>

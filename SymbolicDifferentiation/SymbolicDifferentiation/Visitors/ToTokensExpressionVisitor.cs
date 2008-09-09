@@ -15,12 +15,13 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.FSharp.Core;
 using SymbolicDifferentiation.Core.AST;
 using SymbolicDifferentiation.Core.Tokens;
 
 namespace SymbolicDifferentiation.Visitors
 {
-    public class ToTokensExpressionVisitor : IExpressionVisitor
+    public class ToTokensExpressionVisitor : IExpressionVisitor<Unit>
     {
         private readonly bool _grouping;
         private readonly List<Token> _tokens;
@@ -36,7 +37,7 @@ namespace SymbolicDifferentiation.Visitors
             get { return _tokens; }
         }
 
-        public void Visit(BinaryExpression expression)
+        public Unit Visit(BinaryExpression expression)
         {
             var action = new Action(() =>
                                         {
@@ -53,11 +54,13 @@ namespace SymbolicDifferentiation.Visitors
             }
             else
                 action();
+            return default(Unit);
         }
 
-        public void Visit(Expression expression)
+        public Unit Visit(Expression expression)
         {
             _tokens.Add(expression.Value);
+            return default(Unit);
         }
     }
 }

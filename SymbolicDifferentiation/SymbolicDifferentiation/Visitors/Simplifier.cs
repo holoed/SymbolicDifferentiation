@@ -15,18 +15,19 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.FSharp.Core;
 using SymbolicDifferentiation.Core.AST;
 using SymbolicDifferentiation.Core.Tokens;
 
 namespace SymbolicDifferentiation.Visitors
 {
-    public class Simplifier : IExpressionVisitor
+    public class Simplifier : IExpressionVisitor<Unit>
     {
         private readonly Expression _one = new Expression {Value = TokenBuilder.Number(1)};
         private readonly Stack<Expression> _stack = new Stack<Expression>();
         private readonly Expression _zero = new Expression {Value = TokenBuilder.Number(0)};
 
-        public void Visit(BinaryExpression expression)
+        public Unit Visit(BinaryExpression expression)
         {
             expression.Left.Accept(this);
             expression.Right.Accept(this);
@@ -34,12 +35,12 @@ namespace SymbolicDifferentiation.Visitors
             Expression right = _stack.Pop();
             Expression left = _stack.Pop();
 
-            if (HandleMultiplicationByZero(expression, left, right)) return;
-            if (HandleAdditionToZero(expression, left, right)) return;
-            if (HandleMultiplicationByOne(expression, left, right)) return;
-            if (HandleRaiseToPowerOne(expression, left, right)) return;
-            if (HandleSimpleOperation(expression, left, right)) return;
-            if (HandleDoubleMultiplicationOperation(expression, left, right)) return;
+            if (HandleMultiplicationByZero(expression, left, right)) return default(Unit);
+            if (HandleAdditionToZero(expression, left, right)) return default(Unit);
+            if (HandleMultiplicationByOne(expression, left, right)) return default(Unit);
+            if (HandleRaiseToPowerOne(expression, left, right)) return default(Unit);
+            if (HandleSimpleOperation(expression, left, right)) return default(Unit);
+            if (HandleDoubleMultiplicationOperation(expression, left, right)) return default(Unit);
 
             _stack.Push(new BinaryExpression
                             {
@@ -47,11 +48,13 @@ namespace SymbolicDifferentiation.Visitors
                                 Left = left,
                                 Right = right
                             });
+            return default(Unit);
         }
 
-        public void Visit(Expression expression)
+        public Unit Visit(Expression expression)
         {
             _stack.Push(expression);
+            return default(Unit);
         }
 
         public static Expression Simplify(Expression expression)

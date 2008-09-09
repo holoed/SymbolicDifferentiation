@@ -14,30 +14,31 @@
 #endregion
 
 using System.Collections.Generic;
+using Microsoft.FSharp.Core;
 using SymbolicDifferentiation.Core.AST;
 
 namespace SymbolicDifferentiation.Visitors
 {
-    public class ExpressionEqualityComparer : IExpressionVisitor
+    public class ExpressionEqualityComparer : IExpressionVisitor<Unit>
     {
         private readonly Queue<Expression> _stack = new Queue<Expression>();
         private bool _enabled;
         private bool _equals = true;
 
-        public void Visit(BinaryExpression expression)
+        public Unit Visit(BinaryExpression expression)
         {
             if (_enabled)
             {
                 if (_stack.Count == 0)
                 {
                     _equals = false;
-                    return;
+                    return default(Unit);
                 }
                 Expression expectedOperator = _stack.Dequeue();
                 if (!Equals(expectedOperator.Value, expression.Operator))
                 {
                     _equals = false;
-                    return;
+                    return default(Unit);
                 }
             }
             else
@@ -45,26 +46,28 @@ namespace SymbolicDifferentiation.Visitors
 
             expression.Left.Accept(this);
             expression.Right.Accept(this);
+            return default(Unit);
         }
 
-        public void Visit(Expression expression)
+        public Unit Visit(Expression expression)
         {
             if (_enabled)
             {
                 if (_stack.Count == 0)
                 {
                     _equals = false;
-                    return;
+                    return default(Unit);
                 }
                 Expression expected = _stack.Dequeue();
                 if (!Equals(expected.Value, expression.Value))
                 {
                     _equals = false;
-                    return;
+                    return default(Unit);
                 }
             }
             else
                 _stack.Enqueue(expression);
+            return default(Unit);
         }
 
         public static bool AreEqual(Expression expected, Expression actual)

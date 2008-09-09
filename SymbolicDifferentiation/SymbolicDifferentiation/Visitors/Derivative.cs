@@ -15,24 +15,26 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.FSharp.Core;
 using SymbolicDifferentiation.Core.AST;
 using SymbolicDifferentiation.Core.Tokens;
 using SymbolicDifferentiation.Extensions;
 
 namespace SymbolicDifferentiation.Visitors
 {
-    public class Derivative : IExpressionVisitor
+    public class Derivative : IExpressionVisitor<Unit>
     {
         private readonly Stack<Expression> _stack = new Stack<Expression>();
 
-        void IExpressionVisitor.Visit(BinaryExpression expression)
+        Unit IExpressionVisitor<Unit>.Visit(BinaryExpression expression)
         {
             HandleAddition(expression);
             HandleMultiplication(expression);
             HandlePower(expression);
+            return default(Unit);
         }
 
-        void IExpressionVisitor.Visit(Expression expression)
+        Unit IExpressionVisitor<Unit>.Visit(Expression expression)
         {
             Token token;
             if (expression.Value.Type == MatchType.Number)
@@ -40,9 +42,10 @@ namespace SymbolicDifferentiation.Visitors
             else if (expression.Value.Type == MatchType.Variable)
                 token = TokenBuilder.Number(1);
             else
-                return;
+                return default(Unit);
 
             _stack.Push(new Expression {Value = token});
+            return default(Unit);
         }
 
         public static Expression Deriv(Expression input)

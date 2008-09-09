@@ -33,9 +33,9 @@ namespace SymbolicDifferentiation.Core.AST
             get { return false; }
         }
 
-        public override void Accept(IExpressionVisitor visitor)
+        public override T Accept<T>(IExpressionVisitor<T> visitor)
         {
-            visitor.Visit(this);
+            return visitor.Visit(this);
         }
     }
 }

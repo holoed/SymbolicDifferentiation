@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using Microsoft.FSharp.Core;
 using SymbolicDifferentiation.Core.AST;
 using SymbolicDifferentiation.Core.Tokens;
 using BinaryExpression=SymbolicDifferentiation.Core.AST.BinaryExpression;
@@ -28,7 +29,7 @@ namespace SymbolicDifferentiation.Visitors
 {
     using SLE = System.Linq.Expressions;
 
-    public class ToLinqExpressionVisitor : IExpressionVisitor
+    public class ToLinqExpressionVisitor : IExpressionVisitor<Unit>
     {
         private static readonly Dictionary<Token, Func<Expression, Expression, Expression>> _token_handlers =
             new Dictionary<Token, Func<Expression, Expression, Expression>>();
@@ -50,7 +51,7 @@ namespace SymbolicDifferentiation.Visitors
             _args = args.ToDictionary(x => x.Name);
         }
 
-        public void Visit(BinaryExpression expression)
+        public Unit Visit(BinaryExpression expression)
         {
             expression.Left.Accept(this);
             expression.Right.Accept(this);
@@ -59,14 +60,16 @@ namespace SymbolicDifferentiation.Visitors
             Expression l_left = _stack.Pop();
 
             _stack.Push(_token_handlers[expression.Operator](l_left, l_right));
+            return default(Unit);
         }
 
-        public void Visit(Core.AST.Expression expression)
+        public Unit Visit(Core.AST.Expression expression)
         {
             if (expression.IsNumber)
                 _stack.Push(Expression.Constant(expression.Value.Value, typeof (double)));
             else
                 _stack.Push(_args[(string) expression.Value.Value]);
+            return default(Unit);
         }
 
         public static Expression GetExpression(Type delegateType, Core.AST.Expression exr, params string[] args)

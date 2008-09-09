@@ -41,9 +41,9 @@ namespace SymbolicDifferentiation.Core.AST
             get { return Value.Type == MatchType.Number; }
         }
 
-        public virtual void Accept(IExpressionVisitor visitor)
+        public virtual T Accept<T>(IExpressionVisitor<T> visitor)
         {
-            visitor.Visit(this);
+            return visitor.Visit(this);
         }
 
         public static Expression operator *(Expression left, Expression right)

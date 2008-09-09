@@ -17,9 +17,9 @@ using SymbolicDifferentiation.Core.AST;
 
 namespace SymbolicDifferentiation.Core.AST
 {
-    public interface IExpressionVisitor
+    public interface IExpressionVisitor<T>
     {
-        void Visit(BinaryExpression expression);
-        void Visit(Expression expression);
+        T Visit(BinaryExpression expression);
+        T Visit(Expression expression);
     }
 }
