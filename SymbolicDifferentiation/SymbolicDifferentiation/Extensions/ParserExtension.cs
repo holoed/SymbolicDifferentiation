@@ -23,11 +23,6 @@ namespace SymbolicDifferentiation.Extensions
 {
     public static class ParserExtension
     {
-        public static Expression BasicParse(this IEnumerable<Token> tokens)
-        {
-            return BasicParser.Parse(tokens);
-        }
-
         public static Expression CombiParse(this IEnumerable<Token> tokens)
         {
             return CombinatorParser.Parse(tokens);

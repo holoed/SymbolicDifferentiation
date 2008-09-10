@@ -14,60 +14,46 @@
 #endregion
 
 using System.Collections.Generic;
-using Microsoft.FSharp.Core;
 using SymbolicDifferentiation.Core.AST;
 
 namespace SymbolicDifferentiation.Visitors
 {
-    public class ExpressionEqualityComparer : IExpressionVisitor<Unit>
+    public class ExpressionEqualityComparer : IExpressionVisitor<bool>
     {
         private readonly Queue<Expression> _stack = new Queue<Expression>();
         private bool _enabled;
-        private bool _equals = true;
 
-        public Unit Visit(BinaryExpression expression)
+        public bool Visit(BinaryExpression expression)
         {
             if (_enabled)
             {
                 if (_stack.Count == 0)
-                {
-                    _equals = false;
-                    return default(Unit);
-                }
-                Expression expectedOperator = _stack.Dequeue();
+                    return false;
+                var expectedOperator = _stack.Dequeue();
                 if (!Equals(expectedOperator.Value, expression.Operator))
-                {
-                    _equals = false;
-                    return default(Unit);
-                }
+                    return false;
             }
             else
                 _stack.Enqueue(new Expression {Value = expression.Operator});
 
             expression.Left.Accept(this);
             expression.Right.Accept(this);
-            return default(Unit);
+            return true;
         }
 
-        public Unit Visit(Expression expression)
+        public bool Visit(Expression expression)
         {
             if (_enabled)
             {
                 if (_stack.Count == 0)
-                {
-                    _equals = false;
-                    return default(Unit);
-                }
-                Expression expected = _stack.Dequeue();
+                    return false;
+                var expected = _stack.Dequeue();
                 if (!Equals(expected.Value, expression.Value))
-                {
-                    _equals = false;
-                    return default(Unit);
-                }
+                    return false;
             }
             else
                 _stack.Enqueue(expression);
-            return default(Unit);
+            return true;
         }
 
         public static bool AreEqual(Expression expected, Expression actual)
@@ -75,8 +61,7 @@ namespace SymbolicDifferentiation.Visitors
             var assert = new ExpressionEqualityComparer();
             expected.Accept(assert);
             assert._enabled = true;
-            actual.Accept(assert);
-            return assert._equals;
+            return actual.Accept(assert);
         }
     }
 }

@@ -54,7 +54,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BasicParserTests.cs" />
     <Compile Include="CombinatorParserTests.cs" />
     <Compile Include="Derivatives\CSDerivativeTests.cs" />
     <Compile Include="Derivatives\FSDerivativeTests.cs" />
