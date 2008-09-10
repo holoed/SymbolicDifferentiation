@@ -11,46 +11,8 @@
 
 #light
 
+open FS_Utils;
 open FS_AbstractSyntaxTree;
-open SymbolicDifferentiation.Core.AST;
-open SymbolicDifferentiation.Core.Tokens;
-
-let private (|IsOp|_|) expected actual = 
-    if (TokenBuilder.Symbol(expected) = actual) then
-        Some actual 
-    else
-        None
-
-let private toDouble (x:Token) = System.Convert.ToDouble(x.Value)
-
-let private toString (x:Token) = System.Convert.ToString(x.Value)
-
-let rec private toFsVisitor = 
- { new IExpressionVisitor<FS_AbstractSyntaxTree.Expression> with 
-   member v.Visit(x : BinaryExpression ) =  
-      let left = x.Left.Accept toFsVisitor
-      let right = x.Right.Accept toFsVisitor
-      match x.Operator with
-      | IsOp("+") result -> left + right
-      | IsOp("*") result -> left * right
-      | IsOp("^") result -> Pow (left, toDouble x.Right.Value)
-      | _ -> failwith "unknown operator"
-   member v.Visit(x : Expression) = 
-      if (x.IsNumber) then
-        Number (toDouble x.Value)
-      else
-        Variable (toString x.Value)  }
-        
-let rec private ToFs (x : Expression) =
-    x.Accept toFsVisitor    
-        
-let rec private ToCs (x : FS_AbstractSyntaxTree.Expression) =  
-        match x with
-        | Variable v -> new Expression(new Token(MatchType.Variable, v))
-        | Number n -> new Expression(new Token(MatchType.Number, n))
-        | Add(x,y) -> ToCs(x) + ToCs(y)
-        | Mul(x,y) -> ToCs(x) * ToCs(y)
-        | Pow(x,y) -> Expression.op_ExclusiveOr(ToCs(x) , new Expression(new Token(MatchType.Number, y)))
 
 let rec private Deriv expression =  
     match expression with

@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="FS_AbstractSyntaxTree.fs" />
     <Compile Include="FS_Tokenizer.fs" />
+    <Compile Include="FS_Utils.fs" />
     <Compile Include="FS_Derivative.fs" />
   </ItemGroup>
   <ItemGroup>
