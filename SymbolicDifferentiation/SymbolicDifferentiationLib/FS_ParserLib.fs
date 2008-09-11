@@ -18,14 +18,17 @@ open SymbolicDifferentiation.Core.Tokens;
 type ParserState(input:Token list, position:int) = 
     member s.Position = position
     member s.Input = input
-
-type ErrorInfo = { Position: int; Expectations: string list; Message : string }
-
-let makeError pos = { Position = pos; Expectations = []; Message = System.String.Empty }
-
-let mergeError error1 error2 = { Position = error2.Position; 
-                                 Expectations = error1.Expectations @ error2.Expectations;
-                                 Message = error2.Message }
+    
+type ErrorInfo(position:int, expectations:string list, message: string) = 
+    member s.Position = position
+    member s.Expectations = expectations
+    member s.Message = message
+    static member Make(position: int) = ErrorInfo(position, [], System.String.Empty)
+    static member Merge(error1 : ErrorInfo, error2 : ErrorInfo) = 
+                    ErrorInfo(
+                        error2.Position, 
+                        error1.Expectations @ error2.Expectations,
+                        error2.Message)
   
 type ParseResult<'a> = 
     | Success of 'a * ParserState * ErrorInfo
@@ -38,15 +41,15 @@ let getError result =
 
 let mergeErrorResults result1 result2 = 
     match result2 with
-    | Success (output,state,error) -> Success(output, state, mergeError (getError result1) error)
-    | Fail error -> Fail (mergeError (getError result1) error)
+    | Success (output,state,error) -> Success(output, state, ErrorInfo.Merge ((getError result1), error))
+    | Fail error -> Fail (ErrorInfo.Merge( (getError result1), error ))
     
 type Consumed<'a> = Consumed of bool * ParseResult<'a>
 
 type ParserType<'a> = ParserState -> Consumed<'a>
 
 type ParseMonad() = class
-    member p.Return output = fun state -> Consumed(false,Success(output, state, makeError (state.Position)))
+    member p.Return output = fun state -> Consumed(false,Success(output, state, ErrorInfo.Make (state.Position)))
     member p.Let(output,f) = f output
     member p.Bind(m,f) = fun output -> match m output with
                                        | Consumed(b,result) -> match result with
@@ -73,10 +76,10 @@ let parse = ParseMonad()
 
 let sat pred = fun (state:ParserState) -> 
     match state.Input with
-    | [] -> Consumed(false,Fail { Position = state.Position; Expectations = []; Message = "unexpected end of input" })
+    | [] -> Consumed(false,Fail (ErrorInfo(state.Position,  [], "unexpected end of input" )))
     | c :: cs -> if pred c 
-                 then Consumed(true, Success(c, ParserState(cs,state.Position + 1), makeError state.Position))
-                 else Consumed(false, Fail { Position = state.Position; Expectations = []; Message = sprintf "unexpected character '%A'" c.Value })
+                 then Consumed(true, Success(c, ParserState(cs,state.Position + 1), ErrorInfo.Make state.Position))
+                 else Consumed(false, Fail (ErrorInfo( state.Position, [], sprintf "unexpected character '%A'" c.Value )))
 
 let digitOrLetter : ParserType<Token> = sat Token.IsLetterOrDigit 
 
