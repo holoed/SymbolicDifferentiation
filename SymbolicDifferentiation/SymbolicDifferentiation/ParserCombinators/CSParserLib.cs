@@ -24,7 +24,7 @@ namespace SymbolicDifferentiation.ParserCombinators
     // representation type for parsers
     public delegate Consumed<T> P<T>(ParserState input);
 
-    public static class CombinatorParserExtensions
+    public static class CSParserLib
     {
         public static readonly P<Expression> DigitVal = from c in Sat(Token.IsLetterOrDigit) select new Expression { Value = c };
 

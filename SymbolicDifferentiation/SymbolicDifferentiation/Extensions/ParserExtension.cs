@@ -17,15 +17,19 @@ using System.Collections.Generic;
 using SymbolicDifferentiation.Core.AST;
 using SymbolicDifferentiation.Core.Tokens;
 using SymbolicDifferentiation.ParserCombinators;
-using SymbolicDifferentiation.Visitors;
 
 namespace SymbolicDifferentiation.Extensions
 {
     public static class ParserExtension
     {
-        public static Expression CombiParse(this IEnumerable<Token> tokens)
+        public static Expression CSParser(this IEnumerable<Token> tokens)
         {
-            return CombinatorParser.Parse(tokens);
+            return ParserCombinators.CSParser.Parse(tokens);
+        }
+
+        public static Expression FSParse(this IEnumerable<Token> tokens)
+        {
+            return FS_Parser.Execute(tokens);
         }
     }
 }

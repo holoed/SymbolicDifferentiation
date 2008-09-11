@@ -19,7 +19,7 @@ using SymbolicDifferentiation.Core.Tokens;
 
 namespace SymbolicDifferentiation.ParserCombinators
 {
-    public static class CombinatorParser
+    public static class CSParser
     {
         public static Expression Parse(IEnumerable<Token> input)
         {
@@ -34,7 +34,7 @@ namespace SymbolicDifferentiation.ParserCombinators
                     from c in new Symbol(")").Literal()
                     select e;
 
-            part = CombinatorParserExtensions.DigitVal.Or(paren);
+            part = CSParserLib.DigitVal.Or(paren);
             factor = part.Chainr1(expOp);
             term = factor.Chainl1(mulOp);
             expr = term.Chainl1(addOp);

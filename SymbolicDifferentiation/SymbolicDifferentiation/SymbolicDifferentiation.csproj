@@ -53,10 +53,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ParserCombinators\CombinatorParserExtensions.cs" />
+    <Compile Include="ParserCombinators\CSParserLib.cs" />
     <Compile Include="ParserCombinators\Consumed.cs" />
     <Compile Include="ParserCombinators\ErrorInfo.cs" />
-    <Compile Include="ParserCombinators\CombinatorParser.cs" />
+    <Compile Include="ParserCombinators\CSParser.cs" />
     <Compile Include="ParserCombinators\Linq.cs" />
     <Compile Include="ParserCombinators\ParseResult.cs" />
     <Compile Include="ParserCombinators\ParserState.cs" />

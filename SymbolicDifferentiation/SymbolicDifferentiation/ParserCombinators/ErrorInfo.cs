@@ -46,7 +46,7 @@ namespace SymbolicDifferentiation.ParserCombinators
         {
             return string.IsNullOrEmpty(label) ? 
                 new ErrorInfo(Position, Enumerable.Empty<string>(), Message) :
-                new ErrorInfo(Position, CombinatorParserExtensions.Cons(label, Enumerable.Empty<string>()), Message);
+                new ErrorInfo(Position, CSParserLib.Cons(label, Enumerable.Empty<string>()), Message);
         }
 
         public override string ToString()

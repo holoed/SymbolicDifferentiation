@@ -23,13 +23,13 @@ using SymbolicDifferentiation.ParserCombinators;
 namespace SymbolicDifferentiation.Tests.ParserCombinators
 {
     [TestFixture]
-    public class CombinatorParserExtensionsTests
+    public class CSParserLibTests
     {
         [Test]
         public void Cons()
         {
-            CollectionAssert.AreEqual(new[] { 0 }, CombinatorParserExtensions.Cons(0, new int[0]).ToArray());
-            CollectionAssert.AreEqual(new[] {0, 1, 2, 3}, CombinatorParserExtensions.Cons(0, new[] {1, 2, 3}).ToArray());
+            CollectionAssert.AreEqual(new[] { 0 }, CSParserLib.Cons(0, new int[0]).ToArray());
+            CollectionAssert.AreEqual(new[] {0, 1, 2, 3}, CSParserLib.Cons(0, new[] {1, 2, 3}).ToArray());
         }
 
         [Test]
@@ -38,7 +38,7 @@ namespace SymbolicDifferentiation.Tests.ParserCombinators
             Func<IEnumerable<Token>,string> a = tokens => tokens.First().Equals(TokenBuilder.Variable("H"))  ? "Hello" : "";
             Func<IEnumerable<Token>, string> b = tokens => tokens.First().Equals(TokenBuilder.Variable("W")) ? "World" : "";
 
-            P<string> c = CombinatorParserExtensions.Then<string, string>((
+            P<string> c = CSParserLib.Then<string, string>((
                 state => new Consumed<string>(true, new ParseResult<string>(a(state.Input), new ParserState(0, state.Input.Skip(1)), new ErrorInfo(0)))),
                 prevResult => (state => new Consumed<string>(true, new ParseResult<string>(prevResult + b(state.Input), new ParserState(1, state.Input), new ErrorInfo(0)))));
 
@@ -53,7 +53,7 @@ namespace SymbolicDifferentiation.Tests.ParserCombinators
         [ExpectedException(typeof(InvalidOperationException))]
         public void FirstParseFails()
         {
-            P<string> c = CombinatorParserExtensions.Then<string, string>((
+            P<string> c = CSParserLib.Then<string, string>((
                 state => new Consumed<string>(false, new ParseResult<string>(new ErrorInfo(0)))),
                 prevResult => (state => new Consumed<string>(true, new ParseResult<string>(prevResult, new ParserState(1, state.Input), new ErrorInfo(0)))));
 

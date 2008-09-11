@@ -13,15 +13,18 @@
 
 #endregion
 
+using System.Collections.Generic;
+using SymbolicDifferentiation.Core.AST;
+using SymbolicDifferentiation.Core.Tokens;
 using SymbolicDifferentiation.Extensions;
 
-namespace SymbolicDifferentiation.Tests.Derivatives
+namespace SymbolicDifferentiation.Tests
 {
-    public class CSDerivativeTests : DerivativeTests
+    public class FSParserTests : ParserTests
     {
-        protected override string Derivate(string input)
+        protected override Expression Parse(IEnumerable<Token> tokens)
         {
-            return input.FSTokenize().Expand().CSParser().CSDerive();
+            return tokens.FSParse();
         }
     }
 }

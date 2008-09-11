@@ -110,7 +110,7 @@ namespace SymbolicDifferentiation.Tests
         public void CSharpExpressionMatchesLinqExpressionValue()
         {
             var input = "2*x ^ 4 + 5*x ^ 3 + 3*x ^ 2 + 2*x + 1";
-            var expression = Tokenizer.Tokenize(input).CombiParse();
+            var expression = Tokenizer.Tokenize(input).CSParser();
             var linqExp = ToLinqExpressionVisitor.GetExpression(expression, "x");
 
             var func = linqExp.Compile();

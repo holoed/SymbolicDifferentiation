@@ -54,14 +54,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CombinatorParserTests.cs" />
+    <Compile Include="Parsers\FSParserTests.cs" />
+    <Compile Include="Parsers\CSParserTests.cs" />
     <Compile Include="Derivatives\CSDerivativeTests.cs" />
     <Compile Include="Derivatives\FSDerivativeTests.cs" />
     <Compile Include="LexicalAnalysis\CSTokenizerTests.cs" />
     <Compile Include="Derivatives\DerivativeTests.cs" />
     <Compile Include="LexicalAnalysis\FSTokenizerTests.cs" />
     <Compile Include="LinqExpressionVisitorTests.cs" />
-    <Compile Include="ParserCombinators\CombinatorParserExtensionsTests.cs" />
+    <Compile Include="ParserCombinators\CSParserLibTests.cs" />
     <Compile Include="SugarTests.cs" />
     <Compile Include="ExpressionAssert.cs" />
     <Compile Include="ParserTests.cs" />

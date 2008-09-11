@@ -68,6 +68,11 @@ namespace SymbolicDifferentiation.Core.AST
 
         public static Expression operator ^(Expression left, Expression right)
         {
+            return Pow(left, right);
+        }
+
+        public static Expression Pow(Expression left, Expression right)
+        {
             return BuildBinary("^", left, right);
         }
 

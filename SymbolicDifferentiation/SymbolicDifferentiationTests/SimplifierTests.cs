@@ -75,7 +75,7 @@ namespace SymbolicDifferentiation.Tests
 
         private static string Simplify(string input)
         {
-            return input.FSTokenize().CombiParse().Simplify().ToTokens(true).ToStringExpression();
+            return input.FSTokenize().CSParser().Simplify().ToTokens(true).ToStringExpression();
         }
     }
 }

@@ -129,5 +129,17 @@ namespace SymbolicDifferentiation.Tests
                 (Number(2)*Variable("x")) + Number(1),
                 Parse(Tokenizer.Tokenize("5*x^3 + 3*x^2 + 2*x + 1")));
         }
+
+        [Test]
+        public void AdditionMultiplicationGrouped()
+        {
+            ExpressionAssert.AreEqual((Number(2) + Number(3)) * Number(4), Parse(Tokenizer.Tokenize("(2 + 3) * 4")));
+        }
+
+        [Test]
+        public void AdditionExponentationGrouped()
+        {
+            ExpressionAssert.AreEqual((Number(2) + Number(3)) ^ Number(2), Parse(Tokenizer.Tokenize("(2 + 3)^2")));
+        }
     }
 }
