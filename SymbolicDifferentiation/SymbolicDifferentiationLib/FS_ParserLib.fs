@@ -15,10 +15,14 @@
 
 open SymbolicDifferentiation.Core.Tokens;
 
+// Parser State
+
 type ParserState(input:Token list, position:int) = 
     member s.Position = position
     member s.Input = input
-    
+   
+// Error Info
+ 
 type ErrorInfo(position:int, expectations:string list, message: string) = 
     member s.Position = position
     member s.Expectations = expectations
@@ -29,20 +33,19 @@ type ErrorInfo(position:int, expectations:string list, message: string) =
                         error2.Position, 
                         error1.Expectations @ error2.Expectations,
                         error2.Message)
+
+// Parse Result
   
 type ParseResult<'a> = 
     | Success of 'a * ParserState * ErrorInfo
-    | Fail of ErrorInfo  
-                         
-let getError result =
-    match result with
-    | Success(_,_,error) -> error
-    | Fail error -> error
-
-let mergeErrorResults result1 result2 = 
-    match result2 with
-    | Success (output,state,error) -> Success(output, state, ErrorInfo.Merge ((getError result1), error))
-    | Fail error -> Fail (ErrorInfo.Merge( (getError result1), error ))
+    | Fail of ErrorInfo 
+    member s.Error = match s with 
+                        | Success(_,_,error) -> error
+                        | Fail error -> error
+    static member Merge (result1:ParseResult<'a>, result2) = 
+                        match result2 with
+                        | Success (output,state,error) -> Success(output, state, ErrorInfo.Merge ((result1.Error), error))
+                        | Fail error -> Fail (ErrorInfo.Merge( (result1.Error), error ))
     
 type Consumed<'a> = Consumed of bool * ParseResult<'a>
 
@@ -55,7 +58,7 @@ type ParseMonad() = class
                                        | Consumed(b,result) -> match result with
                                                                | Success(output,state,error) -> 
                                                                  let (Consumed(b2,result2)) = f output state
-                                                                 Consumed(b || b2, if b2 then result2 else mergeErrorResults result result2)
+                                                                 Consumed(b || b2, if b2 then result2 else ParseResult.Merge(result, result2))
 
                                                                | Fail e -> Consumed(b,Fail e)
 end
@@ -70,7 +73,7 @@ let (<|>) p1 p2 = fun output -> let Consumed(b,result) as consumed = p1 output
                                                       if b2 then 
                                                         consumed2 
                                                       else 
-                                                        Consumed(b2,mergeErrorResults result result2)
+                                                        Consumed(b2,ParseResult.Merge( result, result2 ))
                                                         
 let parse = ParseMonad()
 
