@@ -38,6 +38,6 @@ let extractOutput result  =
     | Success (state, _, _) -> state
     | Fail _ -> failwith "parse failed"
                         
-let Execute tokens = expr( Seq.to_list tokens , 0) |> extractParseResult |> extractOutput
+let Execute tokens = expr( ParserState(Seq.to_list tokens , 0) ) |> extractParseResult |> extractOutput
 
 

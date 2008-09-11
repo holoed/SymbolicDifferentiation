@@ -15,9 +15,9 @@
 
 open SymbolicDifferentiation.Core.Tokens;
 
-type ParserState = Token list * int
-    
-let getPosition parserState = snd parserState
+type ParserState(input:Token list, position:int) = 
+    member s.Position = position
+    member s.Input = input
 
 type ErrorInfo = { Position: int; Expectations: string list; Message : string }
 
@@ -46,7 +46,7 @@ type Consumed<'a> = Consumed of bool * ParseResult<'a>
 type ParserType<'a> = ParserState -> Consumed<'a>
 
 type ParseMonad() = class
-    member p.Return output = fun state -> Consumed(false,Success(output, state, makeError (getPosition state)))
+    member p.Return output = fun state -> Consumed(false,Success(output, state, makeError (state.Position)))
     member p.Let(output,f) = f output
     member p.Bind(m,f) = fun output -> match m output with
                                        | Consumed(b,result) -> match result with
@@ -71,12 +71,12 @@ let (<|>) p1 p2 = fun output -> let Consumed(b,result) as consumed = p1 output
                                                         
 let parse = ParseMonad()
 
-let sat pred = fun (i,pos) -> 
-    match i with
-    | [] -> Consumed(false,Fail { Position = pos; Expectations = []; Message = "unexpected end of input" })
+let sat pred = fun (state:ParserState) -> 
+    match state.Input with
+    | [] -> Consumed(false,Fail { Position = state.Position; Expectations = []; Message = "unexpected end of input" })
     | c :: cs -> if pred c 
-                 then Consumed(true, Success(c, (cs,pos+1), makeError pos))
-                 else Consumed(false, Fail { Position = pos; Expectations = []; Message = sprintf "unexpected character '%A'" c.Value })
+                 then Consumed(true, Success(c, ParserState(cs,state.Position + 1), makeError state.Position))
+                 else Consumed(false, Fail { Position = state.Position; Expectations = []; Message = sprintf "unexpected character '%A'" c.Value })
 
 let digitOrLetter : ParserType<Token> = sat Token.IsLetterOrDigit 
 
