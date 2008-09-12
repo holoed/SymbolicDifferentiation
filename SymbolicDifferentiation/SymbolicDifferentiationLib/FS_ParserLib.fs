@@ -51,18 +51,6 @@ type Consumed<'a> = Consumed of bool * ParseResult<'a>
 
 type ParserType<'a> = ParserState -> Consumed<'a>
 
-type ParseMonad() = class
-    member p.Return output = fun state -> Consumed(false,Success(output, state, ErrorInfo.Make (state.Position)))
-    member p.Let(output,f) = f output
-    member p.Bind(m,f) = fun output -> match m output with
-                                       | Consumed(b,result) -> match result with
-                                                               | Success(output,state,error) -> 
-                                                                 let (Consumed(b2,result2)) = f output state
-                                                                 Consumed(b || b2, if b2 then result2 else ParseResult.Merge(result, result2))
-
-                                                               | Fail e -> Consumed(b,Fail e)
-end
-
 let (<|>) p1 p2 = fun output -> let Consumed(b,result) as consumed = p1 output
                                 if b then 
                                     consumed 
@@ -74,9 +62,24 @@ let (<|>) p1 p2 = fun output -> let Consumed(b,result) as consumed = p1 output
                                                         consumed2 
                                                       else 
                                                         Consumed(b2,ParseResult.Merge( result, result2 ))
-                                                        
+
+type ParseMonad() = class
+    member p.Return output = fun state -> Consumed(false,Success(output, state, ErrorInfo.Make (state.Position)))
+    member p.Let(output,f) = f output
+    member p.Bind(m,f) = fun output -> match m output with
+                                       | Consumed(b,result) -> match result with
+                                                               | Success(output,state,error) -> 
+                                                                 let (Consumed(b2,result2)) = f output state
+                                                                 Consumed(b || b2, if b2 then result2 else ParseResult.Merge(result, result2))
+
+                                                               | Fail e -> Consumed(b,Fail e)
+end
+                                                       
 let parse = ParseMonad()
 
+/// To allow conditional parsing, we define a combinator sat that takes a predicate, 
+/// and yields a parser that consumes a single character if it satisfies the predicate, 
+/// and fails otherwise
 let sat pred = fun (state:ParserState) -> 
     match state.Input with
     | [] -> Consumed(false,Fail (ErrorInfo(state.Position,  [], "unexpected end of input" )))
@@ -94,7 +97,9 @@ let Literal (s : Token) r =
                                  return! help cs }
     [s] |> List.to_array |> List.of_array |> help   
     
-    
+/// Parse repeated applications of a parser p, separated by applications of a parser
+/// op whose result value is an operator that is assumed to associate to the left,
+/// and which is used to combine the results from the p parsers 
 let chainl1 p op = 
     let rec help x = parse { let! f = op
                              let! y = p
