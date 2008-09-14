@@ -18,7 +18,7 @@ using NUnit.Framework;
 using SymbolicDifferentiation.Core.AST;
 using SymbolicDifferentiation.Core.Tokens;
 
-namespace SymbolicDifferentiation.Tests
+namespace SymbolicDifferentiation.Tests.Parsers
 {
     [TestFixture]
     public abstract class ParserTests : TestsBase

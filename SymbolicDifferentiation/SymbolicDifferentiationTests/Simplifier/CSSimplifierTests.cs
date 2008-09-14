@@ -13,18 +13,17 @@
 
 #endregion
 
-using System.Collections.Generic;
-using SymbolicDifferentiation.Core.AST;
-using SymbolicDifferentiation.Core.Tokens;
+using NUnit.Framework;
 using SymbolicDifferentiation.Extensions;
 
-namespace SymbolicDifferentiation.Tests.Parsers
+namespace SymbolicDifferentiation.Tests.Simplifier
 {
-    public class FSParserTests : ParserTests
+    [TestFixture]
+    public class CSSimplifierTests : SimplifierTestsBase
     {
-        protected override Expression Parse(IEnumerable<Token> tokens)
+        protected override string Simplify(string input)
         {
-            return tokens.FSParse();
+            return input.CSTokenize().CSParser().CSSimplify().ToTokens(true).ToStringExpression();
         }
     }
 }

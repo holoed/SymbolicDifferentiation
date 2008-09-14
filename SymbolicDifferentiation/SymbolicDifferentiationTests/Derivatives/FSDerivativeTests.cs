@@ -23,7 +23,7 @@ namespace SymbolicDifferentiation.Tests.Derivatives
     {
         protected override string Derivate(string input)
         {
-            return input.FSTokenize().Expand().CSParser().FSDerive();
+            return input.FSTokenize().Expand().FSParse().FSDerive();
         }
     }
 

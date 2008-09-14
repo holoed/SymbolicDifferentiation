@@ -16,10 +16,10 @@
 using NUnit.Framework;
 using SymbolicDifferentiation.Extensions;
 
-namespace SymbolicDifferentiation.Tests
+namespace SymbolicDifferentiation.Tests.Simplifier
 {
     [TestFixture]
-    public class SimplifierTests : TestsBase
+    public abstract class SimplifierTestsBase : TestsBase
     {
         [Test]
         public void Addition()
@@ -63,7 +63,7 @@ namespace SymbolicDifferentiation.Tests
         [Test]
         public void MultiplicationMultiplicationByVariable()
         {
-            Assert.AreEqual("(6*x)", (Number(2) * (Number(3) * Variable("x"))).Simplify().ToTokens(true).ToStringExpression());
+            Assert.AreEqual("(6*x)", (Number(2) * (Number(3) * Variable("x"))).CSSimplify().ToTokens(true).ToStringExpression());
         }
 
         [Test]
@@ -73,9 +73,12 @@ namespace SymbolicDifferentiation.Tests
             Assert.AreEqual("5", Simplify("5 ^ 1"));
         }
 
-        private static string Simplify(string input)
+        [Test]
+        public void CompositeExpression()
         {
-            return input.FSTokenize().CSParser().Simplify().ToTokens(true).ToStringExpression();
+            Assert.AreEqual("2", Simplify("2*1+0*x+0"));
         }
+
+        protected abstract string Simplify(string input);
     }
 }

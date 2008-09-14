@@ -63,11 +63,13 @@
     <Compile Include="LexicalAnalysis\FSTokenizerTests.cs" />
     <Compile Include="LinqExpressionVisitorTests.cs" />
     <Compile Include="ParserCombinators\CSParserLibTests.cs" />
+    <Compile Include="Simplifier\FSSimplifierTests.cs" />
+    <Compile Include="Simplifier\CSSimplifierTests.cs" />
     <Compile Include="SugarTests.cs" />
     <Compile Include="ExpressionAssert.cs" />
-    <Compile Include="ParserTests.cs" />
+    <Compile Include="Parsers\ParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SimplifierTests.cs" />
+    <Compile Include="Simplifier\SimplifierTestsBase.cs" />
     <Compile Include="TestsBase.cs" />
     <Compile Include="LexicalAnalysis\TokenizerTests.cs" />
   </ItemGroup>

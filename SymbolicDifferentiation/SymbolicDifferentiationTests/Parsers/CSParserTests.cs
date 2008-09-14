@@ -18,7 +18,7 @@ using SymbolicDifferentiation.Core.AST;
 using SymbolicDifferentiation.Core.Tokens;
 using SymbolicDifferentiation.Extensions;
 
-namespace SymbolicDifferentiation.Tests
+namespace SymbolicDifferentiation.Tests.Parsers
 {
     public class CSParserTests : ParserTests
     {

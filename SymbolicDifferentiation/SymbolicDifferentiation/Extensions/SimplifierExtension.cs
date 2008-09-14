@@ -20,9 +20,14 @@ namespace SymbolicDifferentiation.Extensions
 {
     public static class SimplifierExtension
     {
-        public static Expression Simplify(this Expression expression)
+        public static Expression CSSimplify(this Expression expression)
         {
             return Simplifier.Simplify(expression);
+        }
+
+        public static Expression FSSimplify(this Expression expression)
+        {
+            return FS_Simplifier.Simplify(expression);
         }
     }
 }

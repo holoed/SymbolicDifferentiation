@@ -32,7 +32,7 @@ namespace SymbolicDifferentiation.Extensions
         public static string CSDerive(this Expression expression)
         {
             return Derivative.Deriv(expression).
-                Simplify().
+                CSSimplify().
                 ToTokens(false).
                 Shrink().
                 ToStringExpression();
@@ -41,7 +41,7 @@ namespace SymbolicDifferentiation.Extensions
         public static string FSDerive(this Expression expression)
         {
             return FS_Derivative.Derivate(expression).
-                Simplify().
+                FSSimplify().
                 ToTokens(false).
                 Shrink().
                 ToStringExpression();
