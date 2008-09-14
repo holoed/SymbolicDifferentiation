@@ -63,7 +63,7 @@ let (<|>) p1 p2 = fun output -> let Consumed(b,result) as consumed = p1 output
                                                       else 
                                                         Consumed(b2,ParseResult.Merge( result, result2 ))
 
-type ParseMonad() = class
+type ParseMonad() = 
     member p.Return output = fun state -> Consumed(false,Success(output, state, ErrorInfo.Make (state.Position)))
     member p.Let(output,f) = f output
     member p.Bind(m,f) = fun output -> match m output with
@@ -73,7 +73,6 @@ type ParseMonad() = class
                                                                  Consumed(b || b2, if b2 then result2 else ParseResult.Merge(result, result2))
 
                                                                | Fail e -> Consumed(b,Fail e)
-end
                                                        
 let parse = ParseMonad()
 
