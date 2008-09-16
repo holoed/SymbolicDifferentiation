@@ -49,31 +49,31 @@ namespace SymbolicDifferentiation.Tests.Derivatives
         [Test]
         public void SecondOrderPolynomial()
         {
-            Assert.AreEqual("6x+2", Derivate("3x^2 + 2x + 1"));
+            Assert.AreEqual("6*x+2", Derivate("3x^2 + 2x + 1"));
         }
 
         [Test]
         public void Square()
         {
-            Assert.AreEqual("2x", Derivate("x^2"));
+            Assert.AreEqual("2*x", Derivate("x^2"));
         }
 
         [Test]
         public void SquareAndMultiplication()
         {
-            Assert.AreEqual("6x", Derivate("3x^2"));
+            Assert.AreEqual("6*x", Derivate("3x^2"));
         }
 
         [Test]
         public void ThirdOrderPolynomial()
         {
-            Assert.AreEqual("15x^2+6x+2", Derivate("5x^3 + 3x^2 + 2x + 1"));
+            Assert.AreEqual("15*x^2+6*x+2", Derivate("5x^3 + 3x^2 + 2x + 1"));
         }
 
         [Test]
         public void BinomialSquare()
         {
-            Assert.AreEqual("2x+2", Derivate("(x + 2)^2"));
+            Assert.AreEqual("2*(x+2)", Derivate("(x + 2)^2"));
         }
     }
 }

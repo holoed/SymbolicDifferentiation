@@ -16,7 +16,6 @@
 using System.Collections.Generic;
 using SymbolicDifferentiation.Core.AST;
 using SymbolicDifferentiation.Core.Tokens;
-using SymbolicDifferentiation.ParserCombinators;
 
 namespace SymbolicDifferentiation.Extensions
 {

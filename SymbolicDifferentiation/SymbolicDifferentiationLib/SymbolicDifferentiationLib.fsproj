@@ -48,6 +48,7 @@
     <Compile Include="FS_ParserLib.fs" />
     <Compile Include="FS_Parser.fs" />
     <Compile Include="FS_Simplifier.fs" />
+    <Compile Include="FS_ExpressionToString.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SimbolicDifferentiation.Core\SymbolicDifferentiation.Core.csproj">

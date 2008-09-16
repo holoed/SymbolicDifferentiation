@@ -40,23 +40,5 @@ namespace SymbolicDifferentiation.Tests
                                };
             CollectionAssert.AreEqual(expected, input.Expand().ToArray());
         }
-
-        [Test]
-        public void SugarMultiplications()
-        {
-            var input = new[]
-                            {
-                                TokenBuilder.Number(3), 
-                                TokenBuilder.Symbol("*"), 
-                                TokenBuilder.Variable("x")
-                            };
-
-            var expected = new[]
-                               {
-                                   TokenBuilder.Number(3), 
-                                   TokenBuilder.Variable("x")
-                               };
-            CollectionAssert.AreEqual(expected, input.Shrink().ToArray());
-        }
     }
 }

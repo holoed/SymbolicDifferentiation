@@ -23,7 +23,7 @@ namespace SymbolicDifferentiation.Tests.Simplifier
     {
         protected override string Simplify(string input)
         {
-            return input.CSTokenize().CSParser().CSSimplify().ToTokens(true).ToStringExpression();
+            return input.CSTokenize().CSParser().CSSimplify().FSToString();
         }
     }
 }

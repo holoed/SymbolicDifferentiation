@@ -13,7 +13,6 @@
 
 #endregion
 
-
 using System;
 using SymbolicDifferentiation.Core.AST;
 using SymbolicDifferentiation.Core.Tokens;

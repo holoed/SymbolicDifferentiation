@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExpressionToStringTests.cs" />
     <Compile Include="Parsers\FSParserTests.cs" />
     <Compile Include="Parsers\CSParserTests.cs" />
     <Compile Include="Derivatives\CSDerivativeTests.cs" />

@@ -63,7 +63,7 @@ namespace SymbolicDifferentiation.Tests.Simplifier
         [Test]
         public void MultiplicationMultiplicationByVariable()
         {
-            Assert.AreEqual("(6*x)", (Number(2) * (Number(3) * Variable("x"))).CSSimplify().ToTokens(true).ToStringExpression());
+            Assert.AreEqual("6*x", (Number(2) * (Number(3) * Variable("x"))).CSSimplify().FSToString());
         }
 
         [Test]

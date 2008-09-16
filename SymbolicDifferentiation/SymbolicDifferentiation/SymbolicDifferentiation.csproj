@@ -72,7 +72,6 @@
     <Compile Include="Tokenizer.cs" />
     <Compile Include="Extensions\TokensExtensions.cs" />
     <Compile Include="Visitors\Simplifier.cs" />
-    <Compile Include="Visitors\ToTokensExpressionVisitor.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SimbolicDifferentiation.Core\SymbolicDifferentiation.Core.csproj">

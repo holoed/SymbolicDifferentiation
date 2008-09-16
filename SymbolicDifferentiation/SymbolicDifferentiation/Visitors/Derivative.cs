@@ -35,7 +35,7 @@ namespace SymbolicDifferentiation.Visitors
 
         private static Expression BuildExpRight(BinaryExpression expression)
         {
-            return new Expression { Value = (TokenBuilder.Number(Double.Parse(expression.Right.ToTokens(true).ToStringExpression()) - 1))};
+            return new Expression { Value = (TokenBuilder.Number(Double.Parse(expression.Right.FSToString()) - 1))};
         }
 
         private static bool IsOperation(BinaryExpression expression, string op)

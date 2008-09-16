@@ -14,37 +14,29 @@
 #endregion
 
 using SymbolicDifferentiation.Core.AST;
-using SymbolicDifferentiation.Core.Tokens;
 using SymbolicDifferentiation.Visitors;
-using System.Collections.Generic;
 
 namespace SymbolicDifferentiation.Extensions
 {
     public static class ExpressionExtension
     {
-        public static IEnumerable<Token> ToTokens(this Expression expression, bool grouping)
-        {
-            var visitor = new ToTokensExpressionVisitor(grouping);
-            expression.Accept(visitor);
-            return visitor.Result;
-        }
-
         public static string CSDerive(this Expression expression)
         {
             return Derivative.Deriv(expression).
                 CSSimplify().
-                ToTokens(false).
-                Shrink().
-                ToStringExpression();
+                FSToString();
         }
 
         public static string FSDerive(this Expression expression)
         {
             return FS_Derivative.Derivate(expression).
                 FSSimplify().
-                ToTokens(false).
-                Shrink().
-                ToStringExpression();
+                FSToString();
+        }
+
+        public static string FSToString(this Expression expression)
+        {
+            return FS_ExpressionToString.ToString(FS_Utils.ToFs(expression));
         }
     }
 }

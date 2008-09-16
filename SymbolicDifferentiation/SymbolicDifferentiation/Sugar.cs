@@ -34,30 +34,11 @@ namespace SymbolicDifferentiation
             return desugar(tokens);
         }
 
-        public static IEnumerable<Token> Shrink(IEnumerable<Token> tokens)
-        {
-            Func<IEnumerable<Token>, IEnumerable<Token>, IEnumerable<Token>> ds = null;
-            ds = (i, o) => i.Count() > 1 ? IsExpandedMultiplication(i) ?
-                ds(i.Skip(2), o.ConcatWithNextToken(i)) :
-                ds(i.Skip(1), o.ConcatWithNextToken(i)) : o.ConcatWithNextToken(i);
-            var desugar = ds.Curry()(new Token[0]);
-
-            return desugar(tokens);
-        }
-
         private static bool IsMultiplication(IEnumerable<Token> list)
         {
             return 
                 list.First().Type == MatchType.Number && 
                 list.Skip(1).First().Type == MatchType.Variable;
-        }
-
-        private static bool IsExpandedMultiplication(IEnumerable<Token> list)
-        {
-            return 
-                list.First().Type == MatchType.Number && 
-                list.Skip(1).First().Equals(TokenBuilder.Symbol("*")) &&
-                list.Skip(2).First().Type == MatchType.Variable;
         }
 
         private static IEnumerable<Token> ConcatWithNextToken(this IEnumerable<Token> output, IEnumerable<Token> input)
