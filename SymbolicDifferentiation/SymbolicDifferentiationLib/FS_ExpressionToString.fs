@@ -17,10 +17,10 @@ let rec ToString exp =
     match exp with
     | Number n -> n.ToString()
     | Variable x -> x
-    | Mul(a, Add(b,c)) -> ToString a + "*" + "(" + ToString b + "+" + ToString c + ")"
-    | Mul(Add(a,b), c) -> "(" + ToString a + "+" + ToString b + ")" + "*" + ToString c
-    | Pow(Add(a,b), n) -> "(" + ToString a + "+" + ToString b + ")" + "^" + n.ToString()
-    | Add(a, b) -> ToString a + "+" + ToString b
-    | Mul(a, b) -> ToString a + "*" + ToString b
-    | Pow(a, n) -> ToString a + "^" + n.ToString() 
+    | Mul(a, Add(b,c)) -> sprintf "%s*(%s)" (ToString a) (ToString (Add(b,c)))
+    | Mul(Add(a,b), c) -> sprintf "(%s)*%s" (ToString (Add(a,b))) (ToString c)
+    | Pow(Add(a,b), n) -> sprintf "(%s)^%.0f" (ToString (Add(a,b))) n
+    | Add(a, b) -> sprintf "%s+%s" (ToString a) (ToString b)
+    | Mul(a, b) -> sprintf "%s*%s" (ToString a) (ToString b)
+    | Pow(a, n) -> sprintf "%s^%.0f" (ToString a) n 
 
