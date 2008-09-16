@@ -75,5 +75,17 @@ namespace SymbolicDifferentiation.Tests.Derivatives
         {
             Assert.AreEqual("2*(x+2)", Derivate("(x + 2)^2"));
         }
+
+        [Test]
+        public void BinomialCube()
+        {
+            Assert.AreEqual("3*(x+2)^2", Derivate("(x + 2)^3"));
+        }
+
+        [Test]
+        public void SquarePlusCubeBinomial()
+        {
+            Assert.AreEqual("3*(x+2)^2+2*(x+1)", Derivate("(x + 2)^3 + (x + 1)^2"));
+        }
     }
 }
