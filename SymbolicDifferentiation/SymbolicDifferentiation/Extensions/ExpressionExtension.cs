@@ -13,6 +13,8 @@
 
 #endregion
 
+using System;
+using System.Collections.Generic;
 using SymbolicDifferentiation.Core.AST;
 using SymbolicDifferentiation.Visitors;
 
@@ -37,6 +39,11 @@ namespace SymbolicDifferentiation.Extensions
         public static string FSToString(this Expression expression)
         {
             return FS_ExpressionToString.ToString(FS_Utils.ToFs(expression));
+        }
+
+        public static Func<IEnumerable<double>, IEnumerable<double>, IEnumerable<double>> FSAggregateFunction(this Expression expression)
+        {
+            return FS_Aggregation.Build(expression).Execute;
         }
     }
 }
