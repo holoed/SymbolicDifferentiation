@@ -13,7 +13,6 @@
 
 #endregion
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
@@ -24,37 +23,52 @@ namespace SymbolicDifferentiation.Tests.Aggregation
     [TestFixture]
     public class AggregationTests
     {
-        private IEnumerable<double> _a;
-        private IEnumerable<double> _b;
+        private Dictionary<string, IEnumerable<double>> _data;
 
         [SetUp]
         public void SetUp()
         {
-            _a = Enumerable.Range(1, 3).Select(i => i + .0);
-            _b = Enumerable.Range(5, 7).Select(i => i + .0);
+            _data = new Dictionary<string, IEnumerable<double>>
+                        {
+                            {"A", Enumerable.Range(1, 3).Select(i => i + .0)},
+                            {"B", Enumerable.Range(5, 7).Select(i => i + .0)},
+                        };
         }
 
         [Test]
         public void Add()
         {
-            CollectionAssert.AreEqual(new[] {6, 8, 10}, Generate("A + B")(_a, _b).ToArray());
+            CollectionAssert.AreEqual(new[] { 6, 8, 10 }, Compute("A + B"));
         }
 
         [Test]
         public void Mul()
         {
-            CollectionAssert.AreEqual(new[] { 5, 12, 21 }, Generate("A * B")(_a, _b).ToArray());
+            CollectionAssert.AreEqual(new[] { 5, 12, 21 }, Compute("A * B"));
         }
 
         [Test]
         public void AddMul()
         {
-            CollectionAssert.AreEqual(new[] { 6, 16, 30 }, Generate("(A + B) * A")(_a, _b).ToArray());
+            CollectionAssert.AreEqual(new[] { 6, 16, 30 }, Compute("(A + B) * A"));
         }
 
-        private static Func<IEnumerable<double>, IEnumerable<double>, IEnumerable<double>> Generate(string input)
+        [Test]
+        public void AddToConstant()
         {
-            return input.FSTokenize().FSParse().FSAggregateFunction();
+            CollectionAssert.AreEqual(new[] { 11, 12, 13 }, Compute("A + 10"));
+            CollectionAssert.AreEqual(new[] { 15, 16, 17 }, Compute("B + 10"));
+        }
+
+        [Test]
+        public void AddMulToConstant()
+        {
+            CollectionAssert.AreEqual(new[] { 12, 16, 20 }, Compute("2 * (A + B)"));
+        }
+
+        private double[] Compute(string input)
+        {
+            return input.FSTokenize().FSParse().FSAggregateFunction()(_data).Take(3).ToArray();
         }
     }
 }

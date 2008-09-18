@@ -13,19 +13,18 @@
 
 open FS_AbstractSyntaxTree;
 open FS_Utils;
+open System.Collections.Generic;
 
-let rec private Create (exp:Expression, a: double seq, b: double seq):double seq =
+let rec private Create (exp, data:Dictionary<string, 'a>) =
+    let Process exp = Create(exp, data)
     match exp with
-    | Number n -> seq[n]
-    | Variable x -> match x with
-                        |"A" -> a
-                        |"B" -> b
-                        | _ -> failwith "unrecognized variable"
-    | Add(x, y) -> Seq.map2(fun left right -> left + right) (Create(x, a, b)) (Create(y, a, b))
-    | Mul(x, y) -> Seq.map2(fun left right -> left * right) (Create(x, a, b)) (Create(y, a, b))
-    | Pow(x, n) -> Seq.map2(fun left right -> System.Math.Pow(left, right)) (Create(x, a, b)) (seq[n])
+    | Number n -> Seq.init_infinite(fun i -> n)
+    | Variable x -> Seq.append (data.Item(x)) (Seq.init_infinite(fun i -> 0.0))
+    | Add(x, y) -> Seq.map2(fun left right -> left + right) (Process x) (Process y)
+    | Mul(x, y) -> Seq.map2(fun left right -> left * right) (Process x) (Process y)
+    | Pow(x, n) -> Seq.map2(fun left right -> System.Math.Pow(left, right)) (Process x) (Seq.init_infinite(fun i -> n))
     
-type Ret(exp:Expression) =
-    member x.Execute(a: double seq,b: double seq) = Create(exp, a, b)
+type Ret(exp) =
+    member x.Execute(data) = Create(exp, data)
 
 let Build = fun exp -> Ret(ToFs exp)

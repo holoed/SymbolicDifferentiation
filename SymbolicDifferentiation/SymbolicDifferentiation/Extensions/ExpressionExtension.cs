@@ -41,7 +41,7 @@ namespace SymbolicDifferentiation.Extensions
             return FS_ExpressionToString.ToString(FS_Utils.ToFs(expression));
         }
 
-        public static Func<IEnumerable<double>, IEnumerable<double>, IEnumerable<double>> FSAggregateFunction(this Expression expression)
+        public static Func<Dictionary<string, IEnumerable<double>>, IEnumerable<double>> FSAggregateFunction(this Expression expression)
         {
             return FS_Aggregation.Build(expression).Execute;
         }
