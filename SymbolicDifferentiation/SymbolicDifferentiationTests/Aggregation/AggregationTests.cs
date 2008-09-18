@@ -66,6 +66,13 @@ namespace SymbolicDifferentiation.Tests.Aggregation
             CollectionAssert.AreEqual(new[] { 12, 16, 20 }, Compute("2 * (A + B)"));
         }
 
+        [Test]
+        public void Pow()
+        {
+            CollectionAssert.AreEqual(new[] { 1, 4, 9 }, Compute("A^2"));
+            CollectionAssert.AreEqual(new[] { 36, 64, 100 }, Compute("(A + B)^2"));
+        }
+
         private double[] Compute(string input)
         {
             return input.FSTokenize().FSParse().FSAggregateFunction()(_data).Take(3).ToArray();
