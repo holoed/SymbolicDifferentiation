@@ -32,6 +32,8 @@ namespace SymbolicDifferentiation.Tests.Aggregation
                         {
                             {"A", Enumerable.Range(1, 3).Select(i => i + .0)},
                             {"B", Enumerable.Range(5, 7).Select(i => i + .0)},
+                            {"C", Enumerable.Range(9, 11).Select(i => i + .0)},
+                            {"D", Enumerable.Range(30, 32).Select(i => i + .0)},
                         };
         }
 
@@ -71,6 +73,12 @@ namespace SymbolicDifferentiation.Tests.Aggregation
         {
             CollectionAssert.AreEqual(new[] { 1, 4, 9 }, Compute("A^2"));
             CollectionAssert.AreEqual(new[] { 36, 64, 100 }, Compute("(A + B)^2"));
+        }
+
+        [Test]
+        public void Polynomial()
+        {
+            CollectionAssert.AreEqual(new[] { 190, 305, 526 }, Compute("8*A^3 + 5*B^2 + 3*C + D"));
         }
 
         private double[] Compute(string input)
