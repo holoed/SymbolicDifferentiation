@@ -24,15 +24,32 @@ namespace SymbolicDifferentiation.Tests.Aggregation
     [TestFixture]
     public class AggregationTests
     {
-        [Test]
-        public void Test()
+        private IEnumerable<double> _a;
+        private IEnumerable<double> _b;
+
+        [SetUp]
+        public void SetUp()
         {
-            var a = Enumerable.Range(1, 3).Select(i => i + .0);
-            var b = Enumerable.Range(5, 7).Select(i => i + .0);
+            _a = Enumerable.Range(1, 3).Select(i => i + .0);
+            _b = Enumerable.Range(5, 7).Select(i => i + .0);
+        }
 
-            var c = Generate("A + B")(a, b);
+        [Test]
+        public void Add()
+        {
+            CollectionAssert.AreEqual(new[] {6, 8, 10}, Generate("A + B")(_a, _b).ToArray());
+        }
 
-            CollectionAssert.AreEqual(new[] {6, 8, 10}, c.ToArray());
+        [Test]
+        public void Mul()
+        {
+            CollectionAssert.AreEqual(new[] { 5, 12, 21 }, Generate("A * B")(_a, _b).ToArray());
+        }
+
+        [Test]
+        public void AddMul()
+        {
+            CollectionAssert.AreEqual(new[] { 6, 16, 30 }, Generate("(A + B) * A")(_a, _b).ToArray());
         }
 
         private static Func<IEnumerable<double>, IEnumerable<double>, IEnumerable<double>> Generate(string input)
