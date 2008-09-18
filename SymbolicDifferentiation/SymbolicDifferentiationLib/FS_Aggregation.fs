@@ -12,8 +12,20 @@
 #light
 
 open FS_AbstractSyntaxTree;
+open FS_Utils;
 
-type Ret() =
-    member x.Execute(a: double seq,b: double seq) = seq [ 6.0; 8.0; 10.00 ];
+let rec private Create (exp:Expression, a: double seq, b: double seq):double seq =
+    match exp with
+    | Number n -> seq[n]
+    | Variable x -> match x with
+                        |"A" -> a
+                        |"B" -> b
+                        | _ -> failwith "unrecognized variable"
+    | Add(x, y) -> Seq.map2(fun left right -> left + right) (Create(x, a, b)) (Create(y, a, b))
+    | Mul(x, y) -> Seq.map2(fun left right -> left * right) (Create(x, a, b)) (Create(y, a, b))
+    | Pow(x, n) -> Seq.map2(fun left right -> System.Math.Pow(left, right)) (Create(x, a, b)) (seq[n])
+    
+type Ret(exp:Expression) =
+    member x.Execute(a: double seq,b: double seq) = Create(exp, a, b)
 
-let Build = fun exp -> Ret()
+let Build = fun exp -> Ret(ToFs exp)
