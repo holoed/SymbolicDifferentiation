@@ -16,14 +16,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using SymbolicDifferentiation.Extensions;
 
 namespace SymbolicDifferentiation.Tests.Aggregation
 {
     [TestFixture]
-    public class AggregationTests
+    public abstract class AggregationTests
     {
-        private Dictionary<string, IEnumerable<double>> _data;
+        protected Dictionary<string, IEnumerable<double>> _data;
 
         [SetUp]
         public void SetUp()
@@ -81,9 +80,6 @@ namespace SymbolicDifferentiation.Tests.Aggregation
             CollectionAssert.AreEqual(new[] { 190, 305, 526 }, Compute("8*A^3 + 5*B^2 + 3*C + D"));
         }
 
-        private double[] Compute(string input)
-        {
-            return input.FSTokenize().FSParse().FSAggregateFunction()(_data).Take(3).ToArray();
-        }
+        protected abstract double[] Compute(string input);
     }
 }
