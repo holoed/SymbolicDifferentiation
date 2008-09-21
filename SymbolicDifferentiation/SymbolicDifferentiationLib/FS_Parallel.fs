@@ -18,7 +18,7 @@ let private CalcChunkStartStopIndex size procNum index =
     if index < procNum - 1 then 
         (index + 1) * chunkSize - 1
     else
-        size
+        size - 1
         
 let private Chunks size procNum =
     let Calc = CalcChunkStartStopIndex size procNum
@@ -31,22 +31,15 @@ let private Chunks size procNum =
     
 let private ProcessChunk(f, x: 'a array, y: 'b array) chunk = 
     let ProcessChunk' (startIndex, endIndex) =
-        let rec ProcessChunk'' (i, list) =
-            if i < endIndex then
-                ProcessChunk'' (i + 1, list @ [f x.[i] y.[i] ])
-            else
-               if i < x.Length then 
-                    list @ [f x.[i] y.[i]]
-               else
-                    list
-        ProcessChunk''(startIndex, [])
+        let chunks = Array.init (endIndex - startIndex + 1) (fun index -> index + startIndex)
+        Array.map (fun i -> f x.[i] y.[i]) chunks
     ProcessChunk' chunk
-           
-    
-let pmap2 n size f (x: 'a seq) (y: 'b seq) =     
-    let pmap2Array n f (x: 'a array) (y: 'b array) = 
-        let chunks = Chunks size n
-        let results = List.map (ProcessChunk(f, x, y)) chunks
-        Seq.of_list (List.concat results)
-    pmap2Array n f (Array.of_seq(Seq.take size x)) (Array.of_seq (Seq.take size y))
+             
+let pmap2 n size f (x: 'a array) (y: 'b array) =     
+    let chunks = Chunks size n
+    let asyncs = Seq.map (fun chunk -> async { return (ProcessChunk(f, x, y) chunk) }) chunks
+    let results' = Async.Run(Async.Parallel(asyncs))
+    //let results' = Seq.map (ProcessChunk(f, x, y)) chunks
+    Array.concat results'
+
     

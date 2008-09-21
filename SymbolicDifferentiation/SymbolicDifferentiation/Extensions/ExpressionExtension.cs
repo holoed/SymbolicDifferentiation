@@ -41,14 +41,14 @@ namespace SymbolicDifferentiation.Extensions
             return FS_ExpressionToString.ToString(FS_Utils.ToFs(expression));
         }
 
-        public static Func<Dictionary<string, IEnumerable<double>>, IEnumerable<double>> FSAggregateFunction(this Expression expression)
+        public static Func<Dictionary<string, double[]>, double[]> FSAggregateFunction(this Expression expression)
         {
             return FS_Aggregation.Build(expression).Execute;
         }
 
-        public static Func<Dictionary<string, IEnumerable<double>>, IEnumerable<double>> FSParallelAggregateFunction(this Expression expression)
+        public static Func<Dictionary<string, double[]>, double[]> FSParallelAggregateFunction(this Expression expression, int size)
         {
-            return FS_Aggregation.BuildParallel(2, 3, expression).Execute;
+            return FS_Aggregation.BuildParallel(Environment.ProcessorCount, size, expression).Execute;
         }
     }
 }

@@ -22,24 +22,25 @@ namespace SymbolicDifferentiation.Tests.Aggregation
     [TestFixture]
     public abstract class AggregationTests
     {
-        protected Dictionary<string, IEnumerable<double>> _data;
+        protected Dictionary<string, double[]> _data;
 
         [SetUp]
         public void SetUp()
         {
-            _data = new Dictionary<string, IEnumerable<double>>
+            _data = new Dictionary<string, double[]>
                         {
-                            {"A", Enumerable.Range(1, 3).Select(i => i + .0)},
-                            {"B", Enumerable.Range(5, 7).Select(i => i + .0)},
-                            {"C", Enumerable.Range(9, 11).Select(i => i + .0)},
-                            {"D", Enumerable.Range(30, 32).Select(i => i + .0)},
+                            {"A", Enumerable.Range(1, 3).Select(i => i + .0).ToArray()},
+                            {"B", Enumerable.Range(5, 3).Select(i => i + .0).ToArray()},
+                            {"C", Enumerable.Range(9, 3).Select(i => i + .0).ToArray()},
+                            {"D", Enumerable.Range(30,3).Select(i => i + .0).ToArray()},
                         };
         }
 
         [Test]
         public void Add()
         {
-            CollectionAssert.AreEqual(new[] { 6, 8, 10 }, Compute("A + B"));
+            var compute = Compute("A + B");
+            CollectionAssert.AreEqual(new[] { 6, 8, 10 }, compute);
         }
 
         [Test]
