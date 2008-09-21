@@ -31,7 +31,8 @@ namespace SymbolicDifferentiation.Tests.Aggregation
 
         private double[] ComputeParallel(string input, int size)
         {
-            return input.FSTokenize().FSParse().FSParallelAggregateFunction(size)(_data).Take(size).ToArray();
+            const int PROC_NUM = 8;
+            return input.FSTokenize().FSParse().FSParallelAggregateFunction(size, PROC_NUM)(_data).Take(size).ToArray();
         }
 
         private double[] ComputeSequential(string input, int size)
@@ -39,9 +40,7 @@ namespace SymbolicDifferentiation.Tests.Aggregation
             return input.FSTokenize().FSParse().FSAggregateFunction()(_data).Take(size).ToArray();
         }
 
-
         [Test]
-        [Ignore("Long running tests...")]
         public void AddLots()
         {
             const int _size = 1000000;

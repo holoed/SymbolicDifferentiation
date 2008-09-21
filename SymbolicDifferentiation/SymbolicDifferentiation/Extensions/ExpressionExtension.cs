@@ -46,9 +46,9 @@ namespace SymbolicDifferentiation.Extensions
             return FS_Aggregation.Build(expression).Execute;
         }
 
-        public static Func<Dictionary<string, double[]>, double[]> FSParallelAggregateFunction(this Expression expression, int size)
+        public static Func<Dictionary<string, double[]>, double[]> FSParallelAggregateFunction(this Expression expression, int size, int procNum)
         {
-            return FS_Aggregation.BuildParallel(8, size, expression).Execute;
+            return FS_Aggregation.BuildParallel(procNum, size, expression).Execute;
         }
     }
 }
