@@ -41,10 +41,10 @@ namespace SymbolicDifferentiation.Tests.Aggregation
 
 
         [Test]
-        [Ignore("Long running test...")]
+        [Ignore("Long running tests...")]
         public void AddLots()
         {
-            const int _size = 15000000;
+            const int _size = 1000000;
 
             _data = new Dictionary<string, double[]>
                         {

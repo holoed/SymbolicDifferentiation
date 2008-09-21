@@ -48,7 +48,7 @@ namespace SymbolicDifferentiation.Extensions
 
         public static Func<Dictionary<string, double[]>, double[]> FSParallelAggregateFunction(this Expression expression, int size)
         {
-            return FS_Aggregation.BuildParallel(Environment.ProcessorCount, size, expression).Execute;
+            return FS_Aggregation.BuildParallel(8, size, expression).Execute;
         }
     }
 }
