@@ -27,6 +27,8 @@ let private toString (x:Token) = System.Convert.ToString(x.Value)
 
 let rec private toFsVisitor = 
  { new IExpressionVisitor<FS_AbstractSyntaxTree.Expression> with 
+   member v.Visit(x : FunctionApplicationExpression) : FS_AbstractSyntaxTree.Expression =
+      failwith "Not implemented yet"
    member v.Visit(x : BinaryExpression ) =  
       let left = x.Left.Accept toFsVisitor
       let right = x.Right.Accept toFsVisitor

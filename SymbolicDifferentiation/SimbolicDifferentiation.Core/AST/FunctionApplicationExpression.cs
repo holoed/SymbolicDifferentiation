@@ -13,14 +13,28 @@
 
 #endregion
 
-using SymbolicDifferentiation.Core.AST;
+using SymbolicDifferentiation.Core.Tokens;
 
 namespace SymbolicDifferentiation.Core.AST
 {
-    public interface IExpressionVisitor<T>
+    public class FunctionApplicationExpression : Expression
     {
-        T Visit(FunctionApplicationExpression expression);
-        T Visit(BinaryExpression expression);
-        T Visit(Expression expression);
+        public static Expression Create(Token name, Expression arg)
+        {
+            return new FunctionApplicationExpression {Name = name, Argument = arg};
+        }
+
+        public Token Name
+        {
+            set { Value = value; }
+            get { return Value; }
+        }
+
+        public Expression Argument { get; set; }
+
+        public override T Accept<T>(IExpressionVisitor<T> visitor)
+        {
+            return visitor.Visit(this);
+        }
     }
 }

@@ -100,7 +100,7 @@ namespace SymbolicDifferentiation.ParserCombinators
             return op.Then(f => p.Then(y => Chainl1Helper(f(x, y), p, op))).Or(x.Return());
         }
 
-        private static P<Token> Sat(Predicate<Token> pred)
+        public static P<Token> Sat(Predicate<Token> pred)
         {
             return input =>
                 input.Position >= input.Input.Count() ?

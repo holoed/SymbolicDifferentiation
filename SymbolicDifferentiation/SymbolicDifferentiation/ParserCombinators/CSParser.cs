@@ -27,14 +27,22 @@ namespace SymbolicDifferentiation.ParserCombinators
             var mulOp = (new Symbol("*") > ((x, y) => x * y)).Or(new Symbol("/") > ((x, y) => x / y)).Tag("multiply/divide op");
             var expOp = (new Symbol("^") > ((x, y) => x ^ y)).Tag("exponentiation op");
 
-            P<Expression> paren, part, factor, term, expr = null;
+            P<Expression> paren, part, factor, term, expr = null, app;
 
             paren = from o in new Symbol("(").Literal()
                     from e in expr
                     from c in new Symbol(")").Literal()
                     select e;
 
-            part = CSParserLib.DigitVal.Or(paren);
+            //TODO: First rudimental support for functions, refactor...
+            app = from k in TokenBuilder.Variable("fun").Literal()
+                  from name in CSParserLib.Sat(x => x.Type.Equals(MatchType.Variable))
+                  from o in new Symbol("(").Literal()
+                  from e in expr
+                  from c in new Symbol(")").Literal()
+                  select (Expression)new FunctionApplicationExpression { Name = name, Argument = e };
+
+            part = app.Or(CSParserLib.DigitVal).Or(paren);
             factor = part.Chainr1(expOp);
             term = factor.Chainl1(mulOp);
             expr = term.Chainl1(addOp);

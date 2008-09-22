@@ -23,22 +23,38 @@ namespace SymbolicDifferentiation.Visitors
         private readonly Queue<Expression> _stack = new Queue<Expression>();
         private bool _enabled;
 
+        public bool Visit(FunctionApplicationExpression expression)
+        {
+            if (_enabled)
+            {
+                if (_stack.Count == 0)
+                    return false;
+                var expected = _stack.Dequeue();
+                if (expected.GetType() != expression.GetType()) return false;
+                if (!Equals(expected.Value, expression.Name))
+                    return false;
+            }
+            else
+                _stack.Enqueue(expression);
+
+            return expression.Argument.Accept(this);
+        }
+
         public bool Visit(BinaryExpression expression)
         {
             if (_enabled)
             {
                 if (_stack.Count == 0)
                     return false;
-                var expectedOperator = _stack.Dequeue();
-                if (!Equals(expectedOperator.Value, expression.Operator))
+                var expected = _stack.Dequeue();
+                if (expected.GetType() != expression.GetType()) return false;
+                if (!Equals(expected.Value, expression.Operator))
                     return false;
             }
             else
-                _stack.Enqueue(new Expression {Value = expression.Operator});
+                _stack.Enqueue(expression);
 
-            expression.Left.Accept(this);
-            expression.Right.Accept(this);
-            return true;
+            return expression.Left.Accept(this) && expression.Right.Accept(this);
         }
 
         public bool Visit(Expression expression)
@@ -48,6 +64,7 @@ namespace SymbolicDifferentiation.Visitors
                 if (_stack.Count == 0)
                     return false;
                 var expected = _stack.Dequeue();
+                if (expected.GetType() != expression.GetType()) return false;
                 if (!Equals(expected.Value, expression.Value))
                     return false;
             }

@@ -141,5 +141,33 @@ namespace SymbolicDifferentiation.Tests.Parsers
         {
             ExpressionAssert.AreEqual((Number(2) + Number(3)) ^ Number(2), Parse(Tokenizer.Tokenize("(2 + 3)^2")));
         }
+
+        [Test]
+        public void FunctionApplication()
+        {
+            var expression = Parse(Tokenizer.Tokenize("fun Square(3)"));
+            ExpressionAssert.AreEqual(Function("Square", Number(3)), expression);
+        }
+
+        [Test]
+        public void FunctionApplicationAndAddition()
+        {
+            var expression = Parse(Tokenizer.Tokenize("fun Sin(3) + fun Cos(2)"));
+            ExpressionAssert.AreEqual(Function("Sin", Number(3)) + Function("Cos", Number(2)), expression);
+        }
+
+        [Test]
+        public void FunctionApplicationAndMultiplication()
+        {
+            var expression = Parse(Tokenizer.Tokenize("fun Sin(3) * fun Cos(2)"));
+            ExpressionAssert.AreEqual(Function("Sin", Number(3)) * Function("Cos", Number(2)), expression);
+        }
+
+        [Test]
+        public void FunctionApplicationAndMultiplicationAndAddition()
+        {
+            var expression = Parse(Tokenizer.Tokenize("fun Sin(3) * (fun Tan(6) + fun Cos(2))"));
+            ExpressionAssert.AreEqual(Function("Sin", Number(3)) * (Function("Tan", Number(6)) + Function("Cos", Number(2))), expression);
+        }
     }
 }

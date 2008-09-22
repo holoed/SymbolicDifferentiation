@@ -24,6 +24,7 @@ namespace SymbolicDifferentiation.Tests
     {
         public static void AreEqual(Expression expected, Expression actual)
         {
+            Assert.IsInstanceOfType(expected.GetType(), actual);
             Assert.IsTrue(ExpressionEqualityComparer.AreEqual(expected, actual),
                           String.Format("\nExpected {0}\nbut was  {1}", expected, actual));
         }

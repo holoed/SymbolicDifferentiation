@@ -23,11 +23,17 @@ let expOp = (Literal (TokenBuilder.Symbol("^"))) (fun x y -> SymbolicDifferentia
 let rec expr = chainl1 term addOp
 and term = chainl1 factor mulOp
 and factor = chainr1 part expOp
-and part = digitVal <|> paren
+and part = app <|> digitVal <|> paren
 and paren = parse { let! _ = Literal (TokenBuilder.Symbol("(")) 0
                     let! e = expr
                     let! _ = Literal (TokenBuilder.Symbol(")")) 0
                     return e }
+and app =   parse { let! _ = Literal (TokenBuilder.Variable("fun")) 0
+                    let! name = sat (fun x -> x.Type = MatchType.Variable )
+                    let! _ = Literal (TokenBuilder.Symbol("(")) 0
+                    let! e = expr
+                    let! _ = Literal (TokenBuilder.Symbol(")")) 0
+                    return SymbolicDifferentiation.Core.AST.FunctionApplicationExpression.Create(name, e) }
  
 let extractParseResult consumed  = 
     match consumed with

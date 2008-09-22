@@ -29,5 +29,10 @@ namespace SymbolicDifferentiation.Tests
         {
             return new Expression {Value = TokenBuilder.Variable(value)};
         }
+
+        protected static Expression Function(string name, Expression arg)
+        {
+            return new FunctionApplicationExpression {Name = TokenBuilder.Variable(name), Argument = arg};
+        }
     }
 }

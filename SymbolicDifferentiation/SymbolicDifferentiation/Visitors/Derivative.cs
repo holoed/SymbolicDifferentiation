@@ -22,6 +22,11 @@ namespace SymbolicDifferentiation.Visitors
 {
     public class Derivative : IExpressionVisitor<Expression>
     {
+        public Expression Visit(FunctionApplicationExpression expression)
+        {
+            throw new NotImplementedException();
+        }
+
         Expression IExpressionVisitor<Expression>.Visit(BinaryExpression expression)
         {
             if (IsOperation(expression, "+"))

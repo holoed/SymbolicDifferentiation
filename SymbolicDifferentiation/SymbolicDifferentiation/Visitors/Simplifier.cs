@@ -27,6 +27,11 @@ namespace SymbolicDifferentiation.Visitors
         private readonly Stack<Expression> _stack = new Stack<Expression>();
         private readonly Expression _zero = new Expression {Value = TokenBuilder.Number(0)};
 
+        public Unit Visit(FunctionApplicationExpression expression)
+        {
+            throw new NotImplementedException();
+        }
+
         public Unit Visit(BinaryExpression expression)
         {
             expression.Left.Accept(this);
