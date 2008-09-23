@@ -76,6 +76,15 @@ type ParseMonad() =
                                                        
 let parse = ParseMonad()
 
+let FollowedBy (m,f) =
+    fun output -> match m output with
+                                       | Consumed(b,result) -> match result with
+                                                               | Success(output,state,error) -> 
+                                                                 let (Consumed(b2,result2)) = f output state
+                                                                 Consumed(b && b2, if b2 then result else ParseResult.Merge(result, result2))
+
+                                                               | Fail e -> Consumed(b,Fail e)
+
 /// To allow conditional parsing, we define a combinator sat that takes a predicate, 
 /// and yields a parser that consumes a single character if it satisfies the predicate, 
 /// and fails otherwise

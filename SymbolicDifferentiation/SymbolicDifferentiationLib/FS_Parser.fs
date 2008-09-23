@@ -28,8 +28,7 @@ and paren = parse { let! _ = Literal (TokenBuilder.Symbol("(")) 0
                     let! e = expr
                     let! _ = Literal (TokenBuilder.Symbol(")")) 0
                     return e }
-and app =   parse { let! _ = Literal (TokenBuilder.Variable("fun")) 0
-                    let! name = sat (fun x -> x.Type = MatchType.Variable )
+and app =   parse { let! name = FollowedBy(sat (fun x -> x.Type = MatchType.Variable ), (fun r -> sat (fun x -> x.Value.Equals "("))) 
                     let! _ = Literal (TokenBuilder.Symbol("(")) 0
                     let! e = expr
                     let! _ = Literal (TokenBuilder.Symbol(")")) 0

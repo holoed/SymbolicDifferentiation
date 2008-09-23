@@ -35,8 +35,8 @@ namespace SymbolicDifferentiation.ParserCombinators
                     select e;
 
             //TODO: First rudimental support for functions, refactor...
-            app = from k in TokenBuilder.Variable("fun").Literal()
-                  from name in CSParserLib.Sat(x => x.Type.Equals(MatchType.Variable))
+            app = 
+                  from name in CSParserLib.Sat(x => x.Type.Equals(MatchType.Variable)).FollowedBy(c=> CSParserLib.Sat(t=>(t.Value.Equals("("))))
                   from o in new Symbol("(").Literal()
                   from e in expr
                   from c in new Symbol(")").Literal()

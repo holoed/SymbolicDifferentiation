@@ -56,6 +56,29 @@ namespace SymbolicDifferentiation.ParserCombinators
             };
         }
 
+        public static P<T> FollowedBy<T, U>(this P<T> p1, Func<T, P<U>> f)
+        {
+            return input =>
+            {
+                var consumed1 = p1(input);
+                if (consumed1.ParseResult.Succeeded)
+                {
+                    var consumed2 =
+                        f(consumed1.ParseResult.Result)(consumed1.ParseResult.RemainingInput);
+                    return new Consumed<T>(consumed1.HasConsumedInput && consumed2.HasConsumedInput,
+                                           consumed2.HasConsumedInput
+                                               ? consumed1.ParseResult
+                                               : consumed1.ParseResult.MergeError(
+                                                     consumed2.ParseResult.ErrorInfo));
+                }
+                else
+                {
+                    return new Consumed<T>(consumed1.HasConsumedInput,
+                                           new ParseResult<T>(consumed1.ParseResult.ErrorInfo));
+                }
+            };
+        }
+
         public static P<T> Or<T>(this P<T> p1, P<T> p2)
         {
             return input =>
