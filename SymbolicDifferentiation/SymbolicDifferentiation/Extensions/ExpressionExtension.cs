@@ -38,7 +38,7 @@ namespace SymbolicDifferentiation.Extensions
 
         public static string FSToString(this Expression expression)
         {
-            return FS_ExpressionToString.ToString(FS_Utils.ToFs(expression));
+            return FS_ExpressionToString.ToString(FS_Utils.ToFs<double>(expression));
         }
 
         public static Func<Dictionary<string, double[]>, double[]> FSAggregateFunction(this Expression expression)

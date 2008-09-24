@@ -11,12 +11,12 @@
 
 #light
 
-type Expression = 
+type Expression<'a> = 
     | Variable of string
-    | Number of double
-    | Add of Expression * Expression
-    | Mul of Expression * Expression
-    | Pow of Expression * double
-    static member (+) (x, y) = Add(x,y)
-    static member (*) (x, y) = Mul(x,y)
+    | Number of 'a
+    | Add of Expression<'a> * Expression<'a>
+    | Mul of Expression<'a> * Expression<'a>
+    | Pow of Expression<'a> * 'a
+    static member (+) (x:Expression<'a>, y:Expression<'a>) = Add(x,y)
+    static member (*) (x:Expression<'a>, y:Expression<'a>) = Mul(x,y)
 

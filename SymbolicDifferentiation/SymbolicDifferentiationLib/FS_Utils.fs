@@ -21,13 +21,11 @@ let private (|IsOp|_|) expected actual =
     else
         None
 
-let private toDouble (x:Token) = System.Convert.ToDouble(x.Value)
-
 let private toString (x:Token) = System.Convert.ToString(x.Value)
 
 let rec private toFsVisitor = 
- { new IExpressionVisitor<FS_AbstractSyntaxTree.Expression> with 
-   member v.Visit(x : FunctionApplicationExpression) : FS_AbstractSyntaxTree.Expression =
+ { new IExpressionVisitor<FS_AbstractSyntaxTree.Expression<'a>> with 
+   member v.Visit(x : FunctionApplicationExpression) : FS_AbstractSyntaxTree.Expression<'a> =
       failwith "Not implemented yet"
    member v.Visit(x : BinaryExpression ) =  
       let left = x.Left.Accept toFsVisitor
@@ -35,18 +33,18 @@ let rec private toFsVisitor =
       match x.Operator with
       | IsOp("+") result -> left + right
       | IsOp("*") result -> left * right
-      | IsOp("^") result -> Pow (left, toDouble x.Right.Value)
+      | IsOp("^") result -> Pow (left, x.Right.Value.GetValue<'a>())
       | _ -> failwith "unknown operator"
    member v.Visit(x : Expression) = 
       if (x.IsNumber) then
-        Number (toDouble x.Value)
+        Number (x.Value.GetValue<'a>())
       else
         Variable (toString x.Value)  }
         
 let rec ToFs (x : Expression) =
     x.Accept toFsVisitor    
         
-let rec ToCs (x : FS_AbstractSyntaxTree.Expression) =  
+let rec ToCs (x : FS_AbstractSyntaxTree.Expression<'a>) =  
         match x with
         | Variable v -> new Expression(new Token(MatchType.Variable, v))
         | Number n -> new Expression(new Token(MatchType.Number, n))

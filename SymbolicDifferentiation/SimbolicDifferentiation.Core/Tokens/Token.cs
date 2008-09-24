@@ -90,5 +90,10 @@ namespace SymbolicDifferentiation.Core.Tokens
         {
             return token.Type == MatchType.Variable || token.Type == MatchType.Number;
         }
+
+        public T GetValue<T>()
+        {
+            return (T)Convert.ChangeType(Value, typeof (T));
+        }
     }
 }
