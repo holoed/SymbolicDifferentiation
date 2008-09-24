@@ -124,3 +124,15 @@ let rec chainr1 p op =
                     <|> parse { return x }
           }
 
+let Then p1 p2 = parse { let! x = p1
+                         let! y = p2 x
+                         return y }
+
+let Then_ p1 p2 = Then p1 (fun dummy -> p2)
+
+
+let rec sepBy1 p sep = 
+    let sepByHelper p sep = (Then_ sep (sepBy1 p sep)) <|> parse { return [] }
+    Then p (fun x -> (Then (sepByHelper p sep) (fun xs -> parse { return x :: xs })))
+
+let sepBy p sep = sepBy1 p sep <|> parse { return [] }

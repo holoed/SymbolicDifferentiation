@@ -30,9 +30,9 @@ and paren = parse { let! _ = Literal (TokenBuilder.Symbol("(")) 0
                     return e }
 and app =   parse { let! name = FollowedBy(sat (fun x -> x.Type = MatchType.Variable ), (fun r -> sat (fun x -> x.Value.Equals "("))) 
                     let! _ = Literal (TokenBuilder.Symbol("(")) 0
-                    let! e = expr
+                    let! e = sepBy expr ((Literal (TokenBuilder.Symbol(","))) 0)
                     let! _ = Literal (TokenBuilder.Symbol(")")) 0
-                    return SymbolicDifferentiation.Core.AST.FunctionApplicationExpression.Create(name, e) }
+                    return SymbolicDifferentiation.Core.AST.FunctionApplicationExpression.Create(name, Array.of_list e) }
  
 let extractParseResult consumed  = 
     match consumed with

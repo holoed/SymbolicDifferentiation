@@ -38,9 +38,9 @@ namespace SymbolicDifferentiation.ParserCombinators
             app = 
                   from name in CSParserLib.Sat(x => x.Type.Equals(MatchType.Variable)).FollowedBy(c=> CSParserLib.Sat(t=>(t.Value.Equals("("))))
                   from o in new Symbol("(").Literal()
-                  from e in expr
+                  from e in expr.SepBy(new Symbol(",").Literal())
                   from c in new Symbol(")").Literal()
-                  select (Expression)new FunctionApplicationExpression { Name = name, Argument = e };
+                  select (Expression)new FunctionApplicationExpression { Name = name, Arguments = e };
 
             part = app.Or(CSParserLib.DigitVal).Or(paren);
             factor = part.Chainr1(expOp);

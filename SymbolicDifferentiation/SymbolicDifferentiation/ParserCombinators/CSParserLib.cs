@@ -156,5 +156,29 @@ namespace SymbolicDifferentiation.ParserCombinators
             foreach (var t in rest)
                 yield return t;
         }
+
+        // p1.Then_(p2) runs p1, discards the result, then runs p2 on the remaining input
+        private static P<U> Then_<T, U>(this P<T> p1, P<U> p2)
+        {
+            return p1.Then(dummy => p2);
+        }
+
+        // p.SepBy(sep) parses zero or more p, each separated by a sep, returning a list of the p results
+        public static P<IEnumerable<T>> SepBy<T, U>(this P<T> p, P<U> sep)
+        {
+            return SepBy1(p, sep).Or(Return(Enumerable.Empty<T>()));
+        }
+        // p.SepBy(sep) parses one or more p, each separated by a sep, returning a list of the p results
+        private static P<IEnumerable<T>> SepBy1<T, U>(this P<T> p, P<U> sep)
+        {
+            return p.Then(x =>
+                SepByHelper(p, sep).Then(xs =>
+                Return(Cons(x, xs))));
+        }
+        private static P<IEnumerable<T>> SepByHelper<T, U>(P<T> p, P<U> sep)
+        {
+            return sep.Then_(SepBy1(p, sep))
+                .Or(Return(Enumerable.Empty<T>()));
+        }
     }
 }

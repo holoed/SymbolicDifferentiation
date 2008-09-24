@@ -150,6 +150,13 @@ namespace SymbolicDifferentiation.Tests.Parsers
         }
 
         [Test]
+        public void FunctionApplicationWithTwoArguments()
+        {
+            var expression = Parse(Tokenizer.Tokenize("Max(a,b)"));
+            ExpressionAssert.AreEqual(Function("Max", Variable("a"), Variable("b")), expression);
+        }
+
+        [Test]
         public void FunctionApplicationAndAddition()
         {
             var expression = Parse(Tokenizer.Tokenize("Sin(3) + Cos(2)"));

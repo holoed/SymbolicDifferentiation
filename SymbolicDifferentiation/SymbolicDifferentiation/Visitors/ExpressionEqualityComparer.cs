@@ -37,7 +37,9 @@ namespace SymbolicDifferentiation.Visitors
             else
                 _stack.Enqueue(expression);
 
-            return expression.Argument.Accept(this);
+            foreach (var argument in expression.Arguments)
+                if (!argument.Accept(this)) return false;
+            return true;
         }
 
         public bool Visit(BinaryExpression expression)

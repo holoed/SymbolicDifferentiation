@@ -13,15 +13,16 @@
 
 #endregion
 
+using System.Collections.Generic;
 using SymbolicDifferentiation.Core.Tokens;
 
 namespace SymbolicDifferentiation.Core.AST
 {
     public class FunctionApplicationExpression : Expression
     {
-        public static Expression Create(Token name, Expression arg)
+        public static Expression Create(Token name, params Expression[] arg)
         {
-            return new FunctionApplicationExpression {Name = name, Argument = arg};
+            return new FunctionApplicationExpression {Name = name, Arguments = arg};
         }
 
         public Token Name
@@ -30,7 +31,7 @@ namespace SymbolicDifferentiation.Core.AST
             get { return Value; }
         }
 
-        public Expression Argument { get; set; }
+        public IEnumerable<Expression> Arguments { get; set; }
 
         public override T Accept<T>(IExpressionVisitor<T> visitor)
         {
