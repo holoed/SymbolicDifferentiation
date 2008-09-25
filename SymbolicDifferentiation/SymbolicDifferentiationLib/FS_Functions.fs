@@ -16,3 +16,5 @@ let add (x: double seq, y: double seq) = Seq.map2 (fun x y -> x + y) x y
 let mul (x: double seq, y: double seq) = Seq.map2 (fun x y -> x * y) x y 
 
 let pow (x: double seq, y: double seq) = Seq.map2 (fun x y -> System.Math.Pow(x,y)) x y
+
+let max (x: double seq, y: double seq) = Seq.map2 (fun x y -> if (x > y) then x else y) x y 

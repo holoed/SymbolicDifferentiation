@@ -36,6 +36,11 @@ namespace SymbolicDifferentiation.Parallel
             return Combine(left, right, Math.Pow);
         }
 
+        public static IEnumerable<double> Max(IEnumerable<double> left, IEnumerable<double> right)
+        {
+            return Combine(left, right, (x, y) => x > y ? x : y);
+        }
+
         private static IEnumerable<double> Combine(IEnumerable<double> left, IEnumerable<double> right, Func<double,double,double> func)
         {
             using (var e1 = left.GetEnumerator())

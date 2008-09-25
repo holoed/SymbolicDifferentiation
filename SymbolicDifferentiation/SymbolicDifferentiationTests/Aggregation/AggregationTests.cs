@@ -83,6 +83,13 @@ namespace SymbolicDifferentiation.Tests.Aggregation
             CollectionAssert.AreEqual(new[] { 190, 305, 526 }, Compute("8*A^3 + 5*B^2 + 3*C + D"));
         }
 
+        [Test]
+        public void Function()
+        {
+            var compute = Compute("Max(A , B)");
+            CollectionAssert.AreEqual(_data["B"].ToArray(), compute.ToArray());
+        }
+
         protected abstract double[] Compute(string input);
 
         protected static FastFunc<T, FastFunc<T, T>> ToFastFunc<T>(Func<T, T, T> func)

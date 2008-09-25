@@ -28,7 +28,8 @@ namespace SymbolicDifferentiation.Tests.Aggregation
                                                                         {
                                                                             {"Add", ToFastFunc<IEnumerable<double>>(FS_Functions.add)},
                                                                             {"Mul", ToFastFunc<IEnumerable<double>>(FS_Functions.mul)},
-                                                                            {"Pow", ToFastFunc<IEnumerable<double>>(FS_Functions.pow)}
+                                                                            {"Pow", ToFastFunc<IEnumerable<double>>(FS_Functions.pow)},
+                                                                            {"Max", ToFastFunc<IEnumerable<double>>(FS_Functions.max)}
                                                                         })(_data).Take(3).ToArray();
         }
     }

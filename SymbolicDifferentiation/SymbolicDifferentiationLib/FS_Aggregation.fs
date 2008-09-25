@@ -23,6 +23,9 @@ let rec private Create (exp, data:Dictionary<string, double seq>, functions:Dict
     | Add(x, y) -> functions.Item("Add")(Process x) (Process y)
     | Mul(x, y) -> functions.Item("Mul") (Process x) (Process y)
     | Pow(x, n) -> functions.Item("Pow") (Process x) (Seq.init_infinite (fun i -> n))
+    | Fun(name, args) -> 
+        let argsArray = Seq.to_array args
+        functions.Item(name) (Process(argsArray.[0])) (Process(argsArray.[1]))
     
 type Ret(exp, functions) =
     member x.Execute(data) = Create(exp, data, functions)
