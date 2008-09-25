@@ -13,8 +13,10 @@
 
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.FSharp.Core;
 using NUnit.Framework;
 
 namespace SymbolicDifferentiation.Tests.Aggregation
@@ -22,17 +24,17 @@ namespace SymbolicDifferentiation.Tests.Aggregation
     [TestFixture]
     public abstract class AggregationTests
     {
-        protected Dictionary<string, double[]> _data;
+        protected Dictionary<string, IEnumerable<double>> _data;
 
         [SetUp]
         public void SetUp()
         {
-            _data = new Dictionary<string, double[]>
+            _data = new Dictionary<string, IEnumerable<double>>
                         {
-                            {"A", Enumerable.Range(1, 3).Select(i => i + .0).ToArray()},
-                            {"B", Enumerable.Range(5, 3).Select(i => i + .0).ToArray()},
-                            {"C", Enumerable.Range(9, 3).Select(i => i + .0).ToArray()},
-                            {"D", Enumerable.Range(30,3).Select(i => i + .0).ToArray()},
+                            {"A", Enumerable.Range(1, 3).Select(i => i + .0)},
+                            {"B", Enumerable.Range(5, 3).Select(i => i + .0)},
+                            {"C", Enumerable.Range(9, 3).Select(i => i + .0)},
+                            {"D", Enumerable.Range(30,3).Select(i => i + .0)},
                         };
         }
 
@@ -82,5 +84,12 @@ namespace SymbolicDifferentiation.Tests.Aggregation
         }
 
         protected abstract double[] Compute(string input);
+
+        protected static FastFunc<T, FastFunc<T, T>> ToFastFunc<T>(Func<T, T, T> func)
+        {
+            Converter<T, Converter<T, T>> curriedFunc = x => y => func(x, y);
+            Converter<T, FastFunc<T, T>> fastFunc = x => FuncConvert.ToFastFunc(curriedFunc(x));
+            return FuncConvert.ToFastFunc(fastFunc);
+        }
     }
 }

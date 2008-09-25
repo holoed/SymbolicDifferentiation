@@ -14,27 +14,17 @@
 open FS_AbstractSyntaxTree;
 open FS_Utils;
 open System.Collections.Generic;
-open FS_Parallel;
 
-let rec private Create (exp, data:Dictionary<string, double array>, map2) =
-    let Process exp = Create(exp, data, map2)
+let rec private Create (exp, data:Dictionary<string, double seq>, functions:Dictionary<string, 'f>) =
+    let Process exp = Create(exp, data, functions)
     match exp with
-    | Number n -> Array.of_list [n]
+    | Number n -> Seq.init_infinite (fun i -> n)
     | Variable x -> data.Item(x)
+    | Add(x, y) -> functions.Item("Add")(Process x) (Process y)
+    | Mul(x, y) -> functions.Item("Mul") (Process x) (Process y)
+    | Pow(x, n) -> functions.Item("Pow") (Process x) (Seq.init_infinite (fun i -> n))
     
-    | Add(x, Number n) -> Array.map(fun left -> left + n) (Process x)
-    | Add(Number n, y) -> Array.map(fun right -> n + right) (Process y)
-    | Add(x, y) -> map2(fun left right -> left + right) (Process x) (Process y)
+type Ret(exp, functions) =
+    member x.Execute(data) = Create(exp, data, functions)
 
-    | Mul(x, Number n) -> Array.map(fun left -> left * n) (Process x)
-    | Mul(Number n, y) -> Array.map(fun right -> n * right) (Process y)
-    | Mul(x, y) -> map2(fun left right -> left * right) (Process x) (Process y)
-
-    | Pow(x, n) -> Array.map(fun left -> System.Math.Pow(left, n)) (Process x)
-    
-type Ret(map2, exp) =
-    member x.Execute(data) = Create(exp, data, map2)
-
-let Build = fun exp -> Ret(Array.map2, (ToFs exp))
-
-let BuildParallel procNum dataSize = fun exp -> Ret((FS_Parallel.pmap2 procNum dataSize), (ToFs exp))
+let Build = fun (exp, functions) ->  Ret((ToFs exp), functions)

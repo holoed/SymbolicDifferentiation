@@ -13,7 +13,9 @@
 
 #endregion
 
+using System.Collections.Generic;
 using System.Linq;
+using Microsoft.FSharp.Core;
 using SymbolicDifferentiation.Extensions;
 
 namespace SymbolicDifferentiation.Tests.Aggregation
@@ -22,7 +24,12 @@ namespace SymbolicDifferentiation.Tests.Aggregation
     {
         protected override double[] Compute(string input)
         {
-            return input.FSTokenize().FSParse().FSAggregateFunction()(_data).Take(3).ToArray();
+            return input.FSTokenize().FSParse().FSAggregateFunction(new Dictionary<string, FastFunc<IEnumerable<double>, FastFunc<IEnumerable<double>, IEnumerable<double>>>>
+                                                                        {
+                                                                            {"Add", ToFastFunc<IEnumerable<double>>(FS_Functions.add)},
+                                                                            {"Mul", ToFastFunc<IEnumerable<double>>(FS_Functions.mul)},
+                                                                            {"Pow", ToFastFunc<IEnumerable<double>>(FS_Functions.pow)}
+                                                                        })(_data).Take(3).ToArray();
         }
     }
 }

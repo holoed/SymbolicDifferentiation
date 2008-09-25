@@ -17,8 +17,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Microsoft.FSharp.Core;
 using NUnit.Framework;
 using SymbolicDifferentiation.Extensions;
+using SymbolicDifferentiation.Parallel;
 
 namespace SymbolicDifferentiation.Tests.Aggregation
 {
@@ -26,18 +28,12 @@ namespace SymbolicDifferentiation.Tests.Aggregation
     {
         protected override double[] Compute(string input)
         {
-            return ComputeParallel(input, 3);
-        }
-
-        private double[] ComputeParallel(string input, int size)
-        {
-            const int PROC_NUM = 8;
-            return input.FSTokenize().FSParse().FSParallelAggregateFunction(size, PROC_NUM)(_data).Take(size).ToArray();
-        }
-
-        private double[] ComputeSequential(string input, int size)
-        {
-            return input.FSTokenize().FSParse().FSAggregateFunction()(_data).Take(size).ToArray();
+            return input.FSTokenize().FSParse().FSAggregateFunction(new Dictionary<string, FastFunc<IEnumerable<double>, FastFunc<IEnumerable<double>, IEnumerable<double>>>>
+                                                                        {
+                                                                            {"Add", ToFastFunc<IEnumerable<double>>(ParallelFunctions.Add)},
+                                                                            {"Mul", ToFastFunc<IEnumerable<double>>(ParallelFunctions.Mul)},
+                                                                            {"Pow", ToFastFunc<IEnumerable<double>>(ParallelFunctions.Pow)}
+                                                                        })(_data).Take(3).ToArray();
         }
 
         [Test]
@@ -45,10 +41,10 @@ namespace SymbolicDifferentiation.Tests.Aggregation
         {
             const int _size = 1000000;
 
-            _data = new Dictionary<string, double[]>
+            _data = new Dictionary<string, IEnumerable<double>>
                         {
-                            {"A", Enumerable.Range(0, _size).Select(i => i + .0).ToArray()},
-                            {"B", Enumerable.Range(_size, _size).Select(i => i + .0).ToArray()},
+                            {"A", Enumerable.Range(0, _size).Select(i => i + .0)},
+                            {"B", Enumerable.Range(_size, _size).Select(i => i + .0)},
                         };
 
 
@@ -56,13 +52,13 @@ namespace SymbolicDifferentiation.Tests.Aggregation
             watch.Reset();
             Console.WriteLine("Start sequential...");
             watch.Start();
-            var result2 = ComputeSequential("A + (A * B)", _size);
+            var result2 = Compute("A + (A * B)");
             watch.Stop();
             Console.WriteLine("Sequential elapsed:{0}", watch.Elapsed);
             watch.Reset();
             Console.WriteLine("Start parallel...");
             watch.Start();
-            var result = ComputeParallel("A + (A * B)", _size);
+            var result = Compute("A + (A * B)");
             watch.Stop();
             Console.WriteLine("Parallel elapsed:{0}", watch.Elapsed);
 

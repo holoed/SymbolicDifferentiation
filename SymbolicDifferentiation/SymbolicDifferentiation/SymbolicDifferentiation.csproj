@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Parallel\ParallelFunctions.cs" />
     <Compile Include="ParserCombinators\CSParserLib.cs" />
     <Compile Include="ParserCombinators\Consumed.cs" />
     <Compile Include="ParserCombinators\ErrorInfo.cs" />

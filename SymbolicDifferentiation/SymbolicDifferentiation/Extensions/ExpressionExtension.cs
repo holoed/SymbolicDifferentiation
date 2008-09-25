@@ -15,6 +15,7 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.FSharp.Core;
 using SymbolicDifferentiation.Core.AST;
 using SymbolicDifferentiation.Visitors;
 
@@ -41,14 +42,9 @@ namespace SymbolicDifferentiation.Extensions
             return FS_ExpressionToString.ToString(FS_Utils.ToFs<double>(expression));
         }
 
-        public static Func<Dictionary<string, double[]>, double[]> FSAggregateFunction(this Expression expression)
+        public static Func<Dictionary<string, IEnumerable<double>>, IEnumerable<double>> FSAggregateFunction(this Expression expression, Dictionary<string, FastFunc<IEnumerable<double>, FastFunc<IEnumerable<double>, IEnumerable<double>>>> funcs)
         {
-            return FS_Aggregation.Build(expression).Execute;
-        }
-
-        public static Func<Dictionary<string, double[]>, double[]> FSParallelAggregateFunction(this Expression expression, int size, int procNum)
-        {
-            return FS_Aggregation.BuildParallel(procNum, size, expression).Execute;
+            return FS_Aggregation.Build(expression, funcs).Execute;
         }
     }
 }
