@@ -92,11 +92,9 @@ namespace SymbolicDifferentiation.Tests.Aggregation
 
         protected abstract double[] Compute(string input);
 
-        protected static FastFunc<T, FastFunc<T, T>> ToFastFunc<T>(Func<T, T, T> func)
+        protected static FastFunc<IEnumerable<T>, T> ToFastFunc<T>(Converter<IEnumerable<T>, T> func)
         {
-            Converter<T, Converter<T, T>> curriedFunc = x => y => func(x, y);
-            Converter<T, FastFunc<T, T>> fastFunc = x => FuncConvert.ToFastFunc(curriedFunc(x));
-            return FuncConvert.ToFastFunc(fastFunc);
+            return FuncConvert.ToFastFunc(func);
         }
     }
 }

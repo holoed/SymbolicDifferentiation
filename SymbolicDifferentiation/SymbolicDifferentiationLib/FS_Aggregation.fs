@@ -20,12 +20,11 @@ let rec private Create (exp, data:Dictionary<string, double seq>, functions:Dict
     match exp with
     | Number n -> Seq.init_infinite (fun i -> n)
     | Variable x -> data.Item(x)
-    | Add(x, y) -> functions.Item("Add")(Process x) (Process y)
-    | Mul(x, y) -> functions.Item("Mul") (Process x) (Process y)
-    | Pow(x, n) -> functions.Item("Pow") (Process x) (Seq.init_infinite (fun i -> n))
+    | Add(x, y) -> functions.Item("Add") (seq[(Process x);(Process y)])
+    | Mul(x, y) -> functions.Item("Mul") (seq[(Process x);(Process y)])
+    | Pow(x, n) -> functions.Item("Pow") (seq[(Process x);(Seq.init_infinite (fun i -> n))])
     | Fun(name, args) -> 
-        let argsArray = Seq.to_array args
-        functions.Item(name) (Process(argsArray.[0])) (Process(argsArray.[1]))
+        functions.Item(name) (Seq.map (fun arg -> Process(arg)) args)
     
 type Ret(exp, functions) =
     member x.Execute(data) = Create(exp, data, functions)

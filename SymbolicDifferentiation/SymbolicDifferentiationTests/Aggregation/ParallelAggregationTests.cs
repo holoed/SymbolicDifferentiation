@@ -28,12 +28,12 @@ namespace SymbolicDifferentiation.Tests.Aggregation
     {
         protected override double[] Compute(string input)
         {
-            return input.FSTokenize().FSParse().FSAggregateFunction(new Dictionary<string, FastFunc<IEnumerable<double>, FastFunc<IEnumerable<double>, IEnumerable<double>>>>
+            return input.FSTokenize().FSParse().FSAggregateFunction(new Dictionary<string, FastFunc<IEnumerable<IEnumerable<double>>, IEnumerable<double>>>
                                                                         {
-                                                                            {"Add", ToFastFunc<IEnumerable<double>>(ParallelFunctions.Add)},
-                                                                            {"Mul", ToFastFunc<IEnumerable<double>>(ParallelFunctions.Mul)},
-                                                                            {"Pow", ToFastFunc<IEnumerable<double>>(ParallelFunctions.Pow)},
-                                                                            {"Max", ToFastFunc<IEnumerable<double>>(ParallelFunctions.Max)}
+                                                                            {"Add", ToFastFunc<IEnumerable<double>>(args => ParallelFunctions.Add(args.ElementAt(0), args.ElementAt(1)))},
+                                                                            {"Mul", ToFastFunc<IEnumerable<double>>(args => ParallelFunctions.Mul(args.ElementAt(0), args.ElementAt(1)))},
+                                                                            {"Pow", ToFastFunc<IEnumerable<double>>(args => ParallelFunctions.Pow(args.ElementAt(0), args.ElementAt(1)))},
+                                                                            {"Max", ToFastFunc<IEnumerable<double>>(args => ParallelFunctions.Max(args.ElementAt(0), args.ElementAt(1)))}
                                                                         })(_data).Take(3).ToArray();
         }
 
