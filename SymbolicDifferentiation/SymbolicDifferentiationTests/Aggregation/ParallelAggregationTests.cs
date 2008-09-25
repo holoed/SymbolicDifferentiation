@@ -30,10 +30,10 @@ namespace SymbolicDifferentiation.Tests.Aggregation
         {
             return input.FSTokenize().FSParse().FSAggregateFunction(new Dictionary<string, FastFunc<IEnumerable<IEnumerable<double>>, IEnumerable<double>>>
                                                                         {
-                                                                            {"Add", ToFastFunc<IEnumerable<double>>(args => ParallelFunctions.Add(args.ElementAt(0), args.ElementAt(1)))},
-                                                                            {"Mul", ToFastFunc<IEnumerable<double>>(args => ParallelFunctions.Mul(args.ElementAt(0), args.ElementAt(1)))},
-                                                                            {"Pow", ToFastFunc<IEnumerable<double>>(args => ParallelFunctions.Pow(args.ElementAt(0), args.ElementAt(1)))},
-                                                                            {"Max", ToFastFunc<IEnumerable<double>>(args => ParallelFunctions.Max(args.ElementAt(0), args.ElementAt(1)))}
+                                                                            {"Add", ToFastFunc<IEnumerable<double>>(ParallelFunctions.Add)},
+                                                                            {"Mul", ToFastFunc<IEnumerable<double>>(ParallelFunctions.Mul)},
+                                                                            {"Pow", ToFastFunc<IEnumerable<double>>(ParallelFunctions.Pow)},
+                                                                            {"Max", ToFastFunc<IEnumerable<double>>(ParallelFunctions.Max)}
                                                                         })(_data).Take(3).ToArray();
         }
 
