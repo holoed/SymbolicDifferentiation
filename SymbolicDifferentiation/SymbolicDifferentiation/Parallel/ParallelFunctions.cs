@@ -16,6 +16,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using SymbolicDifferentiation.Core.Extensions;
 
 namespace SymbolicDifferentiation.Parallel
 {
@@ -24,57 +25,22 @@ namespace SymbolicDifferentiation.Parallel
     {
         public static IEnumerable<double> Add(IEnumerable<IEnumerable<double>> data)
         {
-            return Combine(data, item => item.Aggregate((x,y) => x + y));
+            return data.Combine(item => item.Aggregate((x, y) => x + y));
         }
 
         public static IEnumerable<double> Mul(IEnumerable<IEnumerable<double>> data)
         {
-            return Combine(data, item => item.Aggregate((x, y) => x * y));
+            return data.Combine(item => item.Aggregate((x, y) => x * y));
         }
 
         public static IEnumerable<double> Pow(IEnumerable<IEnumerable<double>> data)
         {
-            return Combine(data, item => item.Aggregate(Math.Pow));
+            return data.Combine(item => item.Aggregate(Math.Pow));
         }
 
         public static IEnumerable<double> Max(IEnumerable<IEnumerable<double>> data)
         {
-            return Combine(data, item => item.Aggregate((x, y) => x > y ? x : y));
-        }
-
-        private static IEnumerable<double> Combine(IEnumerable<double> left, IEnumerable<double> right, Func<double,double,double> func)
-        {
-            using (var e1 = left.GetEnumerator())
-            using (var e2 = right.GetEnumerator())
-            {
-                while (e1.MoveNext() && e2.MoveNext())
-                {
-                    yield return func(e1.Current, e2.Current);
-                }
-            }
-        }
-
-        private static IEnumerable<double> Combine(IEnumerable<IEnumerable<double>> data, Func<IEnumerable<double>, double> func)
-        {
-            var enumerators = new List<IEnumerator<double>>();
-            foreach (var enumerable in data)
-                enumerators.Add(enumerable.GetEnumerator());
-
-            while (AllMoveNext(enumerators))
-                yield return func(GetCurrents(enumerators));
-        }
-
-        private static IEnumerable<double> GetCurrents(IEnumerable<IEnumerator<double>> enumerators)
-        {
-            foreach (var enumerator in enumerators)
-                yield return enumerator.Current;
-        }
-
-        private static bool AllMoveNext(IEnumerable<IEnumerator<double>> enumerators)
-        {
-            foreach (var enumerator in enumerators)
-                if (!enumerator.MoveNext()) return false;
-            return true;
+            return data.Combine(item => item.Aggregate((x, y) => x > y ? x : y));
         }
     }
 }

@@ -18,6 +18,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.FSharp.Core;
 using NUnit.Framework;
+using SymbolicDifferentiation.Extensions;
+using SymbolicDifferentiation.Parallel;
 
 namespace SymbolicDifferentiation.Tests.Aggregation
 {
@@ -25,6 +27,14 @@ namespace SymbolicDifferentiation.Tests.Aggregation
     public abstract class AggregationTests
     {
         protected Dictionary<string, IEnumerable<double>> _data;
+
+        protected static Dictionary<string, FastFunc<IEnumerable<IEnumerable<double>>, IEnumerable<double>>> _funcs = new Dictionary<string, FastFunc<IEnumerable<IEnumerable<double>>, IEnumerable<double>>>
+                                              {
+                                                  {"Add", ToFastFunc<IEnumerable<double>>(ParallelFunctions.Add)},
+                                                  {"Mul", ToFastFunc<IEnumerable<double>>(ParallelFunctions.Mul)},
+                                                  {"Pow", ToFastFunc<IEnumerable<double>>(ParallelFunctions.Pow)},
+                                                  {"Max", ToFastFunc<IEnumerable<double>>(ParallelFunctions.Max)}
+                                              };
 
         [SetUp]
         public void SetUp()
@@ -96,5 +106,15 @@ namespace SymbolicDifferentiation.Tests.Aggregation
         {
             return FuncConvert.ToFastFunc(func);
         }
+
+        protected double[] ComputeParallel(string input)
+        {
+            return input.FSTokenize().FSParse().FSParallelComputation(_funcs)(_data).Take(3).ToArray();
+        }
+
+        protected double[] ComputeSequential(string input)
+        {
+            return input.FSTokenize().FSParse().FSSequentialComputation(_funcs)(_data).Take(3).ToArray();
+        } 
     }
 }

@@ -42,9 +42,14 @@ namespace SymbolicDifferentiation.Extensions
             return FS_ExpressionToString.ToString(FS_Utils.ToFs<double>(expression));
         }
 
-        public static Func<Dictionary<string, IEnumerable<double>>, IEnumerable<double>> FSAggregateFunction(this Expression expression, Dictionary<string, FastFunc<IEnumerable<IEnumerable<double>>, IEnumerable<double>>> funcs)
+        public static Func<Dictionary<string, IEnumerable<double>>, IEnumerable<double>> FSSequentialComputation(this Expression expression, Dictionary<string, FastFunc<IEnumerable<IEnumerable<double>>, IEnumerable<double>>> funcs)
         {
-            return FS_Aggregation.Build(expression, funcs).Execute;
+            return FS_AggregationSequential.Build(expression, funcs).Execute;
+        }
+
+        public static Func<Dictionary<string, IEnumerable<double>>, IEnumerable<double>> FSParallelComputation(this Expression expression, Dictionary<string, FastFunc<IEnumerable<IEnumerable<double>>, IEnumerable<double>>> funcs)
+        {
+            return FS_AggregationParallel.Build(expression, funcs).Execute;
         }
     }
 }

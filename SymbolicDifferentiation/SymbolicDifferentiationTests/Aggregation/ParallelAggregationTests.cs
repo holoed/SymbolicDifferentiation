@@ -17,10 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Microsoft.FSharp.Core;
 using NUnit.Framework;
-using SymbolicDifferentiation.Extensions;
-using SymbolicDifferentiation.Parallel;
 
 namespace SymbolicDifferentiation.Tests.Aggregation
 {
@@ -28,19 +25,15 @@ namespace SymbolicDifferentiation.Tests.Aggregation
     {
         protected override double[] Compute(string input)
         {
-            return input.FSTokenize().FSParse().FSAggregateFunction(new Dictionary<string, FastFunc<IEnumerable<IEnumerable<double>>, IEnumerable<double>>>
-                                                                        {
-                                                                            {"Add", ToFastFunc<IEnumerable<double>>(ParallelFunctions.Add)},
-                                                                            {"Mul", ToFastFunc<IEnumerable<double>>(ParallelFunctions.Mul)},
-                                                                            {"Pow", ToFastFunc<IEnumerable<double>>(ParallelFunctions.Pow)},
-                                                                            {"Max", ToFastFunc<IEnumerable<double>>(ParallelFunctions.Max)}
-                                                                        })(_data).Take(3).ToArray();
+            return ComputeParallel(input);
         }
 
         [Test]
         public void AddLots()
         {
-            const int _size = 1000000;
+            var expression = "(A + B) * (A + B)";
+
+            const int _size = 10000;
 
             _data = new Dictionary<string, IEnumerable<double>>
                         {
@@ -53,13 +46,13 @@ namespace SymbolicDifferentiation.Tests.Aggregation
             watch.Reset();
             Console.WriteLine("Start sequential...");
             watch.Start();
-            var result2 = Compute("A + (A * B)");
+            var result2 = ComputeSequential(expression);
             watch.Stop();
             Console.WriteLine("Sequential elapsed:{0}", watch.Elapsed);
             watch.Reset();
             Console.WriteLine("Start parallel...");
             watch.Start();
-            var result = Compute("A + (A * B)");
+            var result = ComputeParallel(expression);
             watch.Stop();
             Console.WriteLine("Parallel elapsed:{0}", watch.Elapsed);
 
