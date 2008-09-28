@@ -48,11 +48,13 @@ let rec ToFs (x : Expression) =
         
 let rec ToCs (x : FS_AbstractSyntaxTree.Expression<'a>) =  
         match x with
-        | Variable v -> new Expression(new Token(MatchType.Variable, v))
-        | Number n -> new Expression(new Token(MatchType.Number, n))
+        | Variable v -> new Expression(TokenBuilder.Variable(v))
+        | Number n -> new Expression(TokenBuilder.Number(n))
         | Add(x,y) -> ToCs(x) + ToCs(y)
         | Mul(x,y) -> ToCs(x) * ToCs(y)
-        | Pow(x,y) -> Expression.op_ExclusiveOr(ToCs(x) , new Expression(new Token(MatchType.Number, y)))
+        | Pow(x,y) -> Expression.op_ExclusiveOr(ToCs(x) , new Expression(TokenBuilder.Number(y)))
+        | Fun(name, args) -> 
+            FunctionApplicationExpression.Create(TokenBuilder.Variable(name), Seq.map ToCs args |> Array.of_seq)
 
 
 

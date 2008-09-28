@@ -21,6 +21,7 @@ let rec private Deriv expression =
         | Add(x,y)   -> (Deriv x) + (Deriv y)
         | Mul(x,y)   -> (x * Deriv(y)) + (Deriv(x) * y)
         | Pow(x,y)   -> Number (y) * Pow(x,(y - 1.0))
+        | _ -> failwith "Not supported"
         
 let Derivate x = 
     x |> ToFs |> Deriv |> ToCs

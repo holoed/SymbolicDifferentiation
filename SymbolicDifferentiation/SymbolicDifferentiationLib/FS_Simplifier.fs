@@ -38,6 +38,7 @@ let rec private SimplifyImpl exp =
         | Number n1, 1.0 -> Number n1
         | a, 1.0 -> a
         | a, b -> Pow(a,b)
+    | exp -> exp
 
     
 let Simplify exp = exp |> ToFs |> SimplifyImpl |> ToCs
