@@ -100,6 +100,13 @@ namespace SymbolicDifferentiation.Tests.Aggregation
             CollectionAssert.AreEqual(_data["B"].ToArray(), compute.ToArray());
         }
 
+        [Test]
+        public void FunctionOfFunctions()
+        {
+            var compute = Compute("Max(Max(A,B), Max(A,B))");
+            CollectionAssert.AreEqual(_data["B"].ToArray(), compute.ToArray());
+        }
+
         protected abstract double[] Compute(string input);
 
         protected static FastFunc<IEnumerable<T>, T> ToFastFunc<T>(Converter<IEnumerable<T>, T> func)

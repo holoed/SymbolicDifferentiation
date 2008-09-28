@@ -23,11 +23,10 @@ let rec private Create (exp, data:Dictionary<string, double seq>, functions:Dict
     match exp with
     | Number n -> seq[n]
     | Variable x -> data.Item(x)
-    | Add(x, y) -> functions.Item("Add") (Parallel(seq[async { return Execute(Process x) }; async { return Execute(Process y) }]))
-    | Mul(x, y) -> functions.Item("Mul") (Parallel(seq[async { return Execute(Process x) }; async { return Execute(Process y) }]))
-    | Pow(x, n) -> functions.Item("Pow") (seq[(Process x);seq[n]])
-    | Fun(name, args) -> 
-        functions.Item(name) (Seq.map (fun arg -> Process(arg)) args)
+    | Add(x, y) ->       functions.Item("Add") (Parallel(seq[async { return Execute(Process x) }; async { return Execute(Process y) }]))
+    | Mul(x, y) ->       functions.Item("Mul") (Parallel(seq[async { return Execute(Process x) }; async { return Execute(Process y) }]))
+    | Pow(x, n) ->       functions.Item("Pow") (seq[(Process x);seq[n]])
+    | Fun(name, args) -> functions.Item(name)  (Parallel(Seq.map (fun arg -> async { return Execute(Process arg) }) args))
     
 type Ret(exp, functions) =
     member x.Execute(data) = Create(exp, data, functions)
