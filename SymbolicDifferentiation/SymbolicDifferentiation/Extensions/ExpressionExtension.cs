@@ -44,12 +44,12 @@ namespace SymbolicDifferentiation.Extensions
 
         public static Func<Dictionary<string, IEnumerable<double>>, IEnumerable<double>> FSSequentialComputation(this Expression expression, Dictionary<string, FastFunc<IEnumerable<IEnumerable<double>>, IEnumerable<double>>> funcs)
         {
-            return FS_AggregationSequential.Build(expression, funcs).Execute;
+            return FS_Compute.Build(expression, funcs).Execute;
         }
 
         public static Func<Dictionary<string, IEnumerable<double>>, IEnumerable<double>> FSParallelComputation(this Expression expression, Dictionary<string, FastFunc<IEnumerable<IEnumerable<double>>, IEnumerable<double>>> funcs)
         {
-            return FS_AggregationParallel.Build(expression, funcs).Execute;
+            return FS_Compute.BuildParallel(expression, funcs).Execute;
         }
     }
 }
