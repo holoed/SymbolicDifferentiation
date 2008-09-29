@@ -50,6 +50,20 @@ namespace SymbolicDifferentiation.Tests
             Assert.AreEqual("(3+4)^2", FSParse("(3+4)^2").FSToString());
         }
 
+        [Test]
+        public void Function()
+        {
+            Assert.AreEqual("Max(3,5)", FSParse("Max(3,5)").FSToString());
+        }
+
+        [Test]
+        public void FunctionOfFunction()
+        {
+            Assert.AreEqual("Max(Max(3,5),5)", FSParse("Max(Max(3,5),5)").FSToString());
+            Assert.AreEqual("Max(6,Max(3,5))", FSParse("Max(6,Max(3,5))").FSToString());
+            Assert.AreEqual("Max(Max(7,3),Max(3,5))", FSParse("Max(Max(7,3),Max(3,5))").FSToString());
+        }
+
         private static Expression FSParse(string input)
         {
             return input.FSTokenize().FSParse();
