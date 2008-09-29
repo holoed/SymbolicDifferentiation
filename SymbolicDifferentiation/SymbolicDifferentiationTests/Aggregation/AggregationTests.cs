@@ -114,14 +114,15 @@ namespace SymbolicDifferentiation.Tests.Aggregation
             return FuncConvert.ToFastFunc(func);
         }
 
-        protected double[] ComputeParallel(string input)
+        protected double[] ComputeParallel(string input, int size)
         {
-            return input.FSTokenize().FSParse().FSParallelComputation(_funcs)(_data).Take(3).ToArray();
+            return input.FSTokenize().FSParse().FSParallelComputation(_funcs)(_data).Take(size).ToArray();
         }
 
-        protected double[] ComputeSequential(string input)
+        protected double[] ComputeSequential(string input, int size)
         {
-            return input.FSTokenize().FSParse().FSSequentialComputation(_funcs)(_data).Take(3).ToArray();
+            return input.FSTokenize().FSParse().FSSequentialComputation(_funcs)(_data).Take(size).ToArray();
         } 
     }
 }
+ 

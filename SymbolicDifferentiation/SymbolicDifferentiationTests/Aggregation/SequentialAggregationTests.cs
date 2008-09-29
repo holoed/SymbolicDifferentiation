@@ -22,7 +22,7 @@ namespace SymbolicDifferentiation.Tests.Aggregation
     {
         protected override double[] Compute(string input)
         {
-            return input.FSTokenize().FSParse().FSSequentialComputation(_funcs)(_data).Take(3).ToArray();
+            return ComputeSequential(input, 3);
         }
     }
 }

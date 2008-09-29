@@ -25,34 +25,35 @@ namespace SymbolicDifferentiation.Tests.Aggregation
     {
         protected override double[] Compute(string input)
         {
-            return ComputeParallel(input);
+            return ComputeParallel(input, 3);
         }
 
         [Test]
+        [Ignore("long running performance test")]
         public void AddLots()
         {
-            var expression = "(A + B) * (A + B)";
+            var expression = "(((A + B) * (A + B)) * ((A + B) * (A + B))) + (((A + B) * (A + B)) * ((A + B) * (A + B)))";
 
-            const int _size = 10000;
+            const int _size = 1000000;
 
             _data = new Dictionary<string, IEnumerable<double>>
                         {
                             {"A", Enumerable.Range(0, _size).Select(i => i + .0)},
                             {"B", Enumerable.Range(_size, _size).Select(i => i + .0)},
                         };
-
+             
 
             var watch = new Stopwatch();
             watch.Reset();
             Console.WriteLine("Start sequential...");
             watch.Start();
-            var result2 = ComputeSequential(expression);
+            var result2 = ComputeSequential(expression, _size);
             watch.Stop();
             Console.WriteLine("Sequential elapsed:{0}", watch.Elapsed);
             watch.Reset();
             Console.WriteLine("Start parallel...");
             watch.Start();
-            var result = ComputeParallel(expression);
+            var result = ComputeParallel(expression, _size);
             watch.Stop();
             Console.WriteLine("Parallel elapsed:{0}", watch.Elapsed);
 
