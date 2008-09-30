@@ -40,5 +40,14 @@ type myAppTests =
     [<Test>] 
     member t.AddMul() = ExpressionAssert.AreEqual( parse "5 + 2 * 3", FromQuoteToCs <@ fun () -> 5 + 2 * 3 @> ) 
     
-//    [<Test>] 
-//    member t.AddMul2() = ExpressionAssert.AreEqual( parse "A + B", FromQuoteToCs <@ fun (A,B) -> A + B @> )    
+    [<Test>] 
+    member t.AddVar() = ExpressionAssert.AreEqual( parse "A + B", FromQuoteToCs <@ fun (A,B) -> A + B @> )  
+    
+    [<Test>] 
+    member t.MulVar() = ExpressionAssert.AreEqual( parse "A * B", FromQuoteToCs <@ fun (A,B) -> A * B @> )   
+    
+    [<Test>] 
+    member t.AddMulVar() = ExpressionAssert.AreEqual( parse "(A + B) * C", FromQuoteToCs <@ fun (A,B,C) -> (A + B) * C @> )   
+    
+    [<Test>] 
+    member t.AddVarNum() = ExpressionAssert.AreEqual( parse "A + 3", FromQuoteToCs <@ fun (A) -> A + 3 @> )    

@@ -70,5 +70,6 @@ let rec FromQuoteToCs(input : Quotations.Expr): Expression =
                     | "op_Multiply" -> FromQuoteToCs(c.Head) * FromQuoteToCs(c.Tail.Head)
                     | _ -> failwith "Not implemented"
     | Value(value,_) -> new Expression(TokenBuilder.Number(System.Convert.ToDouble(value)))
+    | Var(value) -> new Expression(TokenBuilder.Variable(value.Name))
     | _ -> failwith "Not implemented"
 
