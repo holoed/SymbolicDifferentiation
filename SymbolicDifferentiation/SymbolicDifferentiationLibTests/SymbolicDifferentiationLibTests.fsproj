@@ -16,6 +16,8 @@
     <SccProvider>SAK</SccProvider>
     <SccAuxPath>SAK</SccAuxPath>
     <SccLocalPath>SAK</SccLocalPath>
+    <ReferencePath>
+    </ReferencePath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -41,6 +43,24 @@
       <HintPath>..\..\..\..\..\..\..\Program Files\NUnit 2.4.7\bin\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SymbolicDifferentiation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <Name>SymbolicDifferentiation</Name>
+      <AssemblyName>SymbolicDifferentiation.dll</AssemblyName>
+      <HintPath>..\SymbolicDifferentiation\bin\Debug\SymbolicDifferentiation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SymbolicDifferentiation.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <Name>SymbolicDifferentiation.Core</Name>
+      <AssemblyName>SymbolicDifferentiation.Core.dll</AssemblyName>
+      <HintPath>..\SimbolicDifferentiation.Core\bin\Debug\SymbolicDifferentiation.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SymbolicDifferentiation.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <Name>SymbolicDifferentiation.Tests</Name>
+      <AssemblyName>SymbolicDifferentiation.Tests.dll</AssemblyName>
+      <HintPath>..\SymbolicDifferentiationTests\bin\Debug\SymbolicDifferentiation.Tests.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -50,24 +70,9 @@
     <Compile Include="QuotationsConvertTests.fs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SimbolicDifferentiation.Core\SymbolicDifferentiation.Core.csproj">
-      <Name>SymbolicDifferentiation.Core</Name>
-      <Project>{34911264-db7f-49a6-b88f-72c13168ea00}</Project>
-      <Private>True</Private>
-    </ProjectReference>
     <ProjectReference Include="..\SymbolicDifferentiationLib\SymbolicDifferentiationLib.fsproj">
       <Name>SymbolicDifferentiationLib</Name>
       <Project>{50027d53-bfee-4aa9-be67-b4598353dd9f}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\SymbolicDifferentiationTests\SymbolicDifferentiation.Tests.csproj">
-      <Name>SymbolicDifferentiation.Tests</Name>
-      <Project>{56437941-a7c2-4613-b947-59b9fe7682ca}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\SymbolicDifferentiation\SymbolicDifferentiation.csproj">
-      <Name>SymbolicDifferentiation</Name>
-      <Project>{a24939f5-5333-45b7-baec-bc4a518597a1}</Project>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
