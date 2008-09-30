@@ -14,6 +14,7 @@
 open FS_AbstractSyntaxTree;
 open SymbolicDifferentiation.Core.AST;
 open SymbolicDifferentiation.Core.Tokens;
+open Quotations.Patterns;
 
 let private (|IsOp|_|) expected actual = 
     if (TokenBuilder.Symbol(expected) = actual) then
@@ -61,11 +62,13 @@ let rec ToCs (x : FS_AbstractSyntaxTree.Expression<'a>) =
 // Converts from F# Quotations AST to C# AST
 let rec FromQuoteToCs(input : Quotations.Expr): Expression = 
     match input with
-    | Quotations.Patterns.Call(a,meth,c) -> 
+    | Lambda(_,b) -> FromQuoteToCs(b)
+    | Let(_,_,a) -> FromQuoteToCs(a)
+    | Call(a,meth,c) -> 
                     match meth.Name with
                     | "op_Addition" -> FromQuoteToCs(c.Head) + FromQuoteToCs(c.Tail.Head) 
                     | "op_Multiply" -> FromQuoteToCs(c.Head) * FromQuoteToCs(c.Tail.Head)
                     | _ -> failwith "Not implemented"
-    | Quotations.Patterns.Value(value,_) -> new Expression(TokenBuilder.Number(System.Convert.ToDouble(value)))
+    | Value(value,_) -> new Expression(TokenBuilder.Number(System.Convert.ToDouble(value)))
     | _ -> failwith "Not implemented"
 

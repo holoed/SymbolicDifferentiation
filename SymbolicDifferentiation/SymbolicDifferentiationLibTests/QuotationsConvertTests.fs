@@ -23,19 +23,22 @@ type myAppTests =
     new() = {} 
     
     [<Test>] 
-    member t.Add() = ExpressionAssert.AreEqual( parse "2 + 3", FromQuoteToCs <@ 2 + 3 @> )
+    member t.Add() = ExpressionAssert.AreEqual( parse "2 + 3", FromQuoteToCs <@ fun () -> 2 + 3 @> )
     
     [<Test>] 
-    member t.AddAdd() = ExpressionAssert.AreEqual( parse "2 + 3 + 4", FromQuoteToCs <@ 2 + 3 + 4 @> )
+    member t.AddAdd() = ExpressionAssert.AreEqual( parse "2 + 3 + 4", FromQuoteToCs <@ fun () -> 2 + 3 + 4 @> )
 
     [<Test>] 
-    member t.Mul() = ExpressionAssert.AreEqual( parse "2 * 3", FromQuoteToCs <@ 2 * 3 @> )   
+    member t.Mul() = ExpressionAssert.AreEqual( parse "2 * 3", FromQuoteToCs <@ fun () -> 2 * 3 @> )   
 
     [<Test>] 
-    member t.MulMul() = ExpressionAssert.AreEqual( parse "2 * 3 * 4", FromQuoteToCs <@ 2 * 3 * 4 @> ) 
+    member t.MulMul() = ExpressionAssert.AreEqual( parse "2 * 3 * 4", FromQuoteToCs <@ fun () -> 2 * 3 * 4 @> ) 
     
     [<Test>] 
-    member t.MulAdd() = ExpressionAssert.AreEqual( parse "5 * (2 + 3)", FromQuoteToCs <@ 5 * (2 + 3) @> )    
+    member t.MulAdd() = ExpressionAssert.AreEqual( parse "5 * (2 + 3)", FromQuoteToCs <@ fun () -> 5 * (2 + 3) @> )    
     
     [<Test>] 
-    member t.AddMul() = ExpressionAssert.AreEqual( parse "5 + 2 * 3", FromQuoteToCs <@ 5 + 2 * 3 @> )    
+    member t.AddMul() = ExpressionAssert.AreEqual( parse "5 + 2 * 3", FromQuoteToCs <@ fun () -> 5 + 2 * 3 @> ) 
+    
+//    [<Test>] 
+//    member t.AddMul2() = ExpressionAssert.AreEqual( parse "A + B", FromQuoteToCs <@ fun (A,B) -> A + B @> )    
