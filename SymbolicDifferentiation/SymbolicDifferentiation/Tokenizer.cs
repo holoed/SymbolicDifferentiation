@@ -27,7 +27,7 @@ namespace SymbolicDifferentiation
                 {
                     { MatchType.Number, input => Regex.Match(input, "^[0-9]+") },
                     { MatchType.Variable, input => Regex.Match(input, "^[a-zA-Z]+") },
-                    { MatchType.Symbol, input => Regex.Match(input, "^[\\^\\+\\*\\(\\)\\,]") },
+                    { MatchType.Symbol, input => Regex.Match(input, "^[\\^\\+\\*\\(\\)\\,\\=]") },
                     { MatchType.Whitespace, input => Regex.Match(input, "^[ ]") }
                 };
 

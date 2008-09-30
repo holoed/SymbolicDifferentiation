@@ -27,14 +27,14 @@ namespace SymbolicDifferentiation.ParserCombinators
             var mulOp = (new Symbol("*") > ((x, y) => x * y)).Or(new Symbol("/") > ((x, y) => x / y)).Tag("multiply/divide op");
             var expOp = (new Symbol("^") > ((x, y) => x ^ y)).Tag("exponentiation op");
 
-            P<Expression> paren, part, factor, term, expr = null, app;
+            P<Expression> paren, part, factor, term, expr = null, app, decl;
 
             paren = from o in new Symbol("(").Literal()
                     from e in expr
                     from c in new Symbol(")").Literal()
                     select e;
 
-            //TODO: First rudimental support for functions, refactor...
+            // Function application
             app = 
                   from name in CSParserLib.Sat(x => x.Type.Equals(MatchType.Variable)).FollowedBy(c=> CSParserLib.Sat(t=>(t.Value.Equals("("))))
                   from o in new Symbol("(").Literal()
@@ -42,7 +42,14 @@ namespace SymbolicDifferentiation.ParserCombinators
                   from c in new Symbol(")").Literal()
                   select (Expression)new FunctionApplicationExpression { Name = name, Arguments = e };
 
-            part = app.Or(CSParserLib.DigitVal).Or(paren);
+            // Function application
+            decl =
+                  from name in CSParserLib.Sat(x => x.Type.Equals(MatchType.Variable)).FollowedBy(c => CSParserLib.Sat(t => (t.Value.Equals("="))))
+                  from o in new Symbol("=").Literal()
+                  from e in expr
+                  select (Expression)new FunctionDeclarationExpression() { Name = name, Body = e };
+
+            part = decl.Or(app).Or(CSParserLib.DigitVal).Or(paren);
             factor = part.Chainr1(expOp);
             term = factor.Chainl1(mulOp);
             expr = term.Chainl1(addOp);

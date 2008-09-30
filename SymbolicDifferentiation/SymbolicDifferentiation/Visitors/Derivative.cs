@@ -22,6 +22,11 @@ namespace SymbolicDifferentiation.Visitors
 {
     public class Derivative : IExpressionVisitor<Expression>
     {
+        public Expression Visit(FunctionDeclarationExpression expression)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public Expression Visit(FunctionApplicationExpression expression)
         {
             throw new NotImplementedException();

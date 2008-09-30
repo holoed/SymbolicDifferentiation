@@ -23,6 +23,24 @@ namespace SymbolicDifferentiation.Visitors
         private readonly Queue<Expression> _stack = new Queue<Expression>();
         private bool _enabled;
 
+        public bool Visit(FunctionDeclarationExpression expression)
+        {
+            if (_enabled)
+            {
+                if (_stack.Count == 0)
+                    return false;
+                var expected = _stack.Dequeue();
+                if (expected.GetType() != expression.GetType()) return false;
+                if (!Equals(expected.Value, expression.Name))
+                    return false;
+            }
+            else
+                _stack.Enqueue(expression);
+
+            if (!expression.Body.Accept(this)) return false;
+            return true;
+        }
+
         public bool Visit(FunctionApplicationExpression expression)
         {
             if (_enabled)

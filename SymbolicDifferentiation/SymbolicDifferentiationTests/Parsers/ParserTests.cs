@@ -146,35 +146,56 @@ namespace SymbolicDifferentiation.Tests.Parsers
         public void FunctionApplication()
         {
             var expression = Parse(Tokenizer.Tokenize("Square(3)"));
-            ExpressionAssert.AreEqual(Function("Square", Number(3)), expression);
+            ExpressionAssert.AreEqual(FunctionApp("Square", Number(3)), expression);
         }
 
         [Test]
         public void FunctionApplicationWithTwoArguments()
         {
             var expression = Parse(Tokenizer.Tokenize("Max(a,b)"));
-            ExpressionAssert.AreEqual(Function("Max", Variable("a"), Variable("b")), expression);
+            ExpressionAssert.AreEqual(FunctionApp("Max", Variable("a"), Variable("b")), expression);
         }
 
         [Test]
         public void FunctionApplicationAndAddition()
         {
             var expression = Parse(Tokenizer.Tokenize("Sin(3) + Cos(2)"));
-            ExpressionAssert.AreEqual(Function("Sin", Number(3)) + Function("Cos", Number(2)), expression);
+            ExpressionAssert.AreEqual(FunctionApp("Sin", Number(3)) + FunctionApp("Cos", Number(2)), expression);
         }
 
         [Test]
         public void FunctionApplicationAndMultiplication()
         {
             var expression = Parse(Tokenizer.Tokenize("Sin(3) * Cos(2)"));
-            ExpressionAssert.AreEqual(Function("Sin", Number(3)) * Function("Cos", Number(2)), expression);
+            ExpressionAssert.AreEqual(FunctionApp("Sin", Number(3)) * FunctionApp("Cos", Number(2)), expression);
         }
 
         [Test]
         public void FunctionApplicationAndMultiplicationAndAddition()
         {
             var expression = Parse(Tokenizer.Tokenize("Sin(3) * (Tan(6) + Cos(2))"));
-            ExpressionAssert.AreEqual(Function("Sin", Number(3)) * (Function("Tan", Number(6)) + Function("Cos", Number(2))), expression);
+            ExpressionAssert.AreEqual(FunctionApp("Sin", Number(3)) * (FunctionApp("Tan", Number(6)) + FunctionApp("Cos", Number(2))), expression);
+        }
+
+        [Test]
+        public void FunctionDeclaration()
+        {
+            ExpressionAssert.AreEqual(FunctionDecl("A", Number(2)), Parse(Tokenizer.Tokenize("A = 2")));
+        }
+
+        [Test]
+        public void FunctionDeclarationWithAdditionBody()
+        {
+            ExpressionAssert.AreEqual(FunctionDecl("A", Number(3) + Number(2)), Parse(Tokenizer.Tokenize("A = 3 + 2")));
+        }
+
+        [Test]
+        public void FunctionDeclarationWithComplexBody()
+        {
+            ExpressionAssert.AreEqual(
+                FunctionDecl("v", 
+                (FunctionApp("sin", Variable("x"))^Number(2)) + 
+                (FunctionApp("cos", Variable("x"))^Number(2))) , Parse(Tokenizer.Tokenize("v = sin(x)^2 + cos(x)^2")));
         }
     }
 }

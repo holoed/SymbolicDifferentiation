@@ -26,6 +26,8 @@ let private toString (x:Token) = System.Convert.ToString(x.Value)
 
 let rec private toFsVisitor = 
  { new IExpressionVisitor<FS_AbstractSyntaxTree.Expression<'a>> with 
+   member v.Visit(x : FunctionDeclarationExpression) : FS_AbstractSyntaxTree.Expression<'a> =
+      failwith "not implemented"
    member v.Visit(x : FunctionApplicationExpression) : FS_AbstractSyntaxTree.Expression<'a> =
       let name = toString x.Name
       let args = Seq.map(fun (arg : Expression) -> (arg.Accept toFsVisitor)) x.Arguments;

@@ -47,6 +47,11 @@ namespace SymbolicDifferentiation.Visitors
             _args = args.ToDictionary(x => x.Name);
         }
 
+        public Expression Visit(FunctionDeclarationExpression expression)
+        {
+            throw new NotImplementedException();
+        }
+
         public Expression Visit(FunctionApplicationExpression expression)
         {
             throw new NotImplementedException();

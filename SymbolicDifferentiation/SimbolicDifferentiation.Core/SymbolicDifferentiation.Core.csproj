@@ -53,6 +53,7 @@
     <Compile Include="AST\BinaryExpression.cs" />
     <Compile Include="AST\Expression.cs" />
     <Compile Include="AST\FunctionApplicationExpression.cs" />
+    <Compile Include="AST\FunctionDeclarationExpression.cs" />
     <Compile Include="AST\IExpressionVisitor.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
