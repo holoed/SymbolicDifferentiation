@@ -42,10 +42,12 @@ let rec private toFsVisitor =
         Number (x.Value.GetValue<'a>())
       else
         Variable (toString x.Value)  }
-        
+
+// Converts from C# AST to F# AST        
 let rec ToFs (x : Expression) =
     x.Accept toFsVisitor    
-        
+ 
+// Converts from F# AST to C# AST       
 let rec ToCs (x : FS_AbstractSyntaxTree.Expression<'a>) =  
         match x with
         | Variable v -> new Expression(TokenBuilder.Variable(v))
@@ -56,6 +58,14 @@ let rec ToCs (x : FS_AbstractSyntaxTree.Expression<'a>) =
         | Fun(name, args) -> 
             FunctionApplicationExpression.Create(TokenBuilder.Variable(name), Seq.map ToCs args |> Array.of_seq)
 
-
-
+// Converts from F# Quotations AST to C# AST
+let rec FromQuoteToCs(input : Quotations.Expr): Expression = 
+    match input with
+    | Quotations.Patterns.Call(a,meth,c) -> 
+                    match meth.Name with
+                    | "op_Addition" -> FromQuoteToCs(c.Head) + FromQuoteToCs(c.Tail.Head) 
+                    | "op_Multiply" -> FromQuoteToCs(c.Head) * FromQuoteToCs(c.Tail.Head)
+                    | _ -> failwith "Not implemented"
+    | Quotations.Patterns.Value(value,_) -> new Expression(TokenBuilder.Number(System.Convert.ToDouble(value)))
+    | _ -> failwith "Not implemented"
 
