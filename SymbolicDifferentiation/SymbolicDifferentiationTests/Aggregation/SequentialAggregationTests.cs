@@ -13,14 +13,13 @@
 
 #endregion
 
-using System.Linq;
-using SymbolicDifferentiation.Extensions;
+using System.Collections.Generic;
 
 namespace SymbolicDifferentiation.Tests.Aggregation
 {
     public class SequentialAggregationTests : AggregationTests
     {
-        protected override double[] Compute(string input)
+        protected override IDictionary<string, IEnumerable<KeyValuePair<string, double>>> Compute(string input)
         {
             return ComputeSequential(input, 3);
         }

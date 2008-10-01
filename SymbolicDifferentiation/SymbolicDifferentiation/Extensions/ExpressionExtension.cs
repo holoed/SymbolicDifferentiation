@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.FSharp.Core;
 using SymbolicDifferentiation.Core.AST;
+using SymbolicDifferentiation.Core.Computation;
 using SymbolicDifferentiation.Visitors;
 using System.Linq;
 
@@ -55,14 +56,14 @@ namespace SymbolicDifferentiation.Extensions
                 Aggregate((x, y) => x + Environment.NewLine + y);
         }
 
-        public static Func<Dictionary<string, IEnumerable<double>>, IEnumerable<double>> FSSequentialComputation(this Expression expression, Dictionary<string, FastFunc<IEnumerable<IEnumerable<double>>, IEnumerable<double>>> funcs)
+        public static Func<Dictionary<string, IEnumerable<KeyValuePair<string, double>>>, IDictionary<string, IEnumerable<KeyValuePair<string, double>>>> FSSequentialComputation(this IEnumerable<Expression> expressions, Dictionary<string, FastFunc<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>>> funcs)
         {
-            return FS_Compute.Build(expression, funcs).Execute;
+            return data => ComputationResult.CreateDictionary(FS_Compute.Build(expressions, funcs).Execute(data));
         }
 
-        public static Func<Dictionary<string, IEnumerable<double>>, IEnumerable<double>> FSParallelComputation(this Expression expression, Dictionary<string, FastFunc<IEnumerable<IEnumerable<double>>, IEnumerable<double>>> funcs)
+        public static Func<Dictionary<string, IEnumerable<KeyValuePair<string, double>>>, IDictionary<string, IEnumerable<KeyValuePair<string, double>>>> FSParallelComputation(this IEnumerable<Expression> expressions, Dictionary<string, FastFunc<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>>> funcs)
         {
-            return FS_Compute.BuildParallel(expression, funcs).Execute;
+            return data => ComputationResult.CreateDictionary(FS_Compute.BuildParallel(expressions, funcs).Execute(data));
         }
     }
 }

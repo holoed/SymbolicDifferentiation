@@ -14,6 +14,7 @@
 open FS_AbstractSyntaxTree;
 open FS_Utils;
 open System.Collections.Generic;
+open SymbolicDifferentiation.Core.Computation;
 
 //Sequential
 let processBinaryOpArgs f x y = (seq[(f x);(f y)])
@@ -26,20 +27,21 @@ let parallelProcessBinaryOpArgs f x y = (Parallel(seq[async { return Execute(f x
 let parallelProcessFuncArgs f args = (Parallel(Seq.map (fun arg -> async { return Execute(f arg) }) args))
 
 //Compute
-let rec private Create (exp, seqMapXY, seqMapArgs, data:Dictionary<string, double seq>, functions:Dictionary<string, 'f>) = 
+let rec private Create (exp, seqMapXY, seqMapArgs, data:Dictionary<string, KeyValuePair<string,double> seq>, functions:Dictionary<string, 'f>) = 
     let Process exp = Create(exp, seqMapXY, seqMapArgs, data, functions)
     match exp with
-    | Number n -> seq[n]
-    | Variable x -> data.Item(x)
-    | Add(x, y) ->       functions.Item("Add") (seqMapXY Process x y)
-    | Mul(x, y) ->       functions.Item("Mul") (seqMapXY Process x y)
-    | Pow(x, n) ->       functions.Item("Pow") (seq[(Process x);seq[n]])
-    | FunApp(name, args) -> functions.Item(name)  (seqMapArgs Process args)
+    | Number n ->            seq[n]
+    | Variable x ->          data.Item(x)
+    | Add(x, y) ->           functions.Item("Add") (seqMapXY Process x y)
+    | Mul(x, y) ->           functions.Item("Mul") (seqMapXY Process x y)
+    | Pow(x, n) ->           functions.Item("Pow") (seq[(Process x);seq[n]])
+    | FunApp(name, args) ->  functions.Item(name)  (seqMapArgs Process args)
+    | FunDecl(name, body) -> ComputationResult.CreateFunctionResult(name, (Process body))
     
     
-type Ret(exp, functions, seqMapXY, seqMapArgs) =
-    member x.Execute(data) = Create(exp, seqMapXY, seqMapArgs, data, functions)
+type Ret(exps, functions, seqMapXY, seqMapArgs) =
+    member x.Execute(data) = Seq.map (fun exp -> Create(exp, seqMapXY, seqMapArgs, data, functions)) exps
 
-let Build = fun (exp, functions) ->  Ret((ToFs exp), functions, processBinaryOpArgs, processFuncArgs)
+let Build = fun (exps, functions) ->  Ret((Seq.map (fun exp -> (ToFs exp)) exps), functions, processBinaryOpArgs, processFuncArgs)
 
-let BuildParallel = fun (exp, functions) ->  Ret((ToFs exp), functions, parallelProcessBinaryOpArgs, parallelProcessFuncArgs)
+let BuildParallel = fun (exps, functions) ->  Ret((Seq.map (fun exp -> (ToFs exp)) exps), functions, parallelProcessBinaryOpArgs, parallelProcessFuncArgs)
