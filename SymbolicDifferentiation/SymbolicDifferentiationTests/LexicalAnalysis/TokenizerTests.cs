@@ -13,6 +13,7 @@
 
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
@@ -96,6 +97,17 @@ namespace SymbolicDifferentiation.Tests.LexicalAnalysis
         {
             var tokens = Tokenize("x");
             AssertToken("x", MatchType.Variable, tokens.First());
+        }
+
+        [Test]
+        public void CarriageReturn()
+        {
+            var tokens = Tokenize("x" + Environment.NewLine + " y");
+            var list = tokens.ToList();
+            Assert.AreEqual(3, list.Count);
+            AssertToken("x", MatchType.Variable, list[0]);
+            AssertToken("\n", MatchType.EOL, list[1]);
+            AssertToken("y", MatchType.Variable, list[2]);
         }
     }
 }

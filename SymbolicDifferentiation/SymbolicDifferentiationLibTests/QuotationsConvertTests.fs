@@ -16,7 +16,7 @@ open SymbolicDifferentiation.Extensions;
 open SymbolicDifferentiation.Tests;
 open FS_Utils;
 
-let parse input = input |> FS_Tokenizer.Tokenize |> FS_Parser.Execute
+let parse input = input |> FS_Tokenizer.Tokenize |> FS_Parser.Execute |> List.hd
 
 [<TestFixture>] 
 type myAppTests =  

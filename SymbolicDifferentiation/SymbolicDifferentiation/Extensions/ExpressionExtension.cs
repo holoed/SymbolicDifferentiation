@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using Microsoft.FSharp.Core;
 using SymbolicDifferentiation.Core.AST;
 using SymbolicDifferentiation.Visitors;
+using System.Linq;
 
 namespace SymbolicDifferentiation.Extensions
 {
@@ -30,6 +31,11 @@ namespace SymbolicDifferentiation.Extensions
                 FSToString();
         }
 
+        public static string CSDerive(this IEnumerable<Expression> expressions)
+        {
+            return expressions.Select(expression => expression.CSDerive()).Aggregate((x, y) => x + y);
+        }
+
         public static string FSDerive(this Expression expression)
         {
             return FS_Derivative.Derivate(expression).
@@ -40,6 +46,13 @@ namespace SymbolicDifferentiation.Extensions
         public static string FSToString(this Expression expression)
         {
             return FS_ExpressionToString.ToString(FS_Utils.ToFs<double>(expression));
+        }
+
+        public static string FSToString(this IEnumerable<Expression> expressions)
+        {
+            return
+                expressions.Select(expression => expression.FSToString()).
+                Aggregate((x, y) => x + Environment.NewLine + y);
         }
 
         public static Func<Dictionary<string, IEnumerable<double>>, IEnumerable<double>> FSSequentialComputation(this Expression expression, Dictionary<string, FastFunc<IEnumerable<IEnumerable<double>>, IEnumerable<double>>> funcs)

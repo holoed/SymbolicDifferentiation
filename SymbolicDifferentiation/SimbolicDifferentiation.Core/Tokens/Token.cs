@@ -25,7 +25,8 @@ namespace SymbolicDifferentiation.Core.Tokens
         Symbol,
         Whitespace,
         Keyword,
-        EOF
+        EOF,
+        EOL
     }
 
     public class Token

@@ -14,6 +14,7 @@
 #endregion
 
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using SymbolicDifferentiation.Core.AST;
 using SymbolicDifferentiation.Core.Tokens;
@@ -24,6 +25,7 @@ namespace SymbolicDifferentiation.Tests.Parsers
     public abstract class ParserTests : TestsBase
     {
         protected abstract Expression Parse(IEnumerable<Token> tokens);
+        protected abstract IEnumerable<Expression> ParseMultiple(IEnumerable<Token> tokens);
 
         [Test]
         public void AdditionAdditionBinaryExpression()
@@ -196,6 +198,16 @@ namespace SymbolicDifferentiation.Tests.Parsers
                 FunctionDecl("v", 
                 (FunctionApp("sin", Variable("x"))^Number(2)) + 
                 (FunctionApp("cos", Variable("x"))^Number(2))) , Parse(Tokenizer.Tokenize("v = sin(x)^2 + cos(x)^2")));
+        }
+
+        [Test]
+        public void MultipleFunctionsDeclaration()
+        {
+            var expressions = ParseMultiple(Tokenizer.Tokenize(@"A = 2
+                                                                 B = 5"));
+            var list = expressions.ToList();
+            ExpressionAssert.AreEqual(FunctionDecl("A", Number(2)), list[0]);
+            ExpressionAssert.AreEqual(FunctionDecl("B", Number(5)), list[1]);
         }
     }
 }

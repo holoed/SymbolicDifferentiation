@@ -21,7 +21,7 @@ namespace SymbolicDifferentiation.ParserCombinators
 {
     public static class CSParser
     {
-        public static Expression Parse(IEnumerable<Token> input)
+        public static IEnumerable<Expression> Parse(IEnumerable<Token> input)
         {
             var addOp = (new Symbol("+") > ((x, y) => x + y)).Or(new Symbol("-") > ((x, y) => x - y)).Tag("add/subtract op");
             var mulOp = (new Symbol("*") > ((x, y) => x * y)).Or(new Symbol("/") > ((x, y) => x / y)).Tag("multiply/divide op");
@@ -53,8 +53,11 @@ namespace SymbolicDifferentiation.ParserCombinators
             factor = part.Chainr1(expOp);
             term = factor.Chainl1(mulOp);
             expr = term.Chainl1(addOp);
-           
-            return expr.Parse(input).Result;
+
+            var exprs = from e in expr.SepBy(new Token(MatchType.EOL, "\n").Literal())
+                        select e;
+
+            return exprs.Parse(input).Result;
         }
     }   
 }

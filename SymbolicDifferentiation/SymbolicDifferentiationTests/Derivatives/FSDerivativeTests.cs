@@ -13,6 +13,7 @@
 
 #endregion
 
+using System.Linq;
 using NUnit.Framework;
 using SymbolicDifferentiation.Extensions;
 
@@ -23,7 +24,7 @@ namespace SymbolicDifferentiation.Tests.Derivatives
     {
         protected override string Derivate(string input)
         {
-            return input.FSTokenize().Expand().FSParse().FSDerive();
+            return input.FSTokenize().Expand().FSParse().Single().FSDerive();
         }
     }
 

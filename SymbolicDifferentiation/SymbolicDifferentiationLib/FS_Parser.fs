@@ -43,7 +43,10 @@ and decl =   parse { let! name = FollowedBy(sat (fun x -> x.Type = MatchType.Var
                      let! _ = Literal (TokenBuilder.Symbol("=")) 0
                      let! e = expr
                      return SymbolicDifferentiation.Core.AST.FunctionDeclarationExpression.Create(name, e) }
-                 
+
+//Parse multiple expressions divided by newlines
+let exprs = parse { let! e = sepBy expr ((Literal (new Token(MatchType.EOL, "\n"))) 0)
+                    return e }               
 
 let extractParseResult consumed  = 
     match consumed with
@@ -54,6 +57,6 @@ let extractOutput result  =
     | Success (state, _, _) -> state
     | Fail _ -> failwith "parse failed"
                         
-let Execute tokens = expr( ParserState(Seq.to_list tokens , 0) ) |> extractParseResult |> extractOutput
+let Execute tokens = exprs( ParserState(Seq.to_list tokens , 0) ) |> extractParseResult |> extractOutput
 
 

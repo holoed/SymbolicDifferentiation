@@ -14,6 +14,7 @@
 #endregion
 
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using NUnit.Framework;
 using SymbolicDifferentiation.Core.Tokens;
@@ -110,8 +111,8 @@ namespace SymbolicDifferentiation.Tests
         public void CSharpExpressionMatchesLinqExpressionValue()
         {
             var input = "2*x ^ 4 + 5*x ^ 3 + 3*x ^ 2 + 2*x + 1";
-            var expression = Tokenizer.Tokenize(input).CSParser();
-            var linqExp = ToLinqExpressionVisitor.GetExpression(expression, "x");
+            var expressions = Tokenizer.Tokenize(input).CSParser();
+            var linqExp = ToLinqExpressionVisitor.GetExpression(expressions.First(), "x");
 
             var func = linqExp.Compile();
 

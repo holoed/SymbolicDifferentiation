@@ -13,13 +13,20 @@
 
 #endregion
 
+using System.Collections.Generic;
 using SymbolicDifferentiation.Core.AST;
 using SymbolicDifferentiation.Visitors;
+using System.Linq;
 
 namespace SymbolicDifferentiation.Extensions
 {
     public static class SimplifierExtension
     {
+        public static IEnumerable<Expression> CSSimplify(this IEnumerable<Expression> expressions)
+        {
+            return expressions.Select(expression => Simplifier.Simplify(expression));
+        }
+
         public static Expression CSSimplify(this Expression expression)
         {
             return Simplifier.Simplify(expression);

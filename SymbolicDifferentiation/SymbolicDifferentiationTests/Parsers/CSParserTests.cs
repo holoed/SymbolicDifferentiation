@@ -17,12 +17,18 @@ using System.Collections.Generic;
 using SymbolicDifferentiation.Core.AST;
 using SymbolicDifferentiation.Core.Tokens;
 using SymbolicDifferentiation.Extensions;
+using System.Linq;
 
 namespace SymbolicDifferentiation.Tests.Parsers
 {
     public class CSParserTests : ParserTests
     {
         protected override Expression Parse(IEnumerable<Token> tokens)
+        {
+            return ParseMultiple(tokens).Single();
+        }
+
+        protected override IEnumerable<Expression> ParseMultiple(IEnumerable<Token> tokens)
         {
             return tokens.CSParser();
         }

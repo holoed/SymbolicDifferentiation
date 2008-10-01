@@ -30,6 +30,7 @@ let private parse s =
        | ParseRegex "^[0-9]+"               result ->  result |> is_a_token_of_type <|  MatchType.Number
        | ParseRegex "^[a-zA-Z]+"            result ->  result |> is_a_token_of_type <|  MatchType.Variable
        | ParseRegex "^[\\^\\+\\*\\(\\)\\,\\=]"    result ->  result |> is_a_token_of_type <|  MatchType.Symbol
+       | ParseRegex "^[\n]"                   result ->  result |> is_a_token_of_type <| MatchType.EOL
        | ParseRegex "\s+"                   result ->  Token.Whitespace
        | _ -> failwith "unknown token"
   

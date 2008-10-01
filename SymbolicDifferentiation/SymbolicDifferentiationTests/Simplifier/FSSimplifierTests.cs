@@ -13,6 +13,7 @@
 
 #endregion
 
+using System.Linq;
 using NUnit.Framework;
 using SymbolicDifferentiation.Extensions;
 
@@ -23,7 +24,7 @@ namespace SymbolicDifferentiation.Tests.Simplifier
     {
         protected override string Simplify(string input)
         {
-            return input.FSTokenize().FSParse().FSSimplify().FSToString();
+            return input.FSTokenize().FSParse().Single().FSSimplify().FSToString();
         }
     }
 }

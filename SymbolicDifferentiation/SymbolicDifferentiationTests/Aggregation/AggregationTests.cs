@@ -116,12 +116,12 @@ namespace SymbolicDifferentiation.Tests.Aggregation
 
         protected double[] ComputeParallel(string input, int size)
         {
-            return input.FSTokenize().FSParse().FSParallelComputation(_funcs)(_data).Take(size).ToArray();
+            return input.FSTokenize().FSParse().Single().FSParallelComputation(_funcs)(_data).Take(size).ToArray();
         }
 
         protected double[] ComputeSequential(string input, int size)
         {
-            return input.FSTokenize().FSParse().FSSequentialComputation(_funcs)(_data).Take(size).ToArray();
+            return input.FSTokenize().FSParse().Single().FSSequentialComputation(_funcs)(_data).Take(size).ToArray();
         } 
     }
 }

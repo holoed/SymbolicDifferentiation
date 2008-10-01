@@ -14,7 +14,6 @@
 #endregion
 
 using NUnit.Framework;
-using SymbolicDifferentiation.Core.AST;
 using SymbolicDifferentiation.Extensions;
 
 namespace SymbolicDifferentiation.Tests
@@ -25,48 +24,48 @@ namespace SymbolicDifferentiation.Tests
         [Test]
         public void AdditionAssociativity()
         {
-            Assert.AreEqual("2+3+4", FSParse("(2+3)+4").FSToString());
-            Assert.AreEqual("2+3+4", FSParse("2+(3+4)").FSToString());
+            Assert.AreEqual("2+3+4", FSParse("(2+3)+4"));
+            Assert.AreEqual("2+3+4", FSParse("2+(3+4)"));
         }
 
         [Test]
         public void MultiplicationAssociativity()
         {
-            Assert.AreEqual("2*3*4", FSParse("(2*3)*4").FSToString());
-            Assert.AreEqual("2*3*4", FSParse("2*(3*4)").FSToString());
+            Assert.AreEqual("2*3*4", FSParse("(2*3)*4"));
+            Assert.AreEqual("2*3*4", FSParse("2*(3*4)"));
         }
 
         [Test]
         public void AdditionMultiplicationPrecedence()
         {
-            Assert.AreEqual("2*(3+4)", FSParse("2*(3+4)").FSToString());
-            Assert.AreEqual("(2+3)*4", FSParse("(2+3)*4").FSToString());
-            Assert.AreEqual("2*3+4", FSParse("(2*3)+4").FSToString());
+            Assert.AreEqual("2*(3+4)", FSParse("2*(3+4)"));
+            Assert.AreEqual("(2+3)*4", FSParse("(2+3)*4"));
+            Assert.AreEqual("2*3+4", FSParse("(2*3)+4"));
         }
 
         [Test]
         public void AdditionPowerPrecedence()
         {
-            Assert.AreEqual("(3+4)^2", FSParse("(3+4)^2").FSToString());
+            Assert.AreEqual("(3+4)^2", FSParse("(3+4)^2"));
         }
 
         [Test]
         public void Function()
         {
-            Assert.AreEqual("Max(3,5)", FSParse("Max(3,5)").FSToString());
+            Assert.AreEqual("Max(3,5)", FSParse("Max(3,5)"));
         }
 
         [Test]
         public void FunctionOfFunction()
         {
-            Assert.AreEqual("Max(Max(3,5),5)", FSParse("Max(Max(3,5),5)").FSToString());
-            Assert.AreEqual("Max(6,Max(3,5))", FSParse("Max(6,Max(3,5))").FSToString());
-            Assert.AreEqual("Max(Max(7,3),Max(3,5))", FSParse("Max(Max(7,3),Max(3,5))").FSToString());
+            Assert.AreEqual("Max(Max(3,5),5)", FSParse("Max(Max(3,5),5)"));
+            Assert.AreEqual("Max(6,Max(3,5))", FSParse("Max(6,Max(3,5))"));
+            Assert.AreEqual("Max(Max(7,3),Max(3,5))", FSParse("Max(Max(7,3),Max(3,5))"));
         }
 
-        private static Expression FSParse(string input)
+        private static string FSParse(string input)
         {
-            return input.FSTokenize().FSParse();
+            return input.FSTokenize().FSParse().FSToString();
         }
     }
 }

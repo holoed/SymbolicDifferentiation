@@ -14,6 +14,7 @@
 #endregion
 
 using System.Collections.Generic;
+using System.Linq;
 using SymbolicDifferentiation.Core.AST;
 using SymbolicDifferentiation.Core.Tokens;
 using SymbolicDifferentiation.Extensions;
@@ -23,6 +24,11 @@ namespace SymbolicDifferentiation.Tests.Parsers
     public class FSParserTests : ParserTests
     {
         protected override Expression Parse(IEnumerable<Token> tokens)
+        {
+            return ParseMultiple(tokens).Single();
+        }
+
+        protected override IEnumerable<Expression> ParseMultiple(IEnumerable<Token> tokens)
         {
             return tokens.FSParse();
         }

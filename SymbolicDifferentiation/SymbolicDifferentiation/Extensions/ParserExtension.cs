@@ -21,12 +21,12 @@ namespace SymbolicDifferentiation.Extensions
 {
     public static class ParserExtension
     {
-        public static Expression CSParser(this IEnumerable<Token> tokens)
+        public static IEnumerable<Expression> CSParser(this IEnumerable<Token> tokens)
         {
             return ParserCombinators.CSParser.Parse(tokens);
         }
 
-        public static Expression FSParse(this IEnumerable<Token> tokens)
+        public static IEnumerable<Expression> FSParse(this IEnumerable<Token> tokens)
         {
             return FS_Parser.Execute(tokens);
         }

@@ -28,7 +28,8 @@ namespace SymbolicDifferentiation
                     { MatchType.Number, input => Regex.Match(input, "^[0-9]+") },
                     { MatchType.Variable, input => Regex.Match(input, "^[a-zA-Z]+") },
                     { MatchType.Symbol, input => Regex.Match(input, "^[\\^\\+\\*\\(\\)\\,\\=]") },
-                    { MatchType.Whitespace, input => Regex.Match(input, "^[ ]") }
+                    { MatchType.Whitespace, input => Regex.Match(input, "^[ \r\t]") },
+                    { MatchType.EOL, input => Regex.Match(input, "^[ \n]") }
                 };
 
         public static IEnumerable<Token> Tokenize(string input)
