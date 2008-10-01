@@ -27,11 +27,13 @@ let private toString (x:Token) = System.Convert.ToString(x.Value)
 let rec private toFsVisitor = 
  { new IExpressionVisitor<FS_AbstractSyntaxTree.Expression<'a>> with 
    member v.Visit(x : FunctionDeclarationExpression) : FS_AbstractSyntaxTree.Expression<'a> =
-      failwith "not implemented"
+      let name = toString x.Name
+      let body = x.Body.Accept toFsVisitor
+      FunDecl(name, body)
    member v.Visit(x : FunctionApplicationExpression) : FS_AbstractSyntaxTree.Expression<'a> =
       let name = toString x.Name
       let args = Seq.map(fun (arg : Expression) -> (arg.Accept toFsVisitor)) x.Arguments;
-      Fun(name, args)
+      FunApp(name, args)
    member v.Visit(x : BinaryExpression ) =  
       let left = x.Left.Accept toFsVisitor
       let right = x.Right.Accept toFsVisitor
@@ -58,7 +60,7 @@ let rec ToCs (x : FS_AbstractSyntaxTree.Expression<'a>) =
         | Add(x,y) -> ToCs(x) + ToCs(y)
         | Mul(x,y) -> ToCs(x) * ToCs(y)
         | Pow(x,y) -> Expression.op_ExclusiveOr(ToCs(x) , new Expression(TokenBuilder.Number(y)))
-        | Fun(name, args) -> 
+        | FunApp(name, args) -> 
             FunctionApplicationExpression.Create(TokenBuilder.Variable(name), Seq.map ToCs args |> Array.of_seq)
 
 // Converts from F# Quotations AST to C# AST

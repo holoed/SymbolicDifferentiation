@@ -23,5 +23,5 @@ let rec ToString exp =
     | Add(a, b) -> sprintf "%s+%s" (ToString a) (ToString b)
     | Mul(a, b) -> sprintf "%s*%s" (ToString a) (ToString b)
     | Pow(a, n) -> sprintf "%s^%.0f" (ToString a) n 
-    | Fun(name, args) -> sprintf "%s(%s)" name (String.concat "," (Seq.map (fun arg -> ToString arg) args))
-
+    | FunApp(name, args) -> sprintf "%s(%s)" name (String.concat "," (Seq.map (fun arg -> ToString arg) args))
+    | FunDecl(name, body) -> sprintf "%s=%s" name (ToString body)

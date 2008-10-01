@@ -50,17 +50,23 @@ namespace SymbolicDifferentiation.Tests
         }
 
         [Test]
-        public void Function()
+        public void FunctionApplication()
         {
             Assert.AreEqual("Max(3,5)", FSParse("Max(3,5)"));
         }
 
         [Test]
-        public void FunctionOfFunction()
+        public void FunctionAppOfFunctionApp()
         {
             Assert.AreEqual("Max(Max(3,5),5)", FSParse("Max(Max(3,5),5)"));
             Assert.AreEqual("Max(6,Max(3,5))", FSParse("Max(6,Max(3,5))"));
             Assert.AreEqual("Max(Max(7,3),Max(3,5))", FSParse("Max(Max(7,3),Max(3,5))"));
+        }
+
+        [Test]
+        public void FunctionDeclaration()
+        {
+            Assert.AreEqual("A=Max(3,5)", FSParse("A=Max(3,5)"));
         }
 
         private static string FSParse(string input)
