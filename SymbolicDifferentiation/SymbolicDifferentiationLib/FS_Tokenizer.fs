@@ -28,7 +28,7 @@ let is_a_token_of_type = fun value -> fun tokenType -> Token.Create(tokenType, v
 let private parse s =     
        match s with     
        | ParseRegex "^[0-9]+"               result ->  result |> is_a_token_of_type <|  MatchType.Number
-       | ParseRegex "^[a-zA-Z]+"            result ->  result |> is_a_token_of_type <|  MatchType.Variable
+       | ParseRegex "^[A-Za-z]+\d*"            result ->  result |> is_a_token_of_type <|  MatchType.Variable
        | ParseRegex "^[\\^\\+\\*\\(\\)\\,\\=]"    result ->  result |> is_a_token_of_type <|  MatchType.Symbol
        | ParseRegex "^[\n]"                   result ->  result |> is_a_token_of_type <| MatchType.EOL
        | ParseRegex "\s+"                   result ->  Token.Whitespace

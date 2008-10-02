@@ -100,6 +100,13 @@ namespace SymbolicDifferentiation.Tests.LexicalAnalysis
         }
 
         [Test]
+        public void VariableWithNumber()
+        {
+            var tokens = Tokenize("x2");
+            AssertToken("x2", MatchType.Variable, tokens.First());
+        }
+
+        [Test]
         public void CarriageReturn()
         {
             var tokens = Tokenize("x" + Environment.NewLine + " y");
