@@ -27,6 +27,11 @@ namespace SymbolicDifferentiation.Computation
             return input.Combine(item => item.Aggregate((x, y) => new KeyValuePair<string, double>(x.Key, x.Value + y.Value)));
         }
 
+        public static IEnumerable<KeyValuePair<string, double>> Sub(IEnumerable<IEnumerable<KeyValuePair<string, double>>> input)
+        {
+            return input.Combine(item => item.Aggregate((x, y) => new KeyValuePair<string, double>(x.Key, x.Value - y.Value)));
+        }
+
         public static IEnumerable<KeyValuePair<string, double>> Mul(IEnumerable<IEnumerable<KeyValuePair<string, double>>> input)
         {
             return input.Combine(item => item.Aggregate((x, y) => new KeyValuePair<string, double>(x.Key, x.Value * y.Value)));
@@ -40,6 +45,11 @@ namespace SymbolicDifferentiation.Computation
         public static IEnumerable<KeyValuePair<string, double>> Max(IEnumerable<IEnumerable<KeyValuePair<string, double>>> input)
         {
             return input.Combine(item => item.Aggregate((x, y) => x.Value > y.Value ? x : y));
+        }
+
+        public static IEnumerable<KeyValuePair<string, double>> Div(IEnumerable<IEnumerable<KeyValuePair<string, double>>> input)
+        {
+            return input.Combine(item => item.Aggregate((x, y) => new KeyValuePair<string, double>(x.Key, x.Value / y.Value)));
         }
     }
 }

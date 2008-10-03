@@ -15,10 +15,15 @@ type Expression<'a> =
     | Variable of string
     | Number of 'a
     | Add of Expression<'a> * Expression<'a>
+    | Sub of Expression<'a> * Expression<'a>
     | Mul of Expression<'a> * Expression<'a>
-    | Pow of Expression<'a> * 'a
+    | Div of Expression<'a> * Expression<'a>
+    | Pow of Expression<'a> * Expression<'a>
     | FunApp of string * Expression<'a> seq
     | FunDecl of string * Expression<'a>
     static member (+) (x:Expression<'a>, y:Expression<'a>) = Add(x,y)
+    static member (-) (x:Expression<'a>, y:Expression<'a>) = Sub(x,y)
     static member (*) (x:Expression<'a>, y:Expression<'a>) = Mul(x,y)
+    static member (/) (x:Expression<'a>, y:Expression<'a>) = Div(x,y)
+
 

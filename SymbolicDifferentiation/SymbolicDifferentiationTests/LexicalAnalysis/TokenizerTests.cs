@@ -85,7 +85,9 @@ namespace SymbolicDifferentiation.Tests.LexicalAnalysis
         {
             AssertToken("^", MatchType.Symbol, Tokenize("^").First());
             AssertToken("*", MatchType.Symbol, Tokenize("*").First());
+            AssertToken("/", MatchType.Symbol, Tokenize("/").First());
             AssertToken("+", MatchType.Symbol, Tokenize("+").First());
+            AssertToken("-", MatchType.Symbol, Tokenize("-").First());
             AssertToken("(", MatchType.Symbol, Tokenize("(").First());
             AssertToken(")", MatchType.Symbol, Tokenize(")").First());
             AssertToken(",", MatchType.Symbol, Tokenize(",").First());

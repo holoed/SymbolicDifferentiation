@@ -29,10 +29,12 @@ namespace SymbolicDifferentiation.Tests.Aggregation
     {
         protected Dictionary<string, IEnumerable<KeyValuePair<string, double>>> _data;
 
-        protected static Dictionary<string, FastFunc<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>>> _funcs = new Dictionary<string, FastFunc<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>>>
+        public static Dictionary<string, FastFunc<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>>> Funcs = new Dictionary<string, FastFunc<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>>>
                                               {
                                                   {"Add", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(ParallelFunctions.Add)},
+                                                  {"Sub", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(ParallelFunctions.Sub)},                                                  
                                                   {"Mul", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(ParallelFunctions.Mul)},
+                                                  {"Div", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(ParallelFunctions.Div)},
                                                   {"Pow", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(ParallelFunctions.Pow)},
                                                   {"Max", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(ParallelFunctions.Max)}
                                               };
@@ -56,9 +58,21 @@ namespace SymbolicDifferentiation.Tests.Aggregation
         }
 
         [Test]
+        public void Sub()
+        {
+            CollectionAssert.AreEqual(new[] { 1-5, 2-6, 3-7 }, ComputeSingle("A - B"));
+        }
+
+        [Test]
         public void Mul()
         {
             CollectionAssert.AreEqual(new[] { 5, 12, 21 }, ComputeSingle("A * B"));
+        }
+
+        [Test]
+        public void Div()
+        {
+            CollectionAssert.AreEqual(new[] { 1d/5d, 2d/6d, 3d/7d }, ComputeSingle("A / B"));
         }
 
         [Test]
@@ -148,12 +162,12 @@ namespace SymbolicDifferentiation.Tests.Aggregation
 
         protected IDictionary<string, IEnumerable<KeyValuePair<string, double>>> ComputeParallel(string input, int size)
         {
-            return input.FSTokenize().FSParse().FSParallelComputation(_funcs)(_data);
+            return input.FSTokenize().FSParse().FSParallelComputation(Funcs)(_data);
         }
 
         protected IDictionary<string, IEnumerable<KeyValuePair<string, double>>> ComputeSequential(string input, int size)
         {
-            return input.FSTokenize().FSParse().FSSequentialComputation(_funcs)(_data);
+            return input.FSTokenize().FSParse().FSSequentialComputation(Funcs)(_data);
         } 
     }
 }

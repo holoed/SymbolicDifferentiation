@@ -36,8 +36,12 @@ namespace SymbolicDifferentiation.Visitors
         {
             if (IsOperation(expression, "+"))
                 return Deriv(expression.Left) + Deriv(expression.Right);
+            if (IsOperation(expression, "-"))
+                return Deriv(expression.Left) + Deriv(new Expression(TokenBuilder.Number(-1)) * expression.Right);
             if (IsOperation(expression, "*"))
                 return (expression.Left*Deriv(expression.Right)) + (Deriv(expression.Left)*expression.Right);
+            if (IsOperation(expression, "/"))
+                return ((Deriv(expression.Left) * expression.Right) - (expression.Left * Deriv(expression.Right))) / (expression.Right ^ new Expression(TokenBuilder.Number(2)));
             if (IsOperation(expression, "^"))
                 return expression.Right*(expression.Left ^ BuildExpRight(expression));
             return default(Expression);

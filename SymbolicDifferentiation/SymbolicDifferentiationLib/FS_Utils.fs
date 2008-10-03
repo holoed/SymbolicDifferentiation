@@ -39,8 +39,10 @@ let rec private toFsVisitor =
       let right = x.Right.Accept toFsVisitor
       match x.Operator with
       | IsOp("+") result -> left + right
+      | IsOp("-") result -> left - right
       | IsOp("*") result -> left * right
-      | IsOp("^") result -> Pow (left, x.Right.Value.GetValue<'a>())
+      | IsOp("/") result -> left / right
+      | IsOp("^") result -> Pow (left, x.Right.Accept toFsVisitor)
       | _ -> failwith "unknown operator"
    member v.Visit(x : Expression) = 
       if (x.IsNumber) then
@@ -58,8 +60,10 @@ let rec ToCs (x : FS_AbstractSyntaxTree.Expression<'a>) =
         | Variable v -> new Expression(TokenBuilder.Variable(v))
         | Number n -> new Expression(TokenBuilder.Number(n))
         | Add(x,y) -> ToCs(x) + ToCs(y)
+        | Sub(x,y) -> ToCs(x) - ToCs(y)
         | Mul(x,y) -> ToCs(x) * ToCs(y)
-        | Pow(x,y) -> Expression.op_ExclusiveOr(ToCs(x) , new Expression(TokenBuilder.Number(y)))
+        | Div(x,y) -> ToCs(x) / ToCs(y)
+        | Pow(x,y) -> Expression.op_ExclusiveOr(ToCs(x) , ToCs(y))
         | FunApp(name, args) -> 
             FunctionApplicationExpression.Create(TokenBuilder.Variable(name), Seq.map ToCs args |> Array.of_seq)
 

@@ -92,6 +92,12 @@ namespace SymbolicDifferentiation.Tests.Parsers
         }
 
         [Test]
+        public void DivisionBinaryExpression()
+        {
+            ExpressionAssert.AreEqual(Number(2) / Number(3), Parse(Tokenizer.Tokenize("2 / 3")));
+        }
+
+        [Test]
         public void MultiplicationMultiplicationBinaryExpression()
         {
             ExpressionAssert.AreEqual((Number(2)*Number(3))*Number(4), Parse(Tokenizer.Tokenize("2 * 3 * 4")));

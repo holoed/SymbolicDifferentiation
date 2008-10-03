@@ -14,13 +14,15 @@
 open FS_Utils;
 open FS_AbstractSyntaxTree;
 
-let rec private Deriv expression =  
+let rec private Deriv (expression : Expression<'a>) =  
     match expression with
         | Variable _ -> Number 1.0
         | Number _   -> Number 0.0
         | Add(x,y)   -> (Deriv x) + (Deriv y)
+        | Sub(x,y)   -> (Deriv x) + (Mul((Number -1.0) , Deriv(y)))
         | Mul(x,y)   -> (x * Deriv(y)) + (Deriv(x) * y)
-        | Pow(x,y)   -> Number (y) * Pow(x,(y - 1.0))
+        | Div(x,y)   -> Div((Deriv(x) * y) - (x * Deriv(y)) , Pow(y, (Number 2.0)));
+        | Pow(x,y)   -> y * Pow(x,(y - (Number 1.0)))
         | _ -> failwith "Not supported"
         
 let Derivate x = 

@@ -87,5 +87,19 @@ namespace SymbolicDifferentiation.Tests.Derivatives
         {
             Assert.AreEqual("3*(x+2)^2+2*(x+1)", Derivate("(x + 2)^3 + (x + 1)^2"));
         }
+
+        [Test]
+        public void Sub()
+        {
+            //TODO: Simplify
+            Assert.AreEqual("3*(1+(-2)*x)", Derivate("3*(x - x^2)"));
+        }
+
+        [Test]
+        public void Div()
+        {
+            //TODO: Simplify
+            Assert.AreEqual("(x-(1+x))/x^2", Derivate("(1 + x) / x"));
+        }
     }
 }
