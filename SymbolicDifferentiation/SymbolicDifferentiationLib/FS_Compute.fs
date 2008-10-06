@@ -27,11 +27,11 @@ let parallelProcessBinaryOpArgs f x y = (Parallel(seq[async { return Execute(f x
 let parallelProcessFuncArgs f args = (Parallel(Seq.map (fun arg -> async { return Execute(f arg) }) args))
 
 //Compute
-let rec private Create (exp, seqMapXY, seqMapArgs, data:IDictionary<string, KeyValuePair<string,double> seq>, functions:Dictionary<string, 'f>) = 
-    let Process exp = Create(exp, seqMapXY, seqMapArgs, data, functions)
+let rec private Create (exp, seqMapXY, seqMapArgs, functions:Dictionary<string, 'f>) = 
+    let Process exp = Create(exp, seqMapXY, seqMapArgs, functions)
     match exp with
     | Number n ->            seq[n]
-    | Variable x ->          data.Item(x)
+    | Variable x ->          functions.Item(x) (seq[])
     | Add(x, y) ->           functions.Item("Add") (seqMapXY Process x y)
     | Sub(x, y) ->           functions.Item("Sub") (seqMapXY Process x y)
     | Mul(x, y) ->           functions.Item("Mul") (seqMapXY Process x y)
@@ -42,7 +42,7 @@ let rec private Create (exp, seqMapXY, seqMapArgs, data:IDictionary<string, KeyV
     
     
 type Ret(exps, functions, seqMapXY, seqMapArgs) =
-    member x.Execute(data) = ComputationResult.CreateDictionary(Seq.map (fun exp -> Create(exp, seqMapXY, seqMapArgs, data, functions)) exps)
+    member x.Execute() = ComputationResult.CreateDictionary(Seq.map (fun exp -> Create(exp, seqMapXY, seqMapArgs, functions)) exps)
 
 let Build = fun (exps, functions) ->  Ret((Seq.map (fun exp -> (ToFs exp)) exps), functions, processBinaryOpArgs, processFuncArgs)
 

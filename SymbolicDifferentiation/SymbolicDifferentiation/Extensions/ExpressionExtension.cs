@@ -58,12 +58,12 @@ namespace SymbolicDifferentiation.Extensions
 
         public static Func<IDictionary<string, IEnumerable<KeyValuePair<string, double>>>, IDictionary<string, IEnumerable<KeyValuePair<string, double>>>> FSSequentialComputation(this IEnumerable<Expression> expressions, Dictionary<string, FastFunc<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>>> funcs)
         {
-            return data => FS_Compute.Build(expressions, funcs).Execute(data);
+            return data => FS_Compute.Build(expressions, funcs).Execute();
         }
 
         public static Func<IDictionary<string, IEnumerable<KeyValuePair<string, double>>>, IDictionary<string, IEnumerable<KeyValuePair<string, double>>>> FSParallelComputation(this IEnumerable<Expression> expressions, Dictionary<string, FastFunc<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>>> funcs)
         {
-            return data => FS_Compute.BuildParallel(expressions, funcs).Execute(data);
+            return data => FS_Compute.BuildParallel(expressions, funcs).Execute();
         }
     }
 }

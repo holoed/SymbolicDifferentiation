@@ -27,10 +27,21 @@ namespace SymbolicDifferentiation.Tests.Aggregation
     [TestFixture]
     public abstract class AggregationTests
     {
-        protected Dictionary<string, IEnumerable<KeyValuePair<string, double>>> _data;
+        protected static Dictionary<string, IEnumerable<KeyValuePair<string, double>>> _data = new Dictionary<string, IEnumerable<KeyValuePair<string, double>>>
+                        {
+                            {"A", Enumerable.Range(1, 3).Select(i => new KeyValuePair<string,double>(i.ToString(), i + .0))},
+                            {"B", Enumerable.Range(5, 3).Select(i => new KeyValuePair<string,double>(i.ToString(), i + .0))},
+                            {"C", Enumerable.Range(9, 3).Select(i => new KeyValuePair<string,double>(i.ToString(), i + .0))},
+                            {"D", Enumerable.Range(30,3).Select(i => new KeyValuePair<string,double>(i.ToString(), i + .0))},
+                        };
 
         public static Dictionary<string, FastFunc<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>>> Funcs = new Dictionary<string, FastFunc<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>>>
                                               {
+                                                  {"A", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(input => ParallelFunctions.Data(_data["A"]))},
+                                                  {"B", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(input => ParallelFunctions.Data(_data["B"]))},
+                                                  {"C", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(input => ParallelFunctions.Data(_data["C"]))},
+                                                  {"D", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(input => ParallelFunctions.Data(_data["D"]))},
+                                                  
                                                   {"Add", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(ParallelFunctions.Add)},
                                                   {"Sub", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(ParallelFunctions.Sub)},                                                  
                                                   {"Mul", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(ParallelFunctions.Mul)},
@@ -38,18 +49,6 @@ namespace SymbolicDifferentiation.Tests.Aggregation
                                                   {"Pow", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(ParallelFunctions.Pow)},
                                                   {"Max", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(ParallelFunctions.Max)}
                                               };
-
-        [SetUp]
-        public void SetUp()
-        {
-            _data = new Dictionary<string, IEnumerable<KeyValuePair<string, double>>>
-                        {
-                            {"A", Enumerable.Range(1, 3).Select(i => new KeyValuePair<string,double>(i.ToString(), i + .0))},
-                            {"B", Enumerable.Range(5, 3).Select(i => new KeyValuePair<string,double>(i.ToString(), i + .0))},
-                            {"C", Enumerable.Range(9, 3).Select(i => new KeyValuePair<string,double>(i.ToString(), i + .0))},
-                            {"D", Enumerable.Range(30,3).Select(i => new KeyValuePair<string,double>(i.ToString(), i + .0))},
-                        };
-        }
 
         [Test]
         public void Add()

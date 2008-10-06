@@ -51,5 +51,10 @@ namespace SymbolicDifferentiation.Computation
         {
             return input.Combine(item => item.Aggregate((x, y) => new KeyValuePair<string, double>(x.Key, x.Value / y.Value)));
         }
+
+        public static IEnumerable<KeyValuePair<string, double>> Data(IEnumerable<KeyValuePair<string, double>> data)
+        {
+            return data;
+        }
     }
 }
