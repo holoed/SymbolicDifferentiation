@@ -31,7 +31,7 @@ let rec private Create (exp, seqMapXY, seqMapArgs, functions:IDictionary<string,
     let Process exp = Create(exp, seqMapXY, seqMapArgs, functions)
     match exp with
     | Number n ->            seq[n]
-    | Variable x ->          functions.Item(x) (seq[])
+    | Variable x ->          seq { yield! functions.Item(x) (seq[]) }
     | Add(x, y) ->           functions.Item("Add") (seqMapXY Process x y)
     | Sub(x, y) ->           functions.Item("Sub") (seqMapXY Process x y)
     | Mul(x, y) ->           functions.Item("Mul") (seqMapXY Process x y)

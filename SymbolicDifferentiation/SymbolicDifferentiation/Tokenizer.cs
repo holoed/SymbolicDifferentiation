@@ -25,7 +25,7 @@ namespace SymbolicDifferentiation
         private static readonly Dictionary<MatchType, Func<string, Match>> _patterns = 
             new Dictionary<MatchType, Func<string, Match>>
                 {
-                    { MatchType.Number, input => Regex.Match(input, "^[0-9]+") },
+                    { MatchType.Number, input => Regex.Match(input, "^[0-9]*\\.?[0-9]+") },
                     { MatchType.Variable, input => Regex.Match(input, "^[A-Za-z]+\\d*" ) },
                     { MatchType.Symbol, input => Regex.Match(input, "^[\\^\\+\\*\\(\\)\\,\\=\\/\\-]") },
                     { MatchType.Whitespace, input => Regex.Match(input, "^[ \r\t]") },

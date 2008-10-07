@@ -50,6 +50,13 @@ namespace SymbolicDifferentiation.Tests.LexicalAnalysis
         }
 
         [Test]
+        public void FloatingNumber()
+        {
+            var tokens = Tokenize("123.4342");
+            AssertToken(123.4342, MatchType.Number, tokens.First());
+        }
+
+        [Test]
         public void NumberAndVariable()
         {
             var tokens = Tokenize("2x");

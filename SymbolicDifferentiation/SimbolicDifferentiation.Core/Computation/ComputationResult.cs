@@ -75,8 +75,10 @@ namespace SymbolicDifferentiation.Core.Computation
             IDictionary<string, FastFunction> a,
             IDictionary<string, FastFunction> b)
         {
-            return a.Select(item => item).Concat(b.Select(item => item)).ToDictionary(item => item.Key,
-                                                                                      item => item.Value);
+            return b.Select(item => item).
+                Concat(a.Select(item => item)).
+                Distinct(new KeyComparer()).
+                ToDictionary(item => item.Key, item => item.Value);
         }
 
         public static IDictionary<string, FastFunction> ToFastFunc(
@@ -101,6 +103,19 @@ namespace SymbolicDifferentiation.Core.Computation
         private static Function ComputationResultToFunction(ComputationResult item)
         {
             return input => item._result;
+        }
+    }
+
+    public class KeyComparer : IEqualityComparer<KeyValuePair<string, FastFunction>>
+    {
+        public bool Equals(KeyValuePair<string, FastFunction> x, KeyValuePair<string, FastFunction> y)
+        {
+            return x.Key == y.Key;
+        }
+
+        public int GetHashCode(KeyValuePair<string, FastFunction> obj)
+        {
+            return obj.GetHashCode();
         }
     }
 }

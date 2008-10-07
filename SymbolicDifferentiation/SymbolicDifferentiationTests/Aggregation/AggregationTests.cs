@@ -163,6 +163,19 @@ namespace SymbolicDifferentiation.Tests.Aggregation
                 z);
         }
 
+        [Test]
+        public void RedefineExistingFunction()
+        {
+            var compute = Compute(@"X = A + B
+                                    X = X + C
+                                    Y = A + B + C");
+            var x = compute["X"](Empty).ToArray();
+            var z = compute["Y"](Empty).ToArray();
+            CollectionAssert.AreEqual(
+                x,
+                z);
+        }
+
         private IEnumerable<double> ComputeSingle(string input)
         {
             return Compute(input)[""](Empty).Select(item => item.Value).ToArray();
