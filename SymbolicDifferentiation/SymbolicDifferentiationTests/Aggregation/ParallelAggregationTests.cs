@@ -23,7 +23,7 @@ namespace SymbolicDifferentiation.Tests.Aggregation
 {
     public class ParallelAggregationTests : AggregationTests
     {
-        protected override IDictionary<string, IEnumerable<KeyValuePair<string, double>>> Compute(string input)
+        protected override IDictionary<string, Func<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>>> Compute(string input)
         {
             return ComputeParallel(input, 3);
         }
@@ -32,7 +32,7 @@ namespace SymbolicDifferentiation.Tests.Aggregation
         [Ignore("long running performance test")]
         public void AddLots()
         {
-            var expression = "(((A + B) * (A + B)) * ((A + B) * (A + B))) + (((A + B) * (A + B)) * ((A + B) * (A + B)))";
+            var expression = "X = (((A + B) * (A + B)) * ((A + B) * (A + B))) + (((A + B) * (A + B)) * ((A + B) * (A + B)))";
 
             const int _size = 1000000;
 
@@ -41,19 +41,19 @@ namespace SymbolicDifferentiation.Tests.Aggregation
                             {"A", Enumerable.Range(0, _size).Select(i => new KeyValuePair<string,double>("", i + .0))},
                             {"B", Enumerable.Range(_size, _size).Select(i => new KeyValuePair<string,double>("", i + .0))},
                         };
-             
+
 
             var watch = new Stopwatch();
             watch.Reset();
             Console.WriteLine("Start sequential...");
             watch.Start();
-            var result2 = ComputeSequential(expression, _size).First().Value.Select(item => item.Value).ToArray();
+            var result2 = ComputeSequential(expression, _size)["X"](new[]{new KeyValuePair<string, double>[0]}).Select(item => item.Value).ToArray();
             watch.Stop();
             Console.WriteLine("Sequential elapsed:{0}", watch.Elapsed);
             watch.Reset();
             Console.WriteLine("Start parallel...");
             watch.Start();
-            var result = ComputeParallel(expression, _size).First().Value.Select(item => item.Value).ToArray();
+            var result = ComputeParallel(expression, _size)["X"](new[]{new KeyValuePair<string, double>[0]}).Select(item => item.Value).ToArray();
             watch.Stop();
             Console.WriteLine("Parallel elapsed:{0}", watch.Elapsed);
 

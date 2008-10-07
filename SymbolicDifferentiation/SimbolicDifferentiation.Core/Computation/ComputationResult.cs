@@ -13,33 +13,34 @@
 
 #endregion
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.FSharp.Core;
+using Function =
+    System.Func
+        <
+            System.Collections.Generic.IEnumerable
+                <System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, double>>>,
+            System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, double>>>;
+using FastFunction =
+    Microsoft.FSharp.Core.FastFunc
+        <
+            System.Collections.Generic.IEnumerable
+                <System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, double>>>,
+            System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, double>>>;
 
 namespace SymbolicDifferentiation.Core.Computation
 {
     public class ComputationResult : IEnumerable<KeyValuePair<string, double>>
     {
-        private readonly IEnumerable<KeyValuePair<string, double>> _result;
+        public readonly IEnumerable<KeyValuePair<string, double>> _result;
 
         private ComputationResult(string name, IEnumerable<KeyValuePair<string, double>> result)
         {
             Name = name;
             _result = result;
-        }
-
-        public static IEnumerable<KeyValuePair<string, double>> CreateFunctionResult(string name, IEnumerable<KeyValuePair<string, double>> result)
-        {
-            return new ComputationResult(name, result);
-        }
-
-        public static IDictionary<string, IEnumerable<KeyValuePair<string, double>>> CreateDictionary(IEnumerable<IEnumerable<KeyValuePair<string, double>>> data)
-        {
-            var result = data.ToArray();
-            return result.All(item => item is ComputationResult) ? 
-                result.Cast<ComputationResult>().ToDictionary(item => item.Name, item => item._result) : 
-                result.ToDictionary(item => "", item => item);
         }
 
         public string Name { get; private set; }
@@ -52,6 +53,54 @@ namespace SymbolicDifferentiation.Core.Computation
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        public static IEnumerable<KeyValuePair<string, double>> CreateFunctionResult(string name, IEnumerable<KeyValuePair<string, double>> result)
+        {
+            return new ComputationResult(name, result);
+        }
+
+        public static IDictionary<string, Function> CreateDictionary(
+            IEnumerable<IEnumerable<KeyValuePair<string, double>>> data)
+        {
+            IEnumerable<KeyValuePair<string, double>>[] result = data.ToArray();
+            return result.All(item => item is ComputationResult)
+                       ?
+                           result.Cast<ComputationResult>().ToDictionary(item => item.Name, item => ComputationResultToFunction(item))
+                       :
+                           result.ToDictionary(item => "", item => EnumerableToFunction(item));
+        }
+
+        public static IDictionary<string, FastFunction> MergeDictionaries(
+            IDictionary<string, FastFunction> a,
+            IDictionary<string, FastFunction> b)
+        {
+            return a.Select(item => item).Concat(b.Select(item => item)).ToDictionary(item => item.Key,
+                                                                                      item => item.Value);
+        }
+
+        public static IDictionary<string, FastFunction> ToFastFunc(
+            IDictionary<string, Function> funcs)
+        {
+            return funcs.Select(
+                item =>
+                new KeyValuePair<string, FastFunction>(item.Key,
+                                                       FuncConvert.ToFastFunc(
+                                                           (Converter
+                                                               <IEnumerable<IEnumerable<KeyValuePair<string, double>>>,
+                                                               IEnumerable<KeyValuePair<string, double>>>)
+                                                           (arg => item.Value(arg))))).ToDictionary(item => item.Key,
+                                                                                                    item => item.Value);
+        }
+
+        private static Function EnumerableToFunction(IEnumerable<KeyValuePair<string, double>> item)
+        {
+            return input => item;
+        }
+
+        private static Function ComputationResultToFunction(ComputationResult item)
+        {
+            return input => item._result;
         }
     }
 }

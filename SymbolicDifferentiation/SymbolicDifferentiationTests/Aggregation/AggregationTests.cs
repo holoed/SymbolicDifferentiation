@@ -27,7 +27,7 @@ namespace SymbolicDifferentiation.Tests.Aggregation
     [TestFixture]
     public abstract class AggregationTests
     {
-        protected static Dictionary<string, IEnumerable<KeyValuePair<string, double>>> _data = new Dictionary<string, IEnumerable<KeyValuePair<string, double>>>
+        protected static IDictionary<string, IEnumerable<KeyValuePair<string, double>>> _data = new Dictionary<string, IEnumerable<KeyValuePair<string, double>>>
                         {
                             {"A", Enumerable.Range(1, 3).Select(i => new KeyValuePair<string,double>(i.ToString(), i + .0))},
                             {"B", Enumerable.Range(5, 3).Select(i => new KeyValuePair<string,double>(i.ToString(), i + .0))},
@@ -35,7 +35,7 @@ namespace SymbolicDifferentiation.Tests.Aggregation
                             {"D", Enumerable.Range(30,3).Select(i => new KeyValuePair<string,double>(i.ToString(), i + .0))},
                         };
 
-        public static Dictionary<string, FastFunc<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>>> Funcs = new Dictionary<string, FastFunc<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>>>
+        public static IDictionary<string, FastFunc<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>>> Funcs = new Dictionary<string, FastFunc<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>>>
                                               {
                                                   {"A", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(input => ParallelFunctions.Data(_data["A"]))},
                                                   {"B", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(input => ParallelFunctions.Data(_data["B"]))},
@@ -49,6 +49,8 @@ namespace SymbolicDifferentiation.Tests.Aggregation
                                                   {"Pow", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(ParallelFunctions.Pow)},
                                                   {"Max", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(ParallelFunctions.Max)}
                                               };
+
+        private static KeyValuePair<string, double>[][] Empty = new[] { new KeyValuePair<string, double>[0] };
 
         [Test]
         public void Add()
@@ -123,51 +125,72 @@ namespace SymbolicDifferentiation.Tests.Aggregation
         [Test]
         public void SingleFunctionDeclaration()
         {
-            var compute = Compute("A = 2 + 3");
-           Assert.IsTrue(compute.ContainsKey("A"));
-           CollectionAssert.AreEqual(new [] { new KeyValuePair<string, double>(MatchType.Number.ToString(), 5) }, compute["A"].ToArray());
+            var compute = Compute("X = 2 + 3");
+           Assert.IsTrue(compute.ContainsKey("X"));
+            CollectionAssert.AreEqual(new[] {new KeyValuePair<string, double>(MatchType.Number.ToString(), 5)},
+                                      compute["X"](Empty).ToArray());
         }
 
         [Test]
         public void TwoFunctionDeclarations()
         {
-            var compute = Compute(@"A = 2 + 3
-                                    B = C + 5");
-            Assert.IsTrue(compute.ContainsKey("A"));
+            var compute = Compute(@"X = 2 + 3
+                                    Y = C + 5");
+            Assert.IsTrue(compute.ContainsKey("X"));
             CollectionAssert.AreEqual(new[]
                                           {
                                               new KeyValuePair<string, double>(MatchType.Number.ToString(), 5),
-                                          }, compute["A"].ToArray());
+                                          }, compute["X"](Empty).ToArray());
 
             CollectionAssert.AreEqual(new[]
                                           {
                                               new KeyValuePair<string, double>("9", 14),
                                               new KeyValuePair<string, double>("10", 15),
                                               new KeyValuePair<string, double>("11", 16)
-                                          }, compute["B"].ToArray());        
+                                          }, compute["Y"](Empty).ToArray());        
+        }
+
+        [Test]
+        public void FunctionReferencesPreviousFunction()
+        {
+            var compute = Compute(@"X = A + B
+                                    Y = X + C
+                                    Z = A + B + C");
+            var x = compute["Y"](Empty).ToArray();
+            var z = compute["Z"](Empty).ToArray();
+            CollectionAssert.AreEqual(
+                x, 
+                z);
         }
 
         private IEnumerable<double> ComputeSingle(string input)
         {
-            return Compute(input).First().Value.Select(item => item.Value).ToArray();
+            return Compute(input)[""](Empty).Select(item => item.Value).ToArray();
         }
 
-        protected abstract IDictionary<string, IEnumerable<KeyValuePair<string, double>>> Compute(string input);
+        protected abstract IDictionary<string, Func<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>>> Compute(string input);
 
         protected static FastFunc<IEnumerable<T>, T> ToFastFunc<T>(Converter<IEnumerable<T>, T> func)
         {
             return FuncConvert.ToFastFunc(func);
         }
 
-        protected IDictionary<string, IEnumerable<KeyValuePair<string, double>>> ComputeParallel(string input, int size)
+        protected IDictionary<string, Func<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>>> ComputeParallel(string input, int size)
         {
-            return input.FSTokenize().FSParse().FSParallelComputation(Funcs)(_data);
+            return input.FSTokenize().FSParse().FSParallelComputation(Funcs)().ToDictionary(item => item.Key,
+                                                                                              item => ConvertToFunc(item.Value));
         }
 
-        protected IDictionary<string, IEnumerable<KeyValuePair<string, double>>> ComputeSequential(string input, int size)
+        protected IDictionary<string, Func<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>>> ComputeSequential(string input, int size)
         {
-            return input.FSTokenize().FSParse().FSSequentialComputation(Funcs)(_data);
-        } 
+            return input.FSTokenize().FSParse().FSSequentialComputation(Funcs)().ToDictionary(item => item.Key,
+                                                                                              item => ConvertToFunc(item.Value));
+        }
+
+        private static Func<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>> ConvertToFunc(FastFunc<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>> value)
+        {
+            return arg => value.Invoke(arg);
+        }
     }
 }
  

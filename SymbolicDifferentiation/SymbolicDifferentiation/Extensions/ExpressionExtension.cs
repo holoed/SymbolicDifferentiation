@@ -17,7 +17,6 @@ using System;
 using System.Collections.Generic;
 using Microsoft.FSharp.Core;
 using SymbolicDifferentiation.Core.AST;
-using SymbolicDifferentiation.Core.Computation;
 using SymbolicDifferentiation.Visitors;
 using System.Linq;
 
@@ -56,14 +55,14 @@ namespace SymbolicDifferentiation.Extensions
                 Aggregate((x, y) => x + Environment.NewLine + y);
         }
 
-        public static Func<IDictionary<string, IEnumerable<KeyValuePair<string, double>>>, IDictionary<string, IEnumerable<KeyValuePair<string, double>>>> FSSequentialComputation(this IEnumerable<Expression> expressions, Dictionary<string, FastFunc<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>>> funcs)
+        public static Func<IDictionary<string, FastFunc<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>>>> FSSequentialComputation(this IEnumerable<Expression> expressions, IDictionary<string, FastFunc<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>>> funcs)
         {
-            return data => FS_Compute.Build(expressions, funcs).Execute();
+            return () => FS_Compute.Build(expressions, funcs).Execute();
         }
 
-        public static Func<IDictionary<string, IEnumerable<KeyValuePair<string, double>>>, IDictionary<string, IEnumerable<KeyValuePair<string, double>>>> FSParallelComputation(this IEnumerable<Expression> expressions, Dictionary<string, FastFunc<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>>> funcs)
+        public static Func<IDictionary<string, FastFunc<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>>>> FSParallelComputation(this IEnumerable<Expression> expressions, IDictionary<string, FastFunc<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>>> funcs)
         {
-            return data => FS_Compute.BuildParallel(expressions, funcs).Execute();
+            return () => FS_Compute.BuildParallel(expressions, funcs).Execute();
         }
     }
 }
