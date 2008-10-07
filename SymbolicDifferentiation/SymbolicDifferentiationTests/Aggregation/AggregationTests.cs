@@ -50,7 +50,7 @@ namespace SymbolicDifferentiation.Tests.Aggregation
                                                   {"Max", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(ParallelFunctions.Max)}
                                               };
 
-        private static KeyValuePair<string, double>[][] Empty = new[] { new KeyValuePair<string, double>[0] };
+        public static readonly KeyValuePair<string, double>[][] Empty = new[] { new KeyValuePair<string, double>[0] };
 
         [Test]
         public void Add()
@@ -170,7 +170,7 @@ namespace SymbolicDifferentiation.Tests.Aggregation
 
         protected abstract IDictionary<string, Func<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>>> Compute(string input);
 
-        protected static FastFunc<IEnumerable<T>, T> ToFastFunc<T>(Converter<IEnumerable<T>, T> func)
+        public static FastFunc<IEnumerable<T>, T> ToFastFunc<T>(Converter<IEnumerable<T>, T> func)
         {
             return FuncConvert.ToFastFunc(func);
         }
@@ -187,7 +187,7 @@ namespace SymbolicDifferentiation.Tests.Aggregation
                                                                                               item => ConvertToFunc(item.Value));
         }
 
-        private static Func<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>> ConvertToFunc(FastFunc<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>> value)
+        public static Func<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>> ConvertToFunc(FastFunc<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>> value)
         {
             return arg => value.Invoke(arg);
         }
