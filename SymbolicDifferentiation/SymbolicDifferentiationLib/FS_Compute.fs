@@ -30,15 +30,15 @@ let parallelProcessFuncArgs f args = (Parallel(Seq.map (fun arg -> async { retur
 let rec private Create (exp, seqMapXY, seqMapArgs, functions:IDictionary<string, 'f>) = 
     let Process exp = Create(exp, seqMapXY, seqMapArgs, functions)
     match exp with
-    | Number n ->            seq[n]
-    | Variable x ->          seq { yield! functions.Item(x) (seq[]) }
-    | Add(x, y) ->           functions.Item("Add") (seqMapXY Process x y)
-    | Sub(x, y) ->           functions.Item("Sub") (seqMapXY Process x y)
-    | Mul(x, y) ->           functions.Item("Mul") (seqMapXY Process x y)
-    | Div(x, y) ->           functions.Item("Div") (seqMapXY Process x y)
-    | Pow(x, n) ->           functions.Item("Pow") (seq[(Process x);(Process n)])
-    | FunApp(name, args) ->  functions.Item(name)  (seqMapArgs Process args)
-    | FunDecl(name, body) -> ComputationResult.CreateFunctionResult(name, (Process body))
+    | Number n ->                  seq[n]
+    | Variable x ->                seq { yield! functions.Item(x) (seq[]) }
+    | Add(x, y) ->                 functions.Item("Add") (seqMapXY Process x y)
+    | Sub(x, y) ->                 functions.Item("Sub") (seqMapXY Process x y)
+    | Mul(x, y) ->                 functions.Item("Mul") (seqMapXY Process x y)
+    | Div(x, y) ->                 functions.Item("Div") (seqMapXY Process x y)
+    | Pow(x, n) ->                 functions.Item("Pow") (seq[(Process x);(Process n)])
+    | FunApp(name, args) ->        functions.Item(name)  (seqMapArgs Process args)
+    | FunDecl(name, args, body) -> ComputationResult.CreateFunctionResult(name, (Process body))
     
     
 type Ret(exps, functions, seqMapXY, seqMapArgs) =

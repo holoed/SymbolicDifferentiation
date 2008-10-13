@@ -14,6 +14,10 @@
 open FS_AbstractSyntaxTree;
 
 let rec ToString exp = 
+    let ToStringArgs args = 
+        if (Seq.length args > 0) 
+            then sprintf "(%s)" (String.concat "," (Seq.map (fun arg -> ToString arg) args))
+            else sprintf ""
     match exp with
     | Number n when n < 0.0 -> sprintf "(%.0f)" n
     | Number n -> sprintf "%.0f" n
@@ -35,5 +39,5 @@ let rec ToString exp =
     | Pow(a, Sub(x,y)) -> sprintf "%s^(%s)" (ToString a) (ToString (Sub(x,y))) 
     | Pow(a, Mul(x,y)) -> sprintf "%s^(%s)" (ToString a) (ToString (Mul(x,y))) 
     | Pow(a, n) -> sprintf "%s^%s" (ToString a) (ToString n) 
-    | FunApp(name, args) -> sprintf "%s(%s)" name (String.concat "," (Seq.map (fun arg -> ToString arg) args))
-    | FunDecl(name, body) -> sprintf "%s=%s" name (ToString body)
+    | FunApp(name, args) -> sprintf "%s%s" name (ToStringArgs args)
+    | FunDecl(name, args, body) -> sprintf "%s%s=%s" name (ToStringArgs args) (ToString body)

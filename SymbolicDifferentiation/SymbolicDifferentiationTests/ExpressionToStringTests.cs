@@ -69,6 +69,12 @@ namespace SymbolicDifferentiation.Tests
             Assert.AreEqual("A=Max(3,5)", FSParse("A=Max(3,5)"));
         }
 
+        [Test]
+        public void FunctionDeclarationWithArguments()
+        {
+            Assert.AreEqual("Add(x,y)=x+y", FSParse("Add(x,y)=x+y"));
+        }
+
         private static string FSParse(string input)
         {
             return input.FSTokenize().FSParse().FSToString();

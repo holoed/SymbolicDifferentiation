@@ -28,8 +28,9 @@ let rec private toFsVisitor =
  { new IExpressionVisitor<FS_AbstractSyntaxTree.Expression<'a>> with 
    member v.Visit(x : FunctionDeclarationExpression) : FS_AbstractSyntaxTree.Expression<'a> =
       let name = toString x.Name
+      let args = Seq.map(fun (arg : Expression) -> (arg.Accept toFsVisitor)) x.Arguments;
       let body = x.Body.Accept toFsVisitor
-      FunDecl(name, body)
+      FunDecl(name, args, body)
    member v.Visit(x : FunctionApplicationExpression) : FS_AbstractSyntaxTree.Expression<'a> =
       let name = toString x.Name
       let args = Seq.map(fun (arg : Expression) -> (arg.Accept toFsVisitor)) x.Arguments;
@@ -55,7 +56,7 @@ let rec ToFs (x : Expression) =
     x.Accept toFsVisitor    
  
 // Converts from F# AST to C# AST       
-let rec ToCs (x : FS_AbstractSyntaxTree.Expression<'a>) =  
+let rec ToCs (x : FS_AbstractSyntaxTree.Expression<float>) =  
         match x with
         | Variable v -> new Expression(TokenBuilder.Variable(v))
         | Number n -> new Expression(TokenBuilder.Number(n))
@@ -66,6 +67,8 @@ let rec ToCs (x : FS_AbstractSyntaxTree.Expression<'a>) =
         | Pow(x,y) -> Expression.op_ExclusiveOr(ToCs(x) , ToCs(y))
         | FunApp(name, args) -> 
             FunctionApplicationExpression.Create(TokenBuilder.Variable(name), Seq.map ToCs args |> Array.of_seq)
+        | FunDecl(name, args, body) -> 
+            FunctionDeclarationExpression.CreateWithArgs(TokenBuilder.Variable(name), Seq.map ToCs args |> Array.of_seq, ToCs body)
 
 // Converts from F# Quotations AST to C# AST
 let rec FromQuoteToCs(input : Quotations.Expr): Expression = 
