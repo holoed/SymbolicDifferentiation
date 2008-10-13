@@ -15,6 +15,7 @@
 
 using System.Collections.Generic;
 using SymbolicDifferentiation.Core.AST;
+using System.Linq;
 
 namespace SymbolicDifferentiation.Visitors
 {
@@ -29,16 +30,19 @@ namespace SymbolicDifferentiation.Visitors
             {
                 if (_stack.Count == 0)
                     return false;
-                var expected = _stack.Dequeue();
-                if (expected.GetType() != expression.GetType()) return false;
-                if (!Equals(expected.Value, expression.Name))
+                var expected = _stack.Dequeue() as FunctionDeclarationExpression;
+                if (expected == null) return false;
+                if (!Equals(expected.Name, expression.Name))
+                    return false;
+                if (!Equals(expected.Arguments.Count(), expression.Arguments.Count()))
                     return false;
             }
             else
                 _stack.Enqueue(expression);
 
-            if (!expression.Body.Accept(this)) return false;
-            return true;
+            foreach (var argument in expression.Arguments)
+                if (!argument.Accept(this)) return false;
+            return expression.Body.Accept(this);
         }
 
         public bool Visit(FunctionApplicationExpression expression)
@@ -47,9 +51,11 @@ namespace SymbolicDifferentiation.Visitors
             {
                 if (_stack.Count == 0)
                     return false;
-                var expected = _stack.Dequeue();
-                if (expected.GetType() != expression.GetType()) return false;
+                var expected = _stack.Dequeue() as FunctionApplicationExpression;
+                if (expected == null) return false;
                 if (!Equals(expected.Value, expression.Name))
+                    return false;
+                if (!Equals(expected.Arguments.Count(), expression.Arguments.Count()))
                     return false;
             }
             else
@@ -66,9 +72,9 @@ namespace SymbolicDifferentiation.Visitors
             {
                 if (_stack.Count == 0)
                     return false;
-                var expected = _stack.Dequeue();
-                if (expected.GetType() != expression.GetType()) return false;
-                if (!Equals(expected.Value, expression.Operator))
+                var expected = _stack.Dequeue() as BinaryExpression;
+                if (expected == null) return false;
+                if (!Equals(expected.Operator, expression.Operator))
                     return false;
             }
             else
@@ -84,7 +90,6 @@ namespace SymbolicDifferentiation.Visitors
                 if (_stack.Count == 0)
                     return false;
                 var expected = _stack.Dequeue();
-                if (expected.GetType() != expression.GetType()) return false;
                 if (!Equals(expected.Value, expression.Value))
                     return false;
             }

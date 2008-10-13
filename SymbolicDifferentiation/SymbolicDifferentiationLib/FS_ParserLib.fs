@@ -84,6 +84,12 @@ let FollowedBy (m,f) =
                                                                  Consumed(b && b2, if b2 then result else ParseResult.Merge(result, result2))
 
                                                                | Fail e -> Consumed(b,Fail e)
+                                                               
+                                                               
+let attempt p = fun input -> let Consumed(b,result) as c = p input
+                             match b, result with
+                                     | true, Fail(_) | false, _ -> Consumed(false,result) 
+                                     | true, Success (_,_,_) -> c
 
 /// To allow conditional parsing, we define a combinator sat that takes a predicate, 
 /// and yields a parser that consumes a single character if it satisfies the predicate, 

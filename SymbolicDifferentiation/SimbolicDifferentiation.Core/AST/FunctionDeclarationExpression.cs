@@ -13,15 +13,25 @@
 
 #endregion
 
+using System.Collections.Generic;
 using SymbolicDifferentiation.Core.Tokens;
 
 namespace SymbolicDifferentiation.Core.AST
 {
     public class FunctionDeclarationExpression : Expression
     {
+        private FunctionDeclarationExpression()
+        {
+        }
+
         public static Expression Create(Token name, Expression body)
         {
-            return new FunctionDeclarationExpression { Name = name, Body = body };
+            return new FunctionDeclarationExpression { Name = name, Arguments = new Expression[0], Body = body };
+        }
+
+        public static Expression CreateWithArgs(Token name, IEnumerable<Expression> args, Expression body)
+        {
+            return new FunctionDeclarationExpression { Name = name, Arguments = args, Body = body };
         }
 
         public Token Name
@@ -29,6 +39,8 @@ namespace SymbolicDifferentiation.Core.AST
             set { Value = value; }
             get { return Value; }
         }
+
+        public IEnumerable<Expression> Arguments { get; set; }
 
         public Expression Body { get; set; }
 

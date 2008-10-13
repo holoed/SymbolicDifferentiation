@@ -79,6 +79,17 @@ namespace SymbolicDifferentiation.ParserCombinators
             };
         }
 
+        public static P<T> Attempt<T>(this P<T> p)
+        {
+            return input =>
+                       {
+                           var result = p(input);
+                           return result.HasConsumedInput && result.ParseResult.Succeeded
+                                      ? result
+                                      : new Consumed<T>(false, result.ParseResult);
+                       };
+        }
+
         public static P<T> Or<T>(this P<T> p1, P<T> p2)
         {
             return input =>

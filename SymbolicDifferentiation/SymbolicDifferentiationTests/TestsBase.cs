@@ -13,6 +13,7 @@
 
 #endregion
 
+using System.Collections.Generic;
 using SymbolicDifferentiation.Core.AST;
 using SymbolicDifferentiation.Core.Tokens;
 
@@ -30,14 +31,19 @@ namespace SymbolicDifferentiation.Tests
             return new Expression {Value = TokenBuilder.Variable(value)};
         }
 
-        protected static Expression FunctionApp(string name, params Expression[] arg)
+        protected static Expression FunctionApp(string name, params Expression[] args)
         {
-            return new FunctionApplicationExpression {Name = TokenBuilder.Variable(name), Arguments = arg};
+            return new FunctionApplicationExpression {Name = TokenBuilder.Variable(name), Arguments = args};
         }
 
         protected static Expression FunctionDecl(string name, Expression body)
         {
-            return new FunctionDeclarationExpression { Name = TokenBuilder.Variable(name), Body = body };
+            return FunctionDeclarationExpression.Create(TokenBuilder.Variable(name), body);
+        }
+
+        protected static Expression FunctionDecl(string name, IEnumerable<Expression> args, Expression body)
+        {
+            return FunctionDeclarationExpression.CreateWithArgs(TokenBuilder.Variable(name), args, body);
         }
     }
 }

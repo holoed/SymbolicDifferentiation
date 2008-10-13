@@ -192,6 +192,18 @@ namespace SymbolicDifferentiation.Tests.Parsers
         }
 
         [Test]
+        public void FunctionDeclarationWithArgument()
+        {
+            ExpressionAssert.AreEqual(FunctionDecl("f", new[] { Variable("x") }, Variable("x")), Parse(Tokenizer.Tokenize("f(x) = x")));
+        }
+
+        [Test]
+        public void FunctionDeclarationWithTwoArguments()
+        {
+            ExpressionAssert.AreEqual(FunctionDecl("f", new[] { Variable("x"), Variable("y") }, Variable("x") + Variable("y")), Parse(Tokenizer.Tokenize("f(x,y) = x + y")));
+        }
+
+        [Test]
         public void FunctionDeclarationWithAdditionBody()
         {
             ExpressionAssert.AreEqual(FunctionDecl("A", Number(3) + Number(2)), Parse(Tokenizer.Tokenize("A = 3 + 2")));

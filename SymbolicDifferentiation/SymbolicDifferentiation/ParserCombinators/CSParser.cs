@@ -14,6 +14,7 @@
 #endregion
 
 using System.Collections.Generic;
+using System.Linq;
 using SymbolicDifferentiation.Core.AST;
 using SymbolicDifferentiation.Core.Tokens;
 
@@ -27,7 +28,7 @@ namespace SymbolicDifferentiation.ParserCombinators
             var mulOp = (new Symbol("*") > ((x, y) => x * y)).Or(new Symbol("/") > ((x, y) => x / y)).Tag("multiply/divide op");
             var expOp = (new Symbol("^") > ((x, y) => x ^ y)).Tag("exponentiation op");
 
-            P<Expression> paren, part, factor, term, expr = null, app, decl;
+            P<Expression> paren, part, factor, term, expr = null, app, decl, declWithArgs;
 
             paren = from o in new Symbol("(").Literal()
                     from e in expr
@@ -35,21 +36,37 @@ namespace SymbolicDifferentiation.ParserCombinators
                     select e;
 
             // Function application
-            app = 
-                  from name in CSParserLib.Sat(x => x.Type.Equals(MatchType.Variable)).FollowedBy(c=> CSParserLib.Sat(t=>(t.Value.Equals("("))))
-                  from o in new Symbol("(").Literal()
-                  from e in expr.SepBy(new Symbol(",").Literal())
-                  from c in new Symbol(")").Literal()
-                  select (Expression)new FunctionApplicationExpression { Name = name, Arguments = e };
+            app =
+                from name in
+                    CSParserLib.Sat(x => x.Type.Equals(MatchType.Variable)).FollowedBy(
+                    c => CSParserLib.Sat(t => (t.Value.Equals("("))))
+                from o in new Symbol("(").Literal()
+                from e in expr.SepBy(new Symbol(",").Literal())
+                from c in new Symbol(")").Literal()
+                select FunctionApplicationExpression.Create(name, e.ToArray());
 
             // Function application
             decl =
-                  from name in CSParserLib.Sat(x => x.Type.Equals(MatchType.Variable)).FollowedBy(c => CSParserLib.Sat(t => (t.Value.Equals("="))))
-                  from o in new Symbol("=").Literal()
-                  from e in expr
-                  select (Expression)new FunctionDeclarationExpression() { Name = name, Body = e };
+                from name in
+                    CSParserLib.Sat(x => x.Type.Equals(MatchType.Variable)).FollowedBy(
+                    c => CSParserLib.Sat(t => (t.Value.Equals("="))))
+                from o in new Symbol("=").Literal()
+                from e in expr
+                select FunctionDeclarationExpression.Create(name, e);
 
-            part = decl.Or(app).Or(CSParserLib.DigitVal).Or(paren);
+            // Function application
+            declWithArgs =
+                from name in
+                    CSParserLib.Sat(x => x.Type.Equals(MatchType.Variable)).FollowedBy(
+                    c => CSParserLib.Sat(t => (t.Value.Equals("("))))
+                from o in new Symbol("(").Literal()
+                from args in expr.SepBy(new Symbol(",").Literal())
+                from c in new Symbol(")").Literal()
+                from e in new Symbol("=").Literal()
+                from body in expr
+                select FunctionDeclarationExpression.CreateWithArgs(name, args, body);
+
+            part = declWithArgs.Attempt().Or(decl).Or(app).Or(CSParserLib.DigitVal).Or(paren);
             factor = part.Chainr1(expOp);
             term = factor.Chainl1(mulOp);
             expr = term.Chainl1(addOp);
