@@ -26,9 +26,19 @@ let Execute x = x |> Array.of_seq |> Seq.of_array
 let parallelProcessBinaryOpArgs f x y = (Parallel(seq[async { return Execute(f x) }; async { return Execute(f y) }]))
 let parallelProcessFuncArgs f args = (Parallel(Seq.map (fun arg -> async { return Execute(f arg) }) args))
 
+
+let private ExtractArguments args = 
+    let ExtractArgument arg = match arg with
+                              | Variable x -> x
+                              | _ -> failwith "Only variable arguments are allowed in functions definitions"
+    Seq.map ExtractArgument args
+
+
+
 //Compute
 let rec private Create (exp, seqMapXY, seqMapArgs, functions:IDictionary<string, 'f>) = 
     let Process exp = Create(exp, seqMapXY, seqMapArgs, functions)
+    let ProcessFun exp funs = Create(exp, seqMapXY, seqMapArgs, ComputationResult.MergeDictionaries(functions, funs))
     match exp with
     | Number n ->                  seq[n]
     | Variable x ->                seq { yield! functions.Item(x) (seq[]) }
@@ -38,7 +48,7 @@ let rec private Create (exp, seqMapXY, seqMapArgs, functions:IDictionary<string,
     | Div(x, y) ->                 functions.Item("Div") (seqMapXY Process x y)
     | Pow(x, n) ->                 functions.Item("Pow") (seq[(Process x);(Process n)])
     | FunApp(name, args) ->        functions.Item(name)  (seqMapArgs Process args)
-    | FunDecl(name, args, body) -> ComputationResult.CreateFunctionResult(name, (Process body))
+    | FunDecl(name, args, body) -> ComputationResult.CreateFunction(name, (ExtractArguments args), (ProcessFun body))
     
     
 type Ret(exps, functions, seqMapXY, seqMapArgs) =

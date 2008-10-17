@@ -176,6 +176,47 @@ namespace SymbolicDifferentiation.Tests.Aggregation
                 z);
         }
 
+        [Test]
+        public void UsePreviouslyDefinedFunctionWithArguments()
+        {
+            var compute = Compute(@"AddStuff(x,y) = x + y
+                                    z = AddStuff(A, B)
+                                    k = A + B");
+            var z = compute["z"](Empty).ToArray();
+            var k = compute["k"](Empty).ToArray();
+            CollectionAssert.AreEqual(
+                z,
+                k);
+        }
+
+        [Test]
+        public void UsePreviouslyDefinedTwoFunctionsWithArguments()
+        {
+            var compute = Compute(@"AddStuff(x,y) = x + y
+                                    PowStuff(x,y) = x ^ y
+                                    z = PowStuff(AddStuff(A, B), 2)
+                                    k = (A + B)^2");
+            var z = compute["z"](Empty).ToArray();
+            var k = compute["k"](Empty).ToArray();
+            CollectionAssert.AreEqual(
+                z,
+                k);
+        }
+
+        [Test]
+        public void CustomFunctionsUsesPreviouslyDefinedCustomFunction()
+        {
+            var compute = Compute(@"Add(x,y) = x + y
+                                    AddAndPow(x,y) = Add(x,y) ^ y
+                                    z = AddAndPow(A,B)
+                                    k = (A + B)^B");
+            var z = compute["z"](Empty).ToArray();
+            var k = compute["k"](Empty).ToArray();
+            CollectionAssert.AreEqual(
+                z,
+                k);
+        }
+
         private IEnumerable<double> ComputeSingle(string input)
         {
             return Compute(input)[""](Empty).Select(item => item.Value).ToArray();
