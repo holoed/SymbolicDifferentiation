@@ -29,7 +29,7 @@ let private parse s =
        match s with     
        | ParseRegex "^[0-9]*\.?[0-9]+"    result ->  result |> is_a_token_of_type <|  MatchType.Number
        | ParseRegex "^[A-Za-z]+\d*"            result ->  result |> is_a_token_of_type <|  MatchType.Variable
-       | ParseRegex "^[\\^\\+\\*\\(\\)\\,\\=\\/\\-]"    result ->  result |> is_a_token_of_type <|  MatchType.Symbol
+       | ParseRegex "^[\\^\\+\\*\\(\\)\\,\\=\\/\\-\\?\\:]"    result ->  result |> is_a_token_of_type <|  MatchType.Symbol
        | ParseRegex "^[\n]"                   result ->  result |> is_a_token_of_type <| MatchType.EOL
        | ParseRegex "\s+"                   result ->  Token.Whitespace
        | _ -> failwith "unknown token"
