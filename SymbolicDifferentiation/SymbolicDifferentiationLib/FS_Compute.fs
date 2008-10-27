@@ -36,7 +36,7 @@ let private ExtractArguments args =
 
 
 //Compute
-let rec private Create (exp, seqMapXY, seqMapArgs, functions:IDictionary<string, 'f>) = 
+let rec private Create (exp, seqMapXY, seqMapArgs, functions) = 
     let Process exp = Create(exp, seqMapXY, seqMapArgs, functions)
     let ProcessFun exp funs = Create(exp, seqMapXY, seqMapArgs, ComputationResult.MergeDictionaries(functions, funs))
     match exp with
