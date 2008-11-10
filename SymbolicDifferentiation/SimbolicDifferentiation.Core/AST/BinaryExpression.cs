@@ -13,6 +13,7 @@
 
 #endregion
 
+using System;
 using SymbolicDifferentiation.Core.Tokens;
 
 namespace SymbolicDifferentiation.Core.AST
@@ -36,6 +37,11 @@ namespace SymbolicDifferentiation.Core.AST
         public override T Accept<T>(IExpressionVisitor<T> visitor)
         {
             return visitor.Visit(this);
+        }
+
+        public override string ToString()
+        {
+            return String.Format("({0} {1} {2})", Left, Operator, Right);
         }
     }
 }

@@ -26,9 +26,10 @@ namespace SymbolicDifferentiation.ParserCombinators
         {
             var addOp = (new Symbol("+") > ((x, y) => x + y)).Or(new Symbol("-") > ((x, y) => x - y)).Tag("add/subtract op");
             var mulOp = (new Symbol("*") > ((x, y) => x * y)).Or(new Symbol("/") > ((x, y) => x / y)).Tag("multiply/divide op");
+            var cmpOp = (new Symbol(">") > ((x, y) => x > y)).Or(new Symbol("<") > ((x, y) => x < y)).Tag("greater than/less than op");
             var expOp = (new Symbol("^") > ((x, y) => x ^ y)).Tag("exponentiation op");
 
-            P<Expression> paren, part, factor, term, expr = null, app, decl, declWithArgs;
+            P<Expression> paren, p1, p2, p3, p4,p5, expr = null, app, decl, declWithArgs;
 
             paren = from o in new Symbol("(").Literal()
                     from e in expr
@@ -66,11 +67,12 @@ namespace SymbolicDifferentiation.ParserCombinators
                 from body in expr
                 select FunctionDeclarationExpression.CreateWithArgs(name, args, body);
 
-            part = declWithArgs.Attempt().Or(decl).Or(app).Or(CSParserLib.DigitVal).Or(paren);
-            factor = part.Chainr1(expOp);
-            term = factor.Chainl1(mulOp);
-            expr = term.Chainl1(addOp);
-
+            p5 = declWithArgs.Attempt().Or(decl).Or(app).Or(CSParserLib.DigitVal).Or(paren);
+            p4 =   p5.Chainr1(expOp);
+            p3 =   p4.Chainl1(mulOp);
+            p2 =   p3.Chainl1(addOp);
+            p1 =   p2.Chainl1(cmpOp);
+            expr = p1;
             var exprs = from e in expr.SepBy(new Token(MatchType.EOL, "\n").Literal())
                         select e;
 

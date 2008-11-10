@@ -13,17 +13,22 @@
 
 open FS_ParserLib;
 open SymbolicDifferentiation.Core.Tokens;
+open SymbolicDifferentiation.Core.AST;
             
 let digitVal = parse { let! c = digitOrLetter
                        return new SymbolicDifferentiation.Core.AST.Expression(c) }                                                  
                            
 let addOp = (Literal (TokenBuilder.Symbol("+"))) (fun x y -> x + y) <|> (Literal (TokenBuilder.Symbol("-"))) (fun x y -> x - y)
 let mulOp = (Literal (TokenBuilder.Symbol("*"))) (fun x y -> x * y) <|> (Literal (TokenBuilder.Symbol("/"))) (fun x y -> x / y) 
-let expOp = (Literal (TokenBuilder.Symbol("^"))) (fun x y -> SymbolicDifferentiation.Core.AST.Expression.Pow(x, y)) 
-let rec expr = chainl1 term addOp
-and term = chainl1 factor mulOp
-and factor = chainr1 part expOp
-and part = attempt declWithArgs <|> decl <|> app <|> digitVal <|> paren
+let expOp = (Literal (TokenBuilder.Symbol("^"))) (fun x y -> Expression.Pow(x, y)) 
+let cmpOp = (Literal (TokenBuilder.Symbol(">"))) (fun x y -> Expression.op_GreaterThan(x,y)) <|> (Literal (TokenBuilder.Symbol("<"))) (fun x y -> Expression.op_LessThan(x,y))
+
+let rec expr v = p1 v
+and p1 =         p2 |> chainl1 <| cmpOp
+and p2 =         p3 |> chainl1 <| addOp
+and p3 =         p4 |> chainl1 <| mulOp
+and p4 =         p5 |> chainr1 <| expOp
+and p5 = attempt declWithArgs <|> decl <|> app <|> digitVal <|> paren
 
 //Parenthesis around expressions to define precedence
 and paren = parse { let! _ = Literal (TokenBuilder.Symbol("(")) 0

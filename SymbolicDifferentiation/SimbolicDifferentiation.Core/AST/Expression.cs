@@ -76,6 +76,16 @@ namespace SymbolicDifferentiation.Core.AST
             return BuildBinary("^", left, right);
         }
 
+        public static Expression operator >(Expression left, Expression right)
+        {
+            return BuildBinary(">", left, right);
+        }
+
+        public static Expression operator <(Expression left, Expression right)
+        {
+            return BuildBinary("<", left, right);
+        }
+
         private static Expression BuildBinary(string op, Expression left, Expression right)
         {
             return new BinaryExpression
@@ -95,6 +105,11 @@ namespace SymbolicDifferentiation.Core.AST
         public override int GetHashCode()
         {
             return (Value != null ? Value.GetHashCode() : 0);
+        }
+
+        public override string ToString()
+        {
+            return Value.ToString();
         }
     }
 }

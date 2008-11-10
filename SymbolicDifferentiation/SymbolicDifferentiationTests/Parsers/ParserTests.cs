@@ -227,5 +227,35 @@ namespace SymbolicDifferentiation.Tests.Parsers
             ExpressionAssert.AreEqual(FunctionDecl("A", Number(2)), list[0]);
             ExpressionAssert.AreEqual(FunctionDecl("B", Number(5)), list[1]);
         }
+
+        [Test]
+        public void GreaterThan()
+        {
+            ExpressionAssert.AreEqual(Number(3) > Number(2), Parse(Tokenizer.Tokenize("3 > 2")));
+        }
+
+        [Test]
+        public void LessThan()
+        {
+            ExpressionAssert.AreEqual(Number(3) > Number(2), Parse(Tokenizer.Tokenize("3 > 2")));
+        }
+
+        [Test]
+        public void GreaterThanAndAddition()
+        {
+            ExpressionAssert.AreEqual((Number(3) + Variable("x")) > (Number(2) + Variable("x")), Parse(Tokenizer.Tokenize("3 + x > 2 + x")));
+        }
+
+        [Test]
+        public void LessThanAndAddition()
+        {
+            ExpressionAssert.AreEqual((Number(3) + Variable("x")) < (Number(2) + Variable("x")), Parse(Tokenizer.Tokenize("3 + x < 2 + x")));
+        }
+
+        [Test]
+        public void GreaterThanAdditionAndMultiplication()
+        {
+            ExpressionAssert.AreEqual(((Number(3) + Variable("x")) * Number(2)) < (Number(2) + (Variable("x") * Number(3))), Parse(Tokenizer.Tokenize("(3 + x) * 2 < 2 + x * 3")));
+        }
     }
 }
