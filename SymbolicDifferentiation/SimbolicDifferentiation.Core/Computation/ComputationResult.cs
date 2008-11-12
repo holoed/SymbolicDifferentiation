@@ -22,33 +22,33 @@ using Function =
     System.Func
         <
             System.Collections.Generic.IEnumerable
-                <System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, double>>>,
-            System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, double>>>;
+                <System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, SymbolicDifferentiation.Core.Computation.Atom>>>,
+            System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, SymbolicDifferentiation.Core.Computation.Atom>>>;
 using FastFunction =
     Microsoft.FSharp.Core.FastFunc
         <
             System.Collections.Generic.IEnumerable
-                <System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, double>>>,
-            System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, double>>>;
+                <System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, SymbolicDifferentiation.Core.Computation.Atom>>>,
+            System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, SymbolicDifferentiation.Core.Computation.Atom>>>;
 
 namespace SymbolicDifferentiation.Core.Computation
 {
-    public class ComputationResult : IEnumerable<KeyValuePair<string, double>>
+    public class ComputationResult : IEnumerable<KeyValuePair<string, Atom>>
     {
-        private ComputationResult(string name, IEnumerable<string> args, FastFunc<IDictionary<string, FastFunction>, IEnumerable<KeyValuePair<string, double>>> body)
+        private ComputationResult(string name, IEnumerable<string> args, FastFunc<IDictionary<string, FastFunction>, IEnumerable<KeyValuePair<string, Atom>>> body)
         {
             Name = name;
             Args = args;
             Body = body;
         }
 
-        private FastFunc<IDictionary<string, FastFunction>, IEnumerable<KeyValuePair<string, double>>> Body { get; set; }
+        private FastFunc<IDictionary<string, FastFunction>, IEnumerable<KeyValuePair<string, Atom>>> Body { get; set; }
 
         private IEnumerable<string> Args { get; set; }
       
         public string Name { get; private set; }
 
-        public IEnumerator<KeyValuePair<string, double>> GetEnumerator()
+        public IEnumerator<KeyValuePair<string, Atom>> GetEnumerator()
         {
             throw new NotSupportedException();
         }
@@ -58,13 +58,13 @@ namespace SymbolicDifferentiation.Core.Computation
             return GetEnumerator();
         }
 
-        public static IEnumerable<KeyValuePair<string, double>> CreateFunction(string name, IEnumerable<string> args, FastFunc<IDictionary<string, FastFunction>, IEnumerable<KeyValuePair<string, double>>> body)
+        public static IEnumerable<KeyValuePair<string, Atom>> CreateFunction(string name, IEnumerable<string> args, FastFunc<IDictionary<string, FastFunction>, IEnumerable<KeyValuePair<string, Atom>>> body)
         {
             return new ComputationResult(name, args, body);
         }
 
         public static IDictionary<string, Function> CreateDictionary(
-            IEnumerable<IEnumerable<KeyValuePair<string, double>>> data)
+            IEnumerable<IEnumerable<KeyValuePair<string, Atom>>> data)
         {
             var result = data.ToArray();
             return result.All(item => item is ComputationResult)
@@ -92,13 +92,13 @@ namespace SymbolicDifferentiation.Core.Computation
                 new KeyValuePair<string, FastFunction>(item.Key,
                                                        FuncConvert.ToFastFunc(
                                                            (Converter
-                                                               <IEnumerable<IEnumerable<KeyValuePair<string, double>>>,
-                                                               IEnumerable<KeyValuePair<string, double>>>)
+                                                               <IEnumerable<IEnumerable<KeyValuePair<string, Atom>>>,
+                                                               IEnumerable<KeyValuePair<string, Atom>>>)
                                                            (arg => item.Value(arg))))).ToDictionary(item => item.Key,
                                                                                                     item => item.Value);
         }
 
-        private static Function EnumerableToFunction(IEnumerable<KeyValuePair<string, double>> item)
+        private static Function EnumerableToFunction(IEnumerable<KeyValuePair<string, Atom>> item)
         {
             return input => item;
         }
@@ -108,7 +108,7 @@ namespace SymbolicDifferentiation.Core.Computation
             return input => item.Body.Invoke(ToFastFunc(CreateInputDictionary(input, item.Args)));
         }
 
-        private static IDictionary<string, Function> CreateInputDictionary(IEnumerable<IEnumerable<KeyValuePair<string, double>>> input, IEnumerable<string> args)
+        private static IDictionary<string, Function> CreateInputDictionary(IEnumerable<IEnumerable<KeyValuePair<string, Atom>>> input, IEnumerable<string> args)
         {
             var argsEnumerator = args.GetEnumerator();
             var inputEnumerator = input.GetEnumerator();

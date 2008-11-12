@@ -16,55 +16,56 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using SymbolicDifferentiation.Core.Computation;
 using SymbolicDifferentiation.Core.Extensions;
 
 namespace SymbolicDifferentiation.Computation
 {
     public static class ParallelFunctions
     {
-        public static IEnumerable<KeyValuePair<string, double>> Add(IEnumerable<IEnumerable<KeyValuePair<string, double>>> input)
+        public static IEnumerable<KeyValuePair<string, Atom>> Add(IEnumerable<IEnumerable<KeyValuePair<string, Atom>>> input)
         {
-            return input.Combine(item => item.Aggregate((x, y) => new KeyValuePair<string, double>(x.Key, x.Value + y.Value)));
+            return input.Combine(item => item.Aggregate((x, y) => new KeyValuePair<string, Atom>(x.Key, x.Value + y.Value)));
         }
 
-        public static IEnumerable<KeyValuePair<string, double>> Sub(IEnumerable<IEnumerable<KeyValuePair<string, double>>> input)
+        public static IEnumerable<KeyValuePair<string, Atom>> Sub(IEnumerable<IEnumerable<KeyValuePair<string, Atom>>> input)
         {
-            return input.Combine(item => item.Aggregate((x, y) => new KeyValuePair<string, double>(x.Key, x.Value - y.Value)));
+            return input.Combine(item => item.Aggregate((x, y) => new KeyValuePair<string, Atom>(x.Key, x.Value - y.Value)));
         }
 
-        public static IEnumerable<KeyValuePair<string, double>> Mul(IEnumerable<IEnumerable<KeyValuePair<string, double>>> input)
+        public static IEnumerable<KeyValuePair<string, Atom>> Mul(IEnumerable<IEnumerable<KeyValuePair<string, Atom>>> input)
         {
-            return input.Combine(item => item.Aggregate((x, y) => new KeyValuePair<string, double>(x.Key, x.Value * y.Value)));
+            return input.Combine(item => item.Aggregate((x, y) => new KeyValuePair<string, Atom>(x.Key, x.Value * y.Value)));
         }
 
-        public static IEnumerable<KeyValuePair<string, double>> Pow(IEnumerable<IEnumerable<KeyValuePair<string, double>>> input)
+        public static IEnumerable<KeyValuePair<string, Atom>> Pow(IEnumerable<IEnumerable<KeyValuePair<string, Atom>>> input)
         {
-            return input.Combine(item => item.Aggregate((x, y) => new KeyValuePair<string, double>(x.Key, Math.Pow(x.Value, y.Value))));
+            return input.Combine(item => item.Aggregate((x, y) => new KeyValuePair<string, Atom>(x.Key, x.Value ^ y.Value)));
         }
 
-        public static IEnumerable<KeyValuePair<string, double>> Max(IEnumerable<IEnumerable<KeyValuePair<string, double>>> input)
+        public static IEnumerable<KeyValuePair<string, Atom>> Max(IEnumerable<IEnumerable<KeyValuePair<string, Atom>>> input)
         {
             return input.Combine(item => item.Aggregate((x, y) => x.Value > y.Value ? x : y));
         }
 
-        public static IEnumerable<KeyValuePair<string, double>> Div(IEnumerable<IEnumerable<KeyValuePair<string, double>>> input)
+        public static IEnumerable<KeyValuePair<string, Atom>> Div(IEnumerable<IEnumerable<KeyValuePair<string, Atom>>> input)
         {
-            return input.Combine(item => item.Aggregate((x, y) => new KeyValuePair<string, double>(x.Key, x.Value / y.Value)));
+            return input.Combine(item => item.Aggregate((x, y) => new KeyValuePair<string, Atom>(x.Key, x.Value / y.Value)));
         }
 
-        public static IEnumerable<KeyValuePair<string, double>> Data(IEnumerable<KeyValuePair<string, double>> data)
+        public static IEnumerable<KeyValuePair<string, Atom>> Data(IEnumerable<KeyValuePair<string, Atom>> data)
         {
             return data;
         }
 
-        public static IEnumerable<KeyValuePair<string, double>> GreaterThan(IEnumerable<IEnumerable<KeyValuePair<string, double>>> input)
+        public static IEnumerable<KeyValuePair<string, Atom>> GreaterThan(IEnumerable<IEnumerable<KeyValuePair<string, Atom>>> input)
         {
-            return input.Combine(item => item.Aggregate((x, y) => new KeyValuePair<string, double>(x.Key, x.Value > y.Value ? 1 : -1)));
+            return input.Combine(item => item.Aggregate((x, y) => new KeyValuePair<string, Atom>(x.Key, x.Value > y.Value)));
         }
 
-        public static IEnumerable<KeyValuePair<string, double>> LessThan(IEnumerable<IEnumerable<KeyValuePair<string, double>>> input)
+        public static IEnumerable<KeyValuePair<string, Atom>> LessThan(IEnumerable<IEnumerable<KeyValuePair<string, Atom>>> input)
         {
-            return input.Combine(item => item.Aggregate((x, y) => new KeyValuePair<string, double>(x.Key, x.Value < y.Value ? 1 : -1)));
+            return input.Combine(item => item.Aggregate((x, y) => new KeyValuePair<string, Atom>(x.Key, x.Value < y.Value)));
         }
     }
 }

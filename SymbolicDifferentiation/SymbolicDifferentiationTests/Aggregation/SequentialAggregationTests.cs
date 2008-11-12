@@ -15,12 +15,13 @@
 
 using System;
 using System.Collections.Generic;
+using SymbolicDifferentiation.Core.Computation;
 
 namespace SymbolicDifferentiation.Tests.Aggregation
 {
     public class SequentialAggregationTests : AggregationTests
     {
-        protected override IDictionary<string, Func<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>>> Compute(string input)
+        protected override IDictionary<string, Func<IEnumerable<IEnumerable<KeyValuePair<string, Atom>>>, IEnumerable<KeyValuePair<string, Atom>>>> Compute(string input)
         {
             return ComputeSequential(input, 3);
         }

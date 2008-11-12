@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using SymbolicDifferentiation.Core.Computation;
 
 namespace SymbolicDifferentiation.Core.Tokens
 {
@@ -95,8 +96,8 @@ namespace SymbolicDifferentiation.Core.Tokens
 
         public T GetValue<T>()
         {
-            if (typeof(T) == typeof(KeyValuePair<string, double>))
-                return (T)Activator.CreateInstance(typeof(T), Type.ToString(), (double)Convert.ChangeType(Value, typeof (double)));
+            if (typeof(T) == typeof(KeyValuePair<string, Atom>))
+                return (T)Activator.CreateInstance(typeof(T), Type.ToString(), Activator.CreateInstance(typeof(Atom), Value));
             return (T)Convert.ChangeType(Value, typeof(T));
         }
     }

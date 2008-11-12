@@ -18,12 +18,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using NUnit.Framework;
+using SymbolicDifferentiation.Core.Computation;
 
 namespace SymbolicDifferentiation.Tests.Aggregation
 {
     public class ParallelAggregationTests : AggregationTests
     {
-        protected override IDictionary<string, Func<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>>> Compute(string input)
+        protected override IDictionary<string, Func<IEnumerable<IEnumerable<KeyValuePair<string, Atom>>>, IEnumerable<KeyValuePair<string, Atom>>>> Compute(string input)
         {
             return ComputeParallel(input, 3);
         }
@@ -36,10 +37,10 @@ namespace SymbolicDifferentiation.Tests.Aggregation
 
             const int _size = 1000000;
 
-            _data = new Dictionary<string, IEnumerable<KeyValuePair<string, double>>>
+            _data = new Dictionary<string, IEnumerable<KeyValuePair<string, Atom>>>
                         {
-                            {"A", Enumerable.Range(0, _size).Select(i => new KeyValuePair<string,double>("", i + .0))},
-                            {"B", Enumerable.Range(_size, _size).Select(i => new KeyValuePair<string,double>("", i + .0))},
+                            {"A", Enumerable.Range(0, _size).Select(i => new KeyValuePair<string,Atom>("", i + .0))},
+                            {"B", Enumerable.Range(_size, _size).Select(i => new KeyValuePair<string,Atom>("", i + .0))},
                         };
 
 
@@ -47,13 +48,13 @@ namespace SymbolicDifferentiation.Tests.Aggregation
             watch.Reset();
             Console.WriteLine("Start sequential...");
             watch.Start();
-            var result2 = ComputeSequential(expression, _size)["X"](new[]{new KeyValuePair<string, double>[0]}).Select(item => item.Value).ToArray();
+            var result2 = ComputeSequential(expression, _size)["X"](new[]{new KeyValuePair<string, Atom>[0]}).Select(item => item.Value).ToArray();
             watch.Stop();
             Console.WriteLine("Sequential elapsed:{0}", watch.Elapsed);
             watch.Reset();
             Console.WriteLine("Start parallel...");
             watch.Start();
-            var result = ComputeParallel(expression, _size)["X"](new[]{new KeyValuePair<string, double>[0]}).Select(item => item.Value).ToArray();
+            var result = ComputeParallel(expression, _size)["X"](new[]{new KeyValuePair<string, Atom>[0]}).Select(item => item.Value).ToArray();
             watch.Stop();
             Console.WriteLine("Parallel elapsed:{0}", watch.Elapsed);
 

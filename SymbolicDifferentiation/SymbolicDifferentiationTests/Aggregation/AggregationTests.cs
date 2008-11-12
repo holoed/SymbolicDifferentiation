@@ -19,6 +19,7 @@ using System.Linq;
 using Microsoft.FSharp.Core;
 using NUnit.Framework;
 using SymbolicDifferentiation.Computation;
+using SymbolicDifferentiation.Core.Computation;
 using SymbolicDifferentiation.Core.Tokens;
 using SymbolicDifferentiation.Extensions;
 
@@ -27,101 +28,99 @@ namespace SymbolicDifferentiation.Tests.Aggregation
     [TestFixture]
     public abstract class AggregationTests
     {
-        protected static IDictionary<string, IEnumerable<KeyValuePair<string, double>>> _data = new Dictionary<string, IEnumerable<KeyValuePair<string, double>>>
+        protected static IDictionary<string, IEnumerable<KeyValuePair<string, Atom>>> _data = new Dictionary<string, IEnumerable<KeyValuePair<string, Atom>>>
                         {
-                            {"A", Enumerable.Range(1, 3).Select(i => new KeyValuePair<string,double>(i.ToString(), i + .0))},
-                            {"B", Enumerable.Range(5, 3).Select(i => new KeyValuePair<string,double>(i.ToString(), i + .0))},
-                            {"C", Enumerable.Range(9, 3).Select(i => new KeyValuePair<string,double>(i.ToString(), i + .0))},
-                            {"D", Enumerable.Range(30,3).Select(i => new KeyValuePair<string,double>(i.ToString(), i + .0))},
+                            {"A", Enumerable.Range(1, 3).Select(i => new KeyValuePair<string,Atom>(i.ToString(), i + .0))},
+                            {"B", Enumerable.Range(5, 3).Select(i => new KeyValuePair<string,Atom>(i.ToString(), i + .0))},
+                            {"C", Enumerable.Range(9, 3).Select(i => new KeyValuePair<string,Atom>(i.ToString(), i + .0))},
+                            {"D", Enumerable.Range(30,3).Select(i => new KeyValuePair<string,Atom>(i.ToString(), i + .0))},
                         };
 
-        public static IDictionary<string, FastFunc<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>>> Funcs = new Dictionary<string, FastFunc<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>>>
+        public static IDictionary<string, FastFunc<IEnumerable<IEnumerable<KeyValuePair<string, Atom>>>, IEnumerable<KeyValuePair<string, Atom>>>> Funcs = new Dictionary<string, FastFunc<IEnumerable<IEnumerable<KeyValuePair<string, Atom>>>, IEnumerable<KeyValuePair<string, Atom>>>>
                                               {
-                                                  {"A", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(input => ParallelFunctions.Data(_data["A"]))},
-                                                  {"B", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(input => ParallelFunctions.Data(_data["B"]))},
-                                                  {"C", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(input => ParallelFunctions.Data(_data["C"]))},
-                                                  {"D", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(input => ParallelFunctions.Data(_data["D"]))},
+                                                  {"A", ToFastFunc<IEnumerable<KeyValuePair<string,Atom>>>(input => ParallelFunctions.Data(_data["A"]))},
+                                                  {"B", ToFastFunc<IEnumerable<KeyValuePair<string,Atom>>>(input => ParallelFunctions.Data(_data["B"]))},
+                                                  {"C", ToFastFunc<IEnumerable<KeyValuePair<string,Atom>>>(input => ParallelFunctions.Data(_data["C"]))},
+                                                  {"D", ToFastFunc<IEnumerable<KeyValuePair<string,Atom>>>(input => ParallelFunctions.Data(_data["D"]))},
                                                   
-                                                  {"GreaterThan", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(ParallelFunctions.GreaterThan)},
-                                                  {"LessThan", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(ParallelFunctions.LessThan)},
-                                                  {"Add", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(ParallelFunctions.Add)},
-                                                  {"Sub", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(ParallelFunctions.Sub)},                                                  
-                                                  {"Mul", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(ParallelFunctions.Mul)},
-                                                  {"Div", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(ParallelFunctions.Div)},
-                                                  {"Pow", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(ParallelFunctions.Pow)},
-                                                  {"Max", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(ParallelFunctions.Max)}
+                                                  {"GreaterThan", ToFastFunc<IEnumerable<KeyValuePair<string,Atom>>>(ParallelFunctions.GreaterThan)},
+                                                  {"LessThan", ToFastFunc<IEnumerable<KeyValuePair<string,Atom>>>(ParallelFunctions.LessThan)},
+                                                  {"Add", ToFastFunc<IEnumerable<KeyValuePair<string,Atom>>>(ParallelFunctions.Add)},
+                                                  {"Sub", ToFastFunc<IEnumerable<KeyValuePair<string,Atom>>>(ParallelFunctions.Sub)},                                                  
+                                                  {"Mul", ToFastFunc<IEnumerable<KeyValuePair<string,Atom>>>(ParallelFunctions.Mul)},
+                                                  {"Div", ToFastFunc<IEnumerable<KeyValuePair<string,Atom>>>(ParallelFunctions.Div)},
+                                                  {"Pow", ToFastFunc<IEnumerable<KeyValuePair<string,Atom>>>(ParallelFunctions.Pow)},
+                                                  {"Max", ToFastFunc<IEnumerable<KeyValuePair<string,Atom>>>(ParallelFunctions.Max)}
                                               };
 
-        public static readonly KeyValuePair<string, double>[][] Empty = new[] { new KeyValuePair<string, double>[0] };
+        public static readonly KeyValuePair<string, Atom>[][] Empty = new[] { new KeyValuePair<string, Atom>[0] };
 
         [Test]
         public void GreaterThan()
         {
-            //CollectionAssert.AreEqual(new[] { false, false, false }, ComputeSingle("A > B"));
-            CollectionAssert.AreEqual(new[] { -1.0, -1.0, -1.0 }, ComputeSingle("A > B"));
+            CollectionAssert.AreEqual(new Atom[] { false, false, false }, ComputeSingle("A > B"));
         }
 
         [Test]
         public void LessThan()
         {
-            //CollectionAssert.AreEqual(new[] { true, true, true }, ComputeSingle("A < B"));
-            CollectionAssert.AreEqual(new[] { 1.0, 1.0, 1.0 }, ComputeSingle("A < B"));
+            CollectionAssert.AreEqual(new Atom[] { true, true, true }, ComputeSingle("A < B"));
         }
 
         [Test]
         public void Add()
         {
-            CollectionAssert.AreEqual(new[] { 6, 8, 10 }, ComputeSingle("A + B"));
+            CollectionAssert.AreEqual(new Atom[] { 6, 8, 10 }, ComputeSingle("A + B"));
         }
 
         [Test]
         public void Sub()
         {
-            CollectionAssert.AreEqual(new[] { 1-5, 2-6, 3-7 }, ComputeSingle("A - B"));
+            CollectionAssert.AreEqual(new Atom[] { 1-5, 2-6, 3-7 }, ComputeSingle("A - B"));
         }
 
         [Test]
         public void Mul()
         {
-            CollectionAssert.AreEqual(new[] { 5, 12, 21 }, ComputeSingle("A * B"));
+            CollectionAssert.AreEqual(new Atom[] { 5, 12, 21 }, ComputeSingle("A * B"));
         }
 
         [Test]
         public void Div()
         {
-            CollectionAssert.AreEqual(new[] { 1d/5d, 2d/6d, 3d/7d }, ComputeSingle("A / B"));
+            CollectionAssert.AreEqual(new Atom[] { 1d/5d, 2d/6d, 3d/7d }, ComputeSingle("A / B"));
         }
 
         [Test]
         public void AddMul()
         {
-            CollectionAssert.AreEqual(new[] { 6, 16, 30 }, ComputeSingle("(A + B) * A"));
+            CollectionAssert.AreEqual(new Atom[] { 6, 16, 30 }, ComputeSingle("(A + B) * A"));
         }
 
         [Test]
         public void AddToConstant()
         {
-            CollectionAssert.AreEqual(new[] { 11, 12, 13 }, ComputeSingle("A + 10"));
-            CollectionAssert.AreEqual(new[] { 15, 16, 17 }, ComputeSingle("B + 10"));
+            CollectionAssert.AreEqual(new Atom[] { 11, 12, 13 }, ComputeSingle("A + 10"));
+            CollectionAssert.AreEqual(new Atom[] { 15, 16, 17 }, ComputeSingle("B + 10"));
         }
 
         [Test]
         public void AddMulToConstant()
         {
-            CollectionAssert.AreEqual(new[] { 12, 16, 20 }, ComputeSingle("2 * (A + B)"));
+            CollectionAssert.AreEqual(new Atom[] { 12, 16, 20 }, ComputeSingle("2 * (A + B)"));
         }
 
         [Test]
         public void Pow()
         {
-            CollectionAssert.AreEqual(new[] { 1, 4, 9 }, ComputeSingle("A^2"));
-            CollectionAssert.AreEqual(new[] { 36, 64, 100 }, ComputeSingle("(A + B)^2"));
+            CollectionAssert.AreEqual(new Atom[] { 1, 4, 9 }, ComputeSingle("A^2"));
+            CollectionAssert.AreEqual(new Atom[] { 36, 64, 100 }, ComputeSingle("(A + B)^2"));
         }
 
         [Test]
         public void Polynomial()
         {
-            CollectionAssert.AreEqual(new[] { 190, 305, 526 }, ComputeSingle("8*A^3 + 5*B^2 + 3*C + D"));
+            CollectionAssert.AreEqual(new Atom[] { 190, 305, 526 }, ComputeSingle("8*A^3 + 5*B^2 + 3*C + D"));
         }
 
         [Test]
@@ -143,7 +142,7 @@ namespace SymbolicDifferentiation.Tests.Aggregation
         {
             var compute = Compute("X = 2 + 3");
            Assert.IsTrue(compute.ContainsKey("X"));
-            CollectionAssert.AreEqual(new[] {new KeyValuePair<string, double>(MatchType.Number.ToString(), 5)},
+            CollectionAssert.AreEqual(new[] {new KeyValuePair<string, Atom>(MatchType.Number.ToString(), 5)},
                                       compute["X"](Empty).ToArray());
         }
 
@@ -155,14 +154,14 @@ namespace SymbolicDifferentiation.Tests.Aggregation
             Assert.IsTrue(compute.ContainsKey("X"));
             CollectionAssert.AreEqual(new[]
                                           {
-                                              new KeyValuePair<string, double>(MatchType.Number.ToString(), 5),
+                                              new KeyValuePair<string, Atom>(MatchType.Number.ToString(), 5),
                                           }, compute["X"](Empty).ToArray());
 
             CollectionAssert.AreEqual(new[]
                                           {
-                                              new KeyValuePair<string, double>("9", 14),
-                                              new KeyValuePair<string, double>("10", 15),
-                                              new KeyValuePair<string, double>("11", 16)
+                                              new KeyValuePair<string, Atom>("9", 14),
+                                              new KeyValuePair<string, Atom>("10", 15),
+                                              new KeyValuePair<string, Atom>("11", 16)
                                           }, compute["Y"](Empty).ToArray());        
         }
 
@@ -233,31 +232,31 @@ namespace SymbolicDifferentiation.Tests.Aggregation
                 k);
         }
 
-        private IEnumerable<double> ComputeSingle(string input)
+        private IEnumerable<Atom> ComputeSingle(string input)
         {
             return Compute(input)[""](Empty).Select(item => item.Value).ToArray();
         }
 
-        protected abstract IDictionary<string, Func<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>>> Compute(string input);
+        protected abstract IDictionary<string, Func<IEnumerable<IEnumerable<KeyValuePair<string, Atom>>>, IEnumerable<KeyValuePair<string, Atom>>>> Compute(string input);
 
         public static FastFunc<IEnumerable<T>, T> ToFastFunc<T>(Converter<IEnumerable<T>, T> func)
         {
             return FuncConvert.ToFastFunc(func);
         }
 
-        protected IDictionary<string, Func<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>>> ComputeParallel(string input, int size)
+        protected IDictionary<string, Func<IEnumerable<IEnumerable<KeyValuePair<string, Atom>>>, IEnumerable<KeyValuePair<string, Atom>>>> ComputeParallel(string input, int size)
         {
             return input.FSTokenize().FSParse().FSParallelComputation(Funcs)().ToDictionary(item => item.Key,
                                                                                               item => ConvertToFunc(item.Value));
         }
 
-        protected IDictionary<string, Func<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>>> ComputeSequential(string input, int size)
+        protected IDictionary<string, Func<IEnumerable<IEnumerable<KeyValuePair<string, Atom>>>, IEnumerable<KeyValuePair<string, Atom>>>> ComputeSequential(string input, int size)
         {
             return input.FSTokenize().FSParse().FSSequentialComputation(Funcs)().ToDictionary(item => item.Key,
                                                                                               item => ConvertToFunc(item.Value));
         }
 
-        public static Func<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>> ConvertToFunc(FastFunc<IEnumerable<IEnumerable<KeyValuePair<string, double>>>, IEnumerable<KeyValuePair<string, double>>> value)
+        public static Func<IEnumerable<IEnumerable<KeyValuePair<string, Atom>>>, IEnumerable<KeyValuePair<string, Atom>>> ConvertToFunc(FastFunc<IEnumerable<IEnumerable<KeyValuePair<string, Atom>>>, IEnumerable<KeyValuePair<string, Atom>>> value)
         {
             return arg => value.Invoke(arg);
         }
