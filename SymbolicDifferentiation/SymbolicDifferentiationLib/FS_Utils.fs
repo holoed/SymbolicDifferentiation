@@ -44,6 +44,8 @@ let rec private toFsVisitor =
       | IsOp("*") result -> left * right
       | IsOp("/") result -> left / right
       | IsOp("^") result -> Pow (left, x.Right.Accept toFsVisitor)
+      | IsOp(">") result -> GreaterThan(left, right)
+      | IsOp("<") result -> LessThan(left, right)
       | _ -> failwith "unknown operator"
    member v.Visit(x : Expression) = 
       if (x.IsNumber) then

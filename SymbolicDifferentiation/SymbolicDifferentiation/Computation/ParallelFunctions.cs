@@ -56,5 +56,15 @@ namespace SymbolicDifferentiation.Computation
         {
             return data;
         }
+
+        public static IEnumerable<KeyValuePair<string, double>> GreaterThan(IEnumerable<IEnumerable<KeyValuePair<string, double>>> input)
+        {
+            return input.Combine(item => item.Aggregate((x, y) => new KeyValuePair<string, double>(x.Key, x.Value > y.Value ? 1 : -1)));
+        }
+
+        public static IEnumerable<KeyValuePair<string, double>> LessThan(IEnumerable<IEnumerable<KeyValuePair<string, double>>> input)
+        {
+            return input.Combine(item => item.Aggregate((x, y) => new KeyValuePair<string, double>(x.Key, x.Value < y.Value ? 1 : -1)));
+        }
     }
 }

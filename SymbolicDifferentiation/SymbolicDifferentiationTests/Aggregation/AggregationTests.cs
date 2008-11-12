@@ -42,6 +42,8 @@ namespace SymbolicDifferentiation.Tests.Aggregation
                                                   {"C", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(input => ParallelFunctions.Data(_data["C"]))},
                                                   {"D", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(input => ParallelFunctions.Data(_data["D"]))},
                                                   
+                                                  {"GreaterThan", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(ParallelFunctions.GreaterThan)},
+                                                  {"LessThan", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(ParallelFunctions.LessThan)},
                                                   {"Add", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(ParallelFunctions.Add)},
                                                   {"Sub", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(ParallelFunctions.Sub)},                                                  
                                                   {"Mul", ToFastFunc<IEnumerable<KeyValuePair<string,double>>>(ParallelFunctions.Mul)},
@@ -51,6 +53,20 @@ namespace SymbolicDifferentiation.Tests.Aggregation
                                               };
 
         public static readonly KeyValuePair<string, double>[][] Empty = new[] { new KeyValuePair<string, double>[0] };
+
+        [Test]
+        public void GreaterThan()
+        {
+            //CollectionAssert.AreEqual(new[] { false, false, false }, ComputeSingle("A > B"));
+            CollectionAssert.AreEqual(new[] { -1.0, -1.0, -1.0 }, ComputeSingle("A > B"));
+        }
+
+        [Test]
+        public void LessThan()
+        {
+            //CollectionAssert.AreEqual(new[] { true, true, true }, ComputeSingle("A < B"));
+            CollectionAssert.AreEqual(new[] { 1.0, 1.0, 1.0 }, ComputeSingle("A < B"));
+        }
 
         [Test]
         public void Add()

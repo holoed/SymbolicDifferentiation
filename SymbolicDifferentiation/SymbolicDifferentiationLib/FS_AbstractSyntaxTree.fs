@@ -14,6 +14,8 @@
 type Expression<'a> = 
     | Variable of string
     | Number of 'a
+    | GreaterThan of Expression<'a> * Expression<'a>
+    | LessThan of Expression<'a> * Expression<'a>
     | Add of Expression<'a> * Expression<'a>
     | Sub of Expression<'a> * Expression<'a>
     | Mul of Expression<'a> * Expression<'a>
