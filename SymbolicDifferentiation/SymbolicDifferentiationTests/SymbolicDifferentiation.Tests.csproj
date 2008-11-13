@@ -54,9 +54,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Aggregation\AggregationTests.cs" />
-    <Compile Include="Aggregation\ParallelAggregationTests.cs" />
-    <Compile Include="Aggregation\SequentialAggregationTests.cs" />
+    <Compile Include="Computation\ComputationTests.cs" />
+    <Compile Include="Computation\ParallelComputationTests.cs" />
+    <Compile Include="Computation\SequentialComputationTests.cs" />
     <Compile Include="ExpressionToStringTests.cs" />
     <Compile Include="Parsers\FSParserTests.cs" />
     <Compile Include="Parsers\CSParserTests.cs" />

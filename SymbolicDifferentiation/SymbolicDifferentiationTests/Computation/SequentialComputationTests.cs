@@ -17,9 +17,9 @@ using System;
 using System.Collections.Generic;
 using SymbolicDifferentiation.Core.Computation;
 
-namespace SymbolicDifferentiation.Tests.Aggregation
+namespace SymbolicDifferentiation.Tests.Computation
 {
-    public class SequentialAggregationTests : AggregationTests
+    public class SequentialComputationTests : ComputationTests
     {
         protected override IDictionary<string, Func<IEnumerable<IEnumerable<KeyValuePair<string, Atom>>>, IEnumerable<KeyValuePair<string, Atom>>>> Compute(string input)
         {

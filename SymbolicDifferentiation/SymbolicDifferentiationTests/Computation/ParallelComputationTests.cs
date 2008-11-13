@@ -20,9 +20,9 @@ using System.Linq;
 using NUnit.Framework;
 using SymbolicDifferentiation.Core.Computation;
 
-namespace SymbolicDifferentiation.Tests.Aggregation
+namespace SymbolicDifferentiation.Tests.Computation
 {
-    public class ParallelAggregationTests : AggregationTests
+    public class ParallelComputationTests : ComputationTests
     {
         protected override IDictionary<string, Func<IEnumerable<IEnumerable<KeyValuePair<string, Atom>>>, IEnumerable<KeyValuePair<string, Atom>>>> Compute(string input)
         {
