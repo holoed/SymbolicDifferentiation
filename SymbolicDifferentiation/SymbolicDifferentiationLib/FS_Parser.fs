@@ -28,7 +28,7 @@ and p1 =         p2 |> chainl1 <| cmpOp
 and p2 =         p3 |> chainl1 <| addOp
 and p3 =         p4 |> chainl1 <| mulOp
 and p4 =         p5 |> chainr1 <| expOp
-and p5 = attempt declWithArgs <|> decl <|> app <|> digitVal <|> paren
+and p5 = attempt declWithArgs <|> decl <|> attempt cond <|> app <|> digitVal <|> paren
 
 //Parenthesis around expressions to define precedence
 and paren = parse { let! _ = Literal (TokenBuilder.Symbol("(")) 0
@@ -43,6 +43,16 @@ and app =   parse { let! name = FollowedBy(sat (fun x -> x.Type = MatchType.Vari
                     let! _ = Literal (TokenBuilder.Symbol(")")) 0
                     return SymbolicDifferentiation.Core.AST.FunctionApplicationExpression.Create(name, Array.of_list e) }
  
+//Conditional expression
+and cond =   parse { let! _ = Literal (TokenBuilder.Symbol("(")) 0
+                     let! condition = expr
+                     let! _ = Literal (TokenBuilder.Symbol(")")) 0
+                     let! _ = Literal (TokenBuilder.Symbol("?")) 0
+                     let! success = expr
+                     let! _ = Literal (TokenBuilder.Symbol(":")) 0
+                     let! failure = expr
+                     return SymbolicDifferentiation.Core.AST.ConditionalExpression.Create(condition, success, failure) }
+
 //Function declaration
 and decl =   parse { let! name = FollowedBy(sat (fun x -> x.Type = MatchType.Variable ), (fun r -> sat (fun x -> x.Value.Equals "="))) 
                      let! _ = Literal (TokenBuilder.Symbol("=")) 0

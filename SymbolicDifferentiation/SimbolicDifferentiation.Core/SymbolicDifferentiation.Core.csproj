@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AST\BinaryExpression.cs" />
+    <Compile Include="AST\ConditionalExpression.cs" />
     <Compile Include="AST\Expression.cs" />
     <Compile Include="AST\FunctionApplicationExpression.cs" />
     <Compile Include="AST\FunctionDeclarationExpression.cs" />

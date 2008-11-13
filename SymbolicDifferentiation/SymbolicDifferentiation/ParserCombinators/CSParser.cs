@@ -29,7 +29,7 @@ namespace SymbolicDifferentiation.ParserCombinators
             var cmpOp = (new Symbol(">") > ((x, y) => x > y)).Or(new Symbol("<") > ((x, y) => x < y)).Tag("greater than/less than op");
             var expOp = (new Symbol("^") > ((x, y) => x ^ y)).Tag("exponentiation op");
 
-            P<Expression> paren, p1, p2, p3, p4,p5, expr = null, app, decl, declWithArgs;
+            P<Expression> paren, p1, p2, p3, p4,p5, expr = null, app, cond, decl, declWithArgs;
 
             paren = from o in new Symbol("(").Literal()
                     from e in expr
@@ -45,6 +45,17 @@ namespace SymbolicDifferentiation.ParserCombinators
                 from e in expr.SepBy(new Symbol(",").Literal())
                 from c in new Symbol(")").Literal()
                 select FunctionApplicationExpression.Create(name, e.ToArray());
+
+            // Conditional expression
+            cond =
+                from o in new Symbol("(").Literal()
+                from condition in expr
+                from c in new Symbol(")").Literal()
+                from e in new Symbol("?").Literal()
+                from success in expr
+                from a in new Symbol(":").Literal()
+                from failure in expr
+                select ConditionalExpression.Create(condition, success, failure);
 
             // Function application
             decl =
@@ -67,7 +78,7 @@ namespace SymbolicDifferentiation.ParserCombinators
                 from body in expr
                 select FunctionDeclarationExpression.CreateWithArgs(name, args, body);
 
-            p5 = declWithArgs.Attempt().Or(decl).Or(app).Or(CSParserLib.DigitVal).Or(paren);
+            p5 = declWithArgs.Attempt().Or(decl).Or(cond.Attempt()).Or(app).Or(CSParserLib.DigitVal).Or(paren);
             p4 =   p5.Chainr1(expOp);
             p3 =   p4.Chainl1(mulOp);
             p2 =   p3.Chainl1(addOp);

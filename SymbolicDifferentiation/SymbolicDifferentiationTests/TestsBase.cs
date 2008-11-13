@@ -45,5 +45,10 @@ namespace SymbolicDifferentiation.Tests
         {
             return FunctionDeclarationExpression.CreateWithArgs(TokenBuilder.Variable(name), args, body);
         }
+
+        protected static Expression Conditional(Expression condition, Expression success, Expression failure)
+        {
+            return ConditionalExpression.Create(condition, success, failure);
+        }
     }
 }

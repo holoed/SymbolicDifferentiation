@@ -257,5 +257,17 @@ namespace SymbolicDifferentiation.Tests.Parsers
         {
             ExpressionAssert.AreEqual(((Number(3) + Variable("x")) * Number(2)) < (Number(2) + (Variable("x") * Number(3))), Parse(Tokenizer.Tokenize("(3 + x) * 2 < 2 + x * 3")));
         }
+
+        [Test]
+        public void ConditionalExpression()
+        {
+            ExpressionAssert.AreEqual(Conditional(Variable("x") > Number(1), Number(2), Number(3)), Parse(Tokenizer.Tokenize("(x > 1) ? 2 : 3")));
+        }
+
+        [Test]
+        public void ConditionalExpressionWithAdditionSubtraction()
+        {
+            ExpressionAssert.AreEqual(Conditional(Variable("x") + Variable("y") > Number(1), Number(2) + Variable("x"), Number(3) - Variable("y")), Parse(Tokenizer.Tokenize("(x + y > 1) ? 2 + x : 3 - y")));
+        }
     }
 }
