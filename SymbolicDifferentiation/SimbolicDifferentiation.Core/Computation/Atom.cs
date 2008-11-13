@@ -6,10 +6,7 @@ namespace SymbolicDifferentiation.Core.Computation
     {
         private readonly double _doubleValue;
         private readonly bool _boolValue;
-        private enum UnionType
-        {
-            Double, Bool
-        } UnionType _type;
+        private enum UnionType { Double, Bool } readonly UnionType _type;
 
         public Atom()
         {}

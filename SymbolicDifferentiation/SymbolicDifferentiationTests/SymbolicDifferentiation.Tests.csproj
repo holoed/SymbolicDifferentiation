@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Computation\AtomTests.cs" />
     <Compile Include="Computation\ComputationTests.cs" />
     <Compile Include="Computation\ParallelComputationTests.cs" />
     <Compile Include="Computation\SequentialComputationTests.cs" />
