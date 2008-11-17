@@ -32,6 +32,11 @@ namespace SymbolicDifferentiation.Visitors
             throw new NotImplementedException();
         }
 
+        public Expression Visit(ConditionalExpression expression)
+        {
+            throw new System.NotImplementedException();
+        }
+
         Expression IExpressionVisitor<Expression>.Visit(BinaryExpression expression)
         {
             if (IsOperation(expression, "+"))

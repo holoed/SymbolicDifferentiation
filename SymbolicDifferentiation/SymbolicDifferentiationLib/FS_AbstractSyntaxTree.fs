@@ -23,6 +23,7 @@ type Expression<'a> =
     | Pow of Expression<'a> * Expression<'a>
     | FunApp of string * Expression<'a> seq
     | FunDecl of string * Expression<'a> seq * Expression<'a>
+    | Cond of Expression<'a> * Expression<'a> * Expression<'a>
     static member (+) (x:Expression<'a>, y:Expression<'a>) = Add(x,y)
     static member (-) (x:Expression<'a>, y:Expression<'a>) = Sub(x,y)
     static member (*) (x:Expression<'a>, y:Expression<'a>) = Mul(x,y)

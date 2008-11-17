@@ -21,6 +21,7 @@ namespace SymbolicDifferentiation.Core.AST
     {
         T Visit(FunctionDeclarationExpression expression);
         T Visit(FunctionApplicationExpression expression);
+        T Visit(ConditionalExpression expression);
         T Visit(BinaryExpression expression);
         T Visit(Expression expression);
     }

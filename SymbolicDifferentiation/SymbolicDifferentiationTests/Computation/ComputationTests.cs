@@ -232,6 +232,18 @@ namespace SymbolicDifferentiation.Tests.Computation
                 k);
         }
 
+        [Test]
+        public void ConditionalExpressionGreaterThan()
+        {
+            CollectionAssert.AreEqual(new Atom[] { 5, 6, 7 }, ComputeSingle("(A > B) ? A : B"));
+        }
+
+        [Test]
+        public void ConditionalExpressionLessThan()
+        {
+            CollectionAssert.AreEqual(new Atom[] { 1, 2, 3 }, ComputeSingle("(A < B) ? A : B"));
+        }
+
         private IEnumerable<Atom> ComputeSingle(string input)
         {
             return Compute(input)[""](Empty).Select(item => item.Value).ToArray();

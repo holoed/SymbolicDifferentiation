@@ -35,6 +35,11 @@ let rec private toFsVisitor =
       let name = toString x.Name
       let args = Seq.map(fun (arg : Expression) -> (arg.Accept toFsVisitor)) x.Arguments;
       FunApp(name, args)
+   member v.Visit(x : ConditionalExpression) : FS_AbstractSyntaxTree.Expression<'a> = 
+      let condition = x.Condition.Accept toFsVisitor
+      let success = x.Success.Accept toFsVisitor
+      let failure = x.Failure.Accept toFsVisitor
+      Cond(condition, success, failure)
    member v.Visit(x : BinaryExpression ) =  
       let left = x.Left.Accept toFsVisitor
       let right = x.Right.Accept toFsVisitor
@@ -71,6 +76,8 @@ let rec ToCs (x : FS_AbstractSyntaxTree.Expression<float>) =
             FunctionApplicationExpression.Create(TokenBuilder.Variable(name), Seq.map ToCs args |> Array.of_seq)
         | FunDecl(name, args, body) -> 
             FunctionDeclarationExpression.CreateWithArgs(TokenBuilder.Variable(name), Seq.map ToCs args |> Array.of_seq, ToCs body)
+        | Cond(condition, success, failure) ->
+            ConditionalExpression.Create(ToCs(condition), ToCs(success), ToCs(failure))
 
 // Converts from F# Quotations AST to C# AST
 let rec FromQuoteToCs(input : Quotations.Expr): Expression = 

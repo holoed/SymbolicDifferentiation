@@ -37,6 +37,11 @@ namespace SymbolicDifferentiation.Visitors
             throw new NotImplementedException();
         }
 
+        public Unit Visit(ConditionalExpression expression)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public Unit Visit(BinaryExpression expression)
         {
             expression.Left.Accept(this);

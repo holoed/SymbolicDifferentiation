@@ -109,5 +109,19 @@ namespace SymbolicDifferentiation.Tests.Computation
             Atom right = true;
             var result = left + right;
         }
+
+        [Test]
+        public void AtomBoolEqual()
+        {
+            Atom left = true;
+            Assert.IsTrue(left.Equals(true));
+        }
+
+        [Test]
+        public void AtomDoubleEqual()
+        {
+            Atom left = 3.5;
+            Assert.IsTrue(left.Equals(3.5));
+        }
     }
 }

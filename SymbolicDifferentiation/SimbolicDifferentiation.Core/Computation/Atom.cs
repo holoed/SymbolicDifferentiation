@@ -102,6 +102,9 @@ namespace SymbolicDifferentiation.Core.Computation
 
         public override bool Equals(object obj)
         {
+            if (obj is bool) return _type == UnionType.Bool && obj.Equals(_boolValue);
+            if (obj is double) return _type == UnionType.Double && obj.Equals(_doubleValue);
+
             var other = obj as Atom;
             return Equals(other);
         }
@@ -122,6 +125,19 @@ namespace SymbolicDifferentiation.Core.Computation
         {
             if (left._type != right._type)
                 throw new InvalidCastException(String.Format("{0} and {1} types are not compatible", left._type, right._type));
+        }
+
+        public override string ToString()
+        {
+            switch (_type)
+            {
+                case UnionType.Double:
+                    return _doubleValue.ToString();
+                case UnionType.Bool:
+                    return _boolValue.ToString();
+                default:
+                    throw new NotSupportedException();
+            }
         }
     }
 }

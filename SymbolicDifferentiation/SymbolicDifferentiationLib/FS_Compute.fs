@@ -34,6 +34,7 @@ let private ExtractArguments args =
     Seq.map ExtractArgument args
 
 
+let seq_map3 f x y z = Seq.zip3 x y z |> Seq.map (fun (a,b,c) -> f a b c)
 
 //Compute
 let rec private Create (exp, seqMapXY, seqMapArgs, functions) = 
@@ -51,7 +52,13 @@ let rec private Create (exp, seqMapXY, seqMapArgs, functions) =
     | Pow(x, n) ->                 functions.Item("Pow") (seq[(Process x);(Process n)])
     | FunApp(name, args) ->        functions.Item(name)  (seqMapArgs Process args)
     | FunDecl(name, args, body) -> ComputationResult.CreateFunction(name, (ExtractArguments args), (ProcessFun body))
-    
+    | Cond(condit, succ, fail) ->  seq_map3 
+                                        (fun (c:KeyValuePair<string, Atom>) s f -> 
+                                                if (c.Value.Equals(true)) then s else f) 
+                                        (Process condit) 
+                                        (Process succ) 
+                                        (Process fail)     
+                                                
     
 type Ret(exps, functions, seqMapXY, seqMapArgs) =
     member x.Execute() = 

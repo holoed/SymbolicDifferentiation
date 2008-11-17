@@ -66,6 +66,24 @@ namespace SymbolicDifferentiation.Visitors
             return true;
         }
 
+        public bool Visit(ConditionalExpression expression)
+        {
+            if (_enabled)
+            {
+                if (_stack.Count == 0)
+                    return false;
+                var expected = _stack.Dequeue() as ConditionalExpression;
+                if (expected == null) return false;
+            }
+            else
+                _stack.Enqueue(expression);
+
+            return 
+                expression.Condition.Accept(this) && 
+                expression.Success.Accept(this) &&
+                expression.Failure.Accept(this);
+        }
+
         public bool Visit(BinaryExpression expression)
         {
             if (_enabled)

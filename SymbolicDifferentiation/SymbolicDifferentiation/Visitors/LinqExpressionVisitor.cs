@@ -22,6 +22,7 @@ using System.Linq.Expressions;
 using SymbolicDifferentiation.Core.AST;
 using SymbolicDifferentiation.Core.Tokens;
 using BinaryExpression=SymbolicDifferentiation.Core.AST.BinaryExpression;
+using ConditionalExpression=SymbolicDifferentiation.Core.AST.ConditionalExpression;
 using Expression=System.Linq.Expressions.Expression;
 
 namespace SymbolicDifferentiation.Visitors
@@ -55,6 +56,11 @@ namespace SymbolicDifferentiation.Visitors
         public Expression Visit(FunctionApplicationExpression expression)
         {
             throw new NotImplementedException();
+        }
+
+        public Expression Visit(ConditionalExpression expression)
+        {
+            throw new System.NotImplementedException();
         }
 
         public Expression Visit(BinaryExpression expression)
