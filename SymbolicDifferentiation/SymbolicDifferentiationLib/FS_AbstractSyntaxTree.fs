@@ -11,22 +11,18 @@
 
 #light
 
+type Operator = Add | Sub | Mul | Div | Pow | GreaterThan | LessThan 
+
 type Expression<'a> = 
     | Variable of string
     | Number of 'a
-    | GreaterThan of Expression<'a> * Expression<'a>
-    | LessThan of Expression<'a> * Expression<'a>
-    | Add of Expression<'a> * Expression<'a>
-    | Sub of Expression<'a> * Expression<'a>
-    | Mul of Expression<'a> * Expression<'a>
-    | Div of Expression<'a> * Expression<'a>
-    | Pow of Expression<'a> * Expression<'a>
+    | Binary of Operator * Expression<'a> * Expression<'a>
     | FunApp of string * Expression<'a> seq
     | FunDecl of string * Expression<'a> seq * Expression<'a>
     | Cond of Expression<'a> * Expression<'a> * Expression<'a>
-    static member (+) (x:Expression<'a>, y:Expression<'a>) = Add(x,y)
-    static member (-) (x:Expression<'a>, y:Expression<'a>) = Sub(x,y)
-    static member (*) (x:Expression<'a>, y:Expression<'a>) = Mul(x,y)
-    static member (/) (x:Expression<'a>, y:Expression<'a>) = Div(x,y)
+    static member (+) (x:Expression<'a>, y:Expression<'a>) = Binary(Add, x,y)
+    static member (-) (x:Expression<'a>, y:Expression<'a>) = Binary(Sub, x,y)
+    static member (*) (x:Expression<'a>, y:Expression<'a>) = Binary(Mul, x,y)
+    static member (/) (x:Expression<'a>, y:Expression<'a>) = Binary(Div, x,y)
 
 

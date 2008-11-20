@@ -48,9 +48,9 @@ let rec private toFsVisitor =
       | IsOp("-") result -> left - right
       | IsOp("*") result -> left * right
       | IsOp("/") result -> left / right
-      | IsOp("^") result -> Pow (left, x.Right.Accept toFsVisitor)
-      | IsOp(">") result -> GreaterThan(left, right)
-      | IsOp("<") result -> LessThan(left, right)
+      | IsOp("^") result -> Binary(Pow, left, x.Right.Accept toFsVisitor)
+      | IsOp(">") result -> Binary(GreaterThan, left, right)
+      | IsOp("<") result -> Binary(LessThan, left, right)
       | _ -> failwith "unknown operator"
    member v.Visit(x : Expression) = 
       if (x.IsNumber) then
@@ -67,11 +67,13 @@ let rec ToCs (x : FS_AbstractSyntaxTree.Expression<float>) =
         match x with
         | Variable v -> new Expression(TokenBuilder.Variable(v))
         | Number n -> new Expression(TokenBuilder.Number(n))
-        | Add(x,y) -> ToCs(x) + ToCs(y)
-        | Sub(x,y) -> ToCs(x) - ToCs(y)
-        | Mul(x,y) -> ToCs(x) * ToCs(y)
-        | Div(x,y) -> ToCs(x) / ToCs(y)
-        | Pow(x,y) -> Expression.op_ExclusiveOr(ToCs(x) , ToCs(y))
+        | Binary(Add,x,y) -> ToCs(x) + ToCs(y)
+        | Binary(Sub,x,y) -> ToCs(x) - ToCs(y)
+        | Binary(Mul,x,y) -> ToCs(x) * ToCs(y)
+        | Binary(Div,x,y) -> ToCs(x) / ToCs(y)
+        | Binary(Pow,x,y) -> Expression.op_ExclusiveOr(ToCs(x) , ToCs(y))
+        | Binary(GreaterThan, x, y) -> Expression.op_GreaterThan(ToCs(x), ToCs(y))
+        | Binary(LessThan, x, y) -> Expression.op_LessThan(ToCs(x), ToCs(y))
         | FunApp(name, args) -> 
             FunctionApplicationExpression.Create(TokenBuilder.Variable(name), Seq.map ToCs args |> Array.of_seq)
         | FunDecl(name, args, body) -> 

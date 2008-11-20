@@ -18,37 +18,37 @@ let rec private SimplifyImpl exp =
     match exp with
     | Number a -> Number a
     | Variable a -> Variable a
-    | Add(a, b) ->
+    | Binary(Add,a, b) ->
         match SimplifyImpl a, SimplifyImpl b with
         | x, Number 0.0 -> x
         | Number 0.0, y -> y
         | Number n1, Number n2 -> Number(n1 + n2)
-        | a, b -> Add(a,b)
-    | Sub(a, b) ->
+        | a, b -> Binary(Add,a,b)
+    | Binary(Sub,a, b) ->
         match SimplifyImpl a, SimplifyImpl b with
         | Number n1, Number n2 -> Number(n1 - n2)
-        | a, b -> Sub(a,b)
-    | Mul(a, b) -> 
+        | a, b -> Binary(Sub,a,b)
+    | Binary(Mul,a, b) -> 
         match SimplifyImpl a, SimplifyImpl b with
         | _, Number 0.0 -> Number 0.0
         | Number 0.0, _ -> Number 0.0
         | a, Number 1.0 -> a
         | Number 1.0, b -> b
         | Number n1, Number n2 -> Number(n1 * n2)
-        | Number n1, Mul(Number n2, c) -> Mul(Number(n1 * n2), c)
-        | a, b -> Mul(a,b)
-    | Div(a, b) -> 
+        | Number n1, Binary(Mul,Number n2, c) -> Binary(Mul,Number(n1 * n2), c)
+        | a, b -> Binary(Mul,a,b)
+    | Binary(Div,a, b) -> 
         match SimplifyImpl a, SimplifyImpl b with
         | _, Number 0.0 -> Number System.Double.NaN
         | Number 0.0, _ -> Number 0.0
         | a, Number 1.0 -> a
         | Number n1, Number n2 -> Number(n1 / n2)
-        | a, b -> Div(a,b)
-    | Pow(a, b) ->
+        | a, b -> Binary(Div,a,b)
+    | Binary(Pow,a, b) ->
         match SimplifyImpl a, SimplifyImpl b with
         | Number n1, Number 1.0 -> Number n1
         | a, Number 1.0 -> a
-        | a, b -> Pow(a,b)
+        | a, b -> Binary(Pow,a,b)
     | exp -> exp
 
     

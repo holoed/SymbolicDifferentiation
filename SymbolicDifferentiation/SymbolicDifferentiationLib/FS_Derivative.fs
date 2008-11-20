@@ -18,11 +18,11 @@ let rec private Deriv (expression : Expression<'a>) =
     match expression with
         | Variable _ -> Number 1.0
         | Number _   -> Number 0.0
-        | Add(x,y)   -> (Deriv x) + (Deriv y)
-        | Sub(x,y)   -> (Deriv x) + (Mul((Number -1.0) , Deriv(y)))
-        | Mul(x,y)   -> (x * Deriv(y)) + (Deriv(x) * y)
-        | Div(x,y)   -> Div((Deriv(x) * y) - (x * Deriv(y)) , Pow(y, (Number 2.0)));
-        | Pow(x,y)   -> y * Pow(x,(y - (Number 1.0)))
+        | Binary(Add,x,y)   -> (Deriv x) + (Deriv y)
+        | Binary(Sub,x,y)   -> (Deriv x) + (Binary(Mul,(Number -1.0) , Deriv(y)))
+        | Binary(Mul,x,y)   -> (x * Deriv(y)) + (Deriv(x) * y)
+        | Binary(Div,x,y)   -> Binary(Div,(Deriv(x) * y) - (x * Deriv(y)) , Binary(Pow,y, (Number 2.0)));
+        | Binary(Pow,x,y)   -> y * Binary(Pow, x,(y - (Number 1.0)))
         | _ -> failwith "Not supported"
         
 let Derivate x = 
